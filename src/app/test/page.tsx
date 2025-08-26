@@ -55,7 +55,6 @@ export default function TestPage() {
 
   // エラーハンドリング用ヘルパー
   const handleError = (error: any, message: string) => {
-    console.error(message, error);
     setError(`${message}: ${error.message || 'Unknown error'}`);
   };
 
@@ -64,15 +63,12 @@ export default function TestPage() {
     try {
       setLoading(true);
       setError(null);
-      console.log('Testing Firebase connection...');
       
       // 簡単な接続テスト：空のクエリを実行
       const querySnapshot = await getDocs(collection(db, 'test-connection'));
       
-      console.log('Firebase connection successful!');
       setError('✅ Firebase接続成功！');
     } catch (error) {
-      console.error('Firebase connection failed:', error);
       handleError(error, '❌ Firebase接続失敗');
     } finally {
       setLoading(false);
