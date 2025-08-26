@@ -12,7 +12,6 @@ const CreateSuggestionButton = ({
   onClick,
   disabled = false,
 }: CreateSuggestionButtonProps) => {
-  // アイコンとテキストを整列させるための最小限のインラインスタイル
   const buttonStyles: React.CSSProperties = {
     display: "inline-flex",
     alignItems: "center",
