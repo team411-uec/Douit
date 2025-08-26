@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "@radix-ui/themes";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 
 type CreateSuggestionButtonProps = {
@@ -6,30 +7,29 @@ type CreateSuggestionButtonProps = {
   onClick: () => void;
   /** ボタンを無効化するかどうか (任意) */
   disabled?: boolean;
+  /** ローディング状態（スピナー表示）にするか (任意) */
+  loading?: boolean;
 };
 
+/**
+ * Radix ThemesのButtonを利用した、編集提案作成ボタンコンポーネント
+ */
 const CreateSuggestionButton = ({
   onClick,
   disabled = false,
+  loading = false,
 }: CreateSuggestionButtonProps) => {
-  const buttonStyles: React.CSSProperties = {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "8px", // アイコンとテキストの間隔
-    padding: "10px 16px",
-    fontSize: "16px",
-    cursor: disabled ? "not-allowed" : "pointer",
-    opacity: disabled ? 0.6 : 1,
-    border: "1px solid #ccc",
-    borderRadius: "6px",
-    backgroundColor: "#fff",
-  };
-
   return (
-    <button style={buttonStyles} onClick={onClick} disabled={disabled}>
-      <Pencil2Icon width="18" height="18" />
-      <span>編集提案を作成</span>
-    </button>
+    <Button
+      onClick={onClick}
+      disabled={disabled || loading}
+      loading={loading}
+      size="2"
+      variant="soft"
+    >
+      <Pencil2Icon width="16" height="16" />
+      編集提案を作成
+    </Button>
   );
 };
 
