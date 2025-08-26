@@ -18,7 +18,6 @@ import {
   getUserUnderstoodRecords,
   getUnderstoodFragmentIds
 } from '../functions/understandingService';
-import { createUser, getUser, updateUser } from '../functions/userService';
 import { db } from '../functions/firebase';
 import { getDocs, collection } from 'firebase/firestore';
 
