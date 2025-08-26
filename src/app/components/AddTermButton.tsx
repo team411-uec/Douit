@@ -1,5 +1,4 @@
 import React from "react";
-import "./AddTermButton.css"; // スタイルを適用するためのCSSファイルをインポート
 
 // このコンポーネントが受け取るpropsの型を定義します
 type AddTermButtonProps = {
