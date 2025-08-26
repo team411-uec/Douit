@@ -32,3 +32,35 @@ export async function searchTermFragmentsByTag(tag: string): Promise<{
 
   return results;
 }
+
+// 全ての規約片を取得する機能（タグ指定なし）
+export async function getAllTermFragments(): Promise<{
+  id: string;
+  data: TermFragment;
+}[]> {
+  const querySnapshot = await getDocs(collection(db, 'termFragments'));
+  const results: { id: string; data: TermFragment }[] = [];
+  
+  querySnapshot.forEach((doc) => {
+    results.push({
+      id: doc.id,
+      data: doc.data() as TermFragment
+    });
+  });
+
+  return results;
+}
+
+// 統合検索機能：タグ指定ありなしを統一したインターフェース
+export async function searchTermFragments(tag?: string): Promise<{
+  id: string;
+  data: TermFragment;
+}[]> {
+  if (!tag || tag.trim() === '') {
+    // タグが指定されていない場合は全ての規約片を返す
+    return getAllTermFragments();
+  } else {
+    // タグが指定されている場合はタグ検索を実行
+    return searchTermFragmentsByTag(tag.trim());
+  }
+}
