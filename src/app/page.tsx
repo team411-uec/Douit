@@ -36,8 +36,6 @@ const AddTermButton = ({ onClick, disabled = false }: AddTermButtonProps) => {
   );
 };
 
-export default AddTermButton;
-
 type CreateSuggestionButtonProps = {
   onClick: () => void;
   /** ボタンを無効化するかどうか (任意) */
@@ -67,5 +65,3 @@ const CreateSuggestionButton = ({
     </Button>
   );
 };
-
-export default CreateSuggestionButton;
