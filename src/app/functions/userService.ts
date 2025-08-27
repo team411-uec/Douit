@@ -6,7 +6,7 @@ import {
   updateDoc,
   serverTimestamp
 } from 'firebase/firestore';
-import { User } from './types';
+import { User } from '../../types';
 
 /**
  * ユーザーの作成
