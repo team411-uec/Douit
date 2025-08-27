@@ -7,7 +7,7 @@ import Link from "next/link";
 const userData = {
   id: "4",
   username: "4 11",
-  initials: "41"
+  initials: "41",
 };
 
 type TermsItem = {
@@ -16,15 +16,13 @@ type TermsItem = {
 };
 
 // テストデータ（後でAPIから取得に置き換え）
-const termsData: TermsItem[] = [
-  { id: "1", title: "サークル会則" },
-];
+const termsData: TermsItem[] = [{ id: "1", title: "サークル会則" }];
 
 export default function TermsPage() {
   return (
     <Box className="min-h-screen">
       <Header showNumber={true} number={userData.id} />
-      
+
       <Container size="1" className="px-6 py-6">
         {/* Terms List */}
         <Flex direction="column" gap="3" className="mb-6">
@@ -35,8 +33,8 @@ export default function TermsPage() {
 
         {/* Add Button - Fixed position */}
         <Box className="fixed bottom-6 right-6">
-          <Button 
-            size="4" 
+          <Button
+            size="4"
             className="w-14 h-14 rounded-full bg-[#00ADB5] hover:bg-[#009AA2] text-white shadow-lg"
           >
             <PlusIcon width="24" height="24" />

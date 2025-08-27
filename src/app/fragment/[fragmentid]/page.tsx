@@ -1,5 +1,20 @@
-import { Box, Flex, Heading, Button, Text, Select, ScrollArea, Container } from "@radix-ui/themes";
-import { PlusIcon, Pencil2Icon, QuestionMarkIcon, CheckIcon, FaceIcon } from "@radix-ui/react-icons";
+import {
+  Box,
+  Flex,
+  Heading,
+  Button,
+  Text,
+  Select,
+  ScrollArea,
+  Container,
+} from "@radix-ui/themes";
+import {
+  PlusIcon,
+  Pencil2Icon,
+  QuestionMarkIcon,
+  CheckIcon,
+  FaceIcon,
+} from "@radix-ui/react-icons";
 import Header from "../../components/Header";
 import Link from "next/link";
 
@@ -33,18 +48,18 @@ const fragmentData: FragmentData = {
 利用規約に違反したユーザーや、不正・不当な目的でサービスを利用しようとするユーザーの特定をし、ご利用をお断りするため
 ユーザーにご自身の登録情報の閲覧や変更、削除、ご利用状況の閲覧を行っていただくため
 有料サービスにおいて、ユーザーに利用料金を請求するため
-上記の利用目的に付随する目的`
+上記の利用目的に付随する目的`,
 };
 
-export default function FragmentDetailPage({ 
-  params 
-}: { 
-  params: { fragmentid: string } 
+export default function FragmentDetailPage({
+  params,
+}: {
+  params: { fragmentid: string };
 }) {
   return (
     <Box className="min-h-screen">
       <Header showUserIcon={true} />
-      
+
       <Container size="1" px="4" py="6">
         {/* Header with title and version */}
         <Flex align="center" justify="between" className="mb-6">
@@ -63,7 +78,10 @@ export default function FragmentDetailPage({
         {/* Content */}
         <ScrollArea className="h-96 mb-6">
           <Box className="pr-4">
-            <Text size="3" className="leading-relaxed text-gray-900 whitespace-pre-line">
+            <Text
+              size="3"
+              className="leading-relaxed text-gray-900 whitespace-pre-line"
+            >
               {fragmentData.content}
             </Text>
           </Box>
@@ -72,46 +90,34 @@ export default function FragmentDetailPage({
         {/* Action Buttons */}
         <Flex direction="column" gap="3">
           <Flex gap="3">
-            <Button 
-              size="3" 
+            <Button
+              size="3"
               className="flex-1 bg-[#00ADB5] hover:bg-[#009AA2] text-white"
             >
               <PlusIcon width="16" height="16" />
             </Button>
-            <Button 
-              size="3" 
+            <Button
+              size="3"
               className="flex-1 bg-[#00ADB5] hover:bg-[#009AA2] text-white"
             >
               <Pencil2Icon width="16" height="16" />
             </Button>
           </Flex>
-          
+
           {/* Bottom Action Buttons */}
           <Flex justify="center" gap="6" className="mt-8">
-            <Button 
-              variant="ghost" 
-              size="3"
-              className="text-[#00ADB5]"
-            >
+            <Button variant="ghost" size="3" className="text-[#00ADB5]">
               <Box className="text-center">
                 <QuestionMarkIcon width="20" height="20" />
                 <br />
                 <Text size="2">知らない</Text>
               </Box>
             </Button>
-            <Button 
-              variant="ghost" 
-              size="3"
-              color="gray"
-            >
+            <Button variant="ghost" size="3" color="gray">
               <CheckIcon width="20" height="20" />
               <Text size="2">理解した</Text>
             </Button>
-            <Button 
-              variant="ghost" 
-              size="3"
-              className="text-[#00ADB5]"
-            >
+            <Button variant="ghost" size="3" className="text-[#00ADB5]">
               <FaceIcon width="20" height="20" />
             </Button>
           </Flex>

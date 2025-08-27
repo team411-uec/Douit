@@ -1,4 +1,12 @@
-import { Dialog, Flex, Text, Button, TextField, Select, Box } from "@radix-ui/themes";
+import {
+  Dialog,
+  Flex,
+  Text,
+  Button,
+  TextField,
+  Select,
+  Box,
+} from "@radix-ui/themes";
 
 type AddToTermsModalProps = {
   open: boolean;
@@ -6,7 +14,11 @@ type AddToTermsModalProps = {
   onConfirm: (termId: string) => void;
 };
 
-export function AddToTermsModal({ open, onOpenChange, onConfirm }: AddToTermsModalProps) {
+export function AddToTermsModal({
+  open,
+  onOpenChange,
+  onConfirm,
+}: AddToTermsModalProps) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Content className="max-w-sm">
@@ -32,7 +44,7 @@ export function AddToTermsModal({ open, onOpenChange, onConfirm }: AddToTermsMod
             </Button>
           </Dialog.Close>
           <Dialog.Close>
-            <Button 
+            <Button
               className="bg-[#00ADB5] hover:bg-[#009AA2] text-white"
               onClick={() => onConfirm("1")}
             >
@@ -51,7 +63,11 @@ type CreateTermsModalProps = {
   onConfirm: (name: string) => void;
 };
 
-export function CreateTermsModal({ open, onOpenChange, onConfirm }: CreateTermsModalProps) {
+export function CreateTermsModal({
+  open,
+  onOpenChange,
+  onConfirm,
+}: CreateTermsModalProps) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Content className="max-w-sm">
@@ -71,7 +87,7 @@ export function CreateTermsModal({ open, onOpenChange, onConfirm }: CreateTermsM
             </Button>
           </Dialog.Close>
           <Dialog.Close>
-            <Button 
+            <Button
               className="bg-[#00ADB5] hover:bg-[#009AA2] text-white"
               onClick={() => onConfirm("新しい規約")}
             >

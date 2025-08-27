@@ -8,26 +8,27 @@ type HeaderProps = {
   showUserIcon?: boolean;
 };
 
-export default function Header({ showNumber = false, number = "4", showUserIcon = false }: HeaderProps) {
+export default function Header({
+  showNumber = false,
+  number = "4",
+  showUserIcon = false,
+}: HeaderProps) {
   return (
-    <Box 
-      asChild
-      className="border-b px-4 py-3"
-    >
+    <Box asChild className="border-b px-4 py-3">
       <header>
         <Flex align="center" justify="between">
           {/* Left side - Logo */}
           <Flex align="center" gap="2">
             <Link href="/" className="no-underline">
-              <Box 
-                width="32px" 
-                height="32px" 
+              <Box
+                width="32px"
+                height="32px"
                 className="flex items-center justify-center cursor-pointer"
               >
-                <Image 
-                  src="/Douit.svg" 
-                  alt="Douit Logo" 
-                  width={24} 
+                <Image
+                  src="/Douit.svg"
+                  alt="Douit Logo"
+                  width={24}
                   height={24}
                 />
               </Box>
@@ -36,15 +37,20 @@ export default function Header({ showNumber = false, number = "4", showUserIcon 
 
           {/* Center - Title */}
           <Link href="/" className="no-underline">
-            <Heading size="5" weight="bold" color="gray" className="cursor-pointer">
+            <Heading
+              size="5"
+              weight="bold"
+              color="gray"
+              className="cursor-pointer"
+            >
               Douit
             </Heading>
           </Link>
 
           {/* Right side - Number or User Icon */}
-          <Box 
-            width="40px" 
-            height="32px" 
+          <Box
+            width="40px"
+            height="32px"
             className="flex items-center justify-center"
           >
             {showUserIcon ? (
