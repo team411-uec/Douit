@@ -1,18 +1,16 @@
-"use client";
-
 import { Box, Flex, Heading, Button, Container, Card, TextField, Badge } from "@radix-ui/themes";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import Header from "./components/Header";
+import Header from "../components/Header";
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense } from "react";
 
-// テストデータ（後でAPIから取得に置き換え）
 type FragmentCard = {
   id: string;
   title: string;
   tags: string[];
 };
 
+// テストデータ（後でAPIから取得に置き換え）
 const fragmentsData: FragmentCard[] = [
   {
     id: "1",
@@ -31,20 +29,14 @@ const fragmentsData: FragmentCard[] = [
   }
 ];
 
-export default function HomePage() {
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      window.location.href = `/search?tag=${encodeURIComponent(searchQuery)}`;
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
+function SearchContent({ searchParams }: { searchParams: { tag?: string } }) {
+  const searchTag = searchParams.tag;
+  
+  const filteredFragments = searchTag 
+    ? fragmentsData.filter(fragment => 
+        fragment.tags.some(tag => tag.includes(searchTag))
+      )
+    : fragmentsData;
 
   return (
     <Box className="min-h-screen">
@@ -56,9 +48,7 @@ export default function HomePage() {
           <TextField.Root 
             placeholder="規約片をタグで検索"
             className="flex-1"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
+            defaultValue={searchTag || ""}
           >
             <TextField.Slot side="left">
               <MagnifyingGlassIcon width="16" height="16" />
@@ -67,20 +57,40 @@ export default function HomePage() {
           <Button 
             size="3"
             className="bg-[#00ADB5] hover:bg-[#009AA2] text-white px-6"
-            onClick={handleSearch}
           >
             検索
           </Button>
         </Flex>
 
+        {/* Search Results */}
+        {searchTag && (
+          <Box className="mb-4">
+            <Heading size="4" color="gray">
+              「{searchTag}」の検索結果: {filteredFragments.length}件
+            </Heading>
+          </Box>
+        )}
+
         {/* Fragment Cards */}
         <Flex direction="column" gap="4">
-          {fragmentsData.map((fragment) => (
+          {filteredFragments.map((fragment) => (
             <FragmentSearchCard key={fragment.id} fragment={fragment} />
           ))}
         </Flex>
       </Container>
     </Box>
+  );
+}
+
+export default function SearchPage({ 
+  searchParams 
+}: { 
+  searchParams: { tag?: string } 
+}) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchContent searchParams={searchParams} />
+    </Suspense>
   );
 }
 
