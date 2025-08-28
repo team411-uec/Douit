@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Box,
   Flex,
@@ -11,7 +13,9 @@ import {
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import Header from "../../components/Header";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect, use } from "react";
+import { searchTermFragments } from "../../functions/tagSearch";
+import { TermFragment } from "../../../types";
 
 type FragmentCard = {
   id: string;
@@ -19,33 +23,44 @@ type FragmentCard = {
   tags: string[];
 };
 
-// テストデータ（後でAPIから取得に置き換え）
-const fragmentsData: FragmentCard[] = [
-  {
-    id: "1",
-    title: "PrivacyPolicy for Website",
-    tags: ["ウェブ", "プライバシーポリシー"],
-  },
-  {
-    id: "2",
-    title: "Do not trust",
-    tags: ["ライブ", "禁止", "ゴミ"],
-  },
-  {
-    id: "3",
-    title: "Do not sleep",
-    tags: ["授業", "禁止"],
-  },
-];
+function SearchContent({ params }: { params: Promise<{ tag: string }> }) {
+  const resolvedParams = use(params);
+  const searchTag = resolvedParams.tag
+    ? decodeURIComponent(resolvedParams.tag)
+    : "";
+  const [fragments, setFragments] = useState<
+    { id: string; data: TermFragment }[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState(searchTag);
 
-function SearchContent({ params }: { params: { tag: string } }) {
-  const searchTag = params.tag ? decodeURIComponent(params.tag) : "";
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      window.location.href = `/search/${encodeURIComponent(searchQuery)}`;
+    }
+  };
 
-  const filteredFragments = searchTag
-    ? fragmentsData.filter((fragment) =>
-        fragment.tags.some((tag) => tag.includes(searchTag))
-      )
-    : fragmentsData;
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  useEffect(() => {
+    const fetchFragments = async () => {
+      try {
+        setLoading(true);
+        const results = await searchTermFragments(searchTag);
+        setFragments(results);
+      } catch (error) {
+        console.error("規約片の取得に失敗しました:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFragments();
+  }, [searchTag]);
 
   return (
     <Box className="min-h-screen">
@@ -57,7 +72,9 @@ function SearchContent({ params }: { params: { tag: string } }) {
           <TextField.Root
             placeholder="規約片をタグで検索"
             className="flex-1"
-            defaultValue={searchTag || ""}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={handleKeyPress}
           >
             <TextField.Slot side="left">
               <MagnifyingGlassIcon width="16" height="16" />
@@ -66,6 +83,7 @@ function SearchContent({ params }: { params: { tag: string } }) {
           <Button
             size="3"
             className="bg-[#00ADB5] hover:bg-[#009AA2] text-white px-6"
+            onClick={handleSearch}
           >
             検索
           </Button>
@@ -75,23 +93,45 @@ function SearchContent({ params }: { params: { tag: string } }) {
         {searchTag && (
           <Box className="mb-4">
             <Heading size="4" color="gray">
-              「{searchTag}」の検索結果: {filteredFragments.length}件
+              「{searchTag}」の検索結果: {fragments.length}件
+            </Heading>
+          </Box>
+        )}
+
+        {/* Loading State */}
+        {loading && (
+          <Box className="text-center py-8">
+            <Heading size="4" color="gray">
+              読み込み中...
             </Heading>
           </Box>
         )}
 
         {/* Fragment Cards */}
-        <Flex direction="column" gap="4">
-          {filteredFragments.map((fragment) => (
-            <FragmentSearchCard key={fragment.id} fragment={fragment} />
-          ))}
-        </Flex>
+        {!loading && (
+          <Flex direction="column" gap="4">
+            {fragments.map((fragmentItem) => (
+              <FragmentSearchCard
+                key={fragmentItem.id}
+                fragment={{
+                  id: fragmentItem.id,
+                  title: fragmentItem.data.title,
+                  tags: fragmentItem.data.tags,
+                }}
+              />
+            ))}
+          </Flex>
+        )}
       </Container>
     </Box>
   );
 }
 
-export default function SearchPage({ params }: { params: { tag: string } }) {
+export default function SearchPage({
+  params,
+}: {
+  params: Promise<{ tag: string }>;
+}) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <SearchContent params={params} />

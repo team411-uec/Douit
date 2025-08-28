@@ -1,6 +1,9 @@
-import { Box, Flex, Heading, Avatar } from "@radix-ui/themes";
+"use client";
+
+import { Box, Flex, Heading, Avatar, Button } from "@radix-ui/themes";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "../contexts/AuthContext";
 
 type HeaderProps = {
   showNumber?: boolean;
@@ -13,6 +16,8 @@ export default function Header({
   number = "4",
   showUserIcon = false,
 }: HeaderProps) {
+  const { user } = useAuth();
+
   return (
     <Box asChild className="border-b px-4 py-3">
       <header>
@@ -47,31 +52,52 @@ export default function Header({
             </Heading>
           </Link>
 
-          {/* Right side - Number or User Icon */}
-          <Box
-            width="40px"
-            height="32px"
-            className="flex items-center justify-center"
-          >
-            {showUserIcon ? (
-              <Link href="/user" className="no-underline">
-                <Avatar
+          {/* Right side - User Authentication */}
+          <Box className="flex items-center justify-center min-w-[80px]">
+            {user ? (
+              // ログイン済み - ユーザーアイコンまたは指定されたUI
+              showUserIcon ? (
+                <Link href="/user" className="no-underline">
+                  <Avatar
+                    size="2"
+                    src={user.photoURL || undefined}
+                    fallback={user.displayName?.[0] || user.email?.[0] || "U"}
+                    style={{ backgroundColor: "#00ADB5", color: "white" }}
+                    className="cursor-pointer"
+                  />
+                </Link>
+              ) : showNumber ? (
+                <Link href="/user" className="no-underline">
+                  <Avatar
+                    size="2"
+                    fallback={number}
+                    style={{ backgroundColor: "#00ADB5", color: "white" }}
+                    className="cursor-pointer"
+                  />
+                </Link>
+              ) : (
+                <Link href="/user" className="no-underline">
+                  <Avatar
+                    size="2"
+                    src={user.photoURL || undefined}
+                    fallback={user.displayName?.[0] || user.email?.[0] || "U"}
+                    style={{ backgroundColor: "#00ADB5", color: "white" }}
+                    className="cursor-pointer"
+                  />
+                </Link>
+              )
+            ) : (
+              // 未ログイン - ログインボタン
+              <Link href="/login" className="no-underline">
+                <Button
                   size="2"
-                  fallback="U"
-                  style={{ backgroundColor: "#00ADB5", color: "white" }}
-                  className="cursor-pointer"
-                />
+                  variant="outline"
+                  className="text-[#00ADB5] border-[#00ADB5] hover:bg-[#00ADB5] hover:text-white"
+                >
+                  ログイン
+                </Button>
               </Link>
-            ) : showNumber ? (
-              <Link href="/user" className="no-underline">
-                <Avatar
-                  size="2"
-                  fallback={number}
-                  style={{ backgroundColor: "#00ADB5", color: "white" }}
-                  className="cursor-pointer"
-                />
-              </Link>
-            ) : null}
+            )}
           </Box>
         </Flex>
       </header>

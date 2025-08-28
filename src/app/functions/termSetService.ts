@@ -1,5 +1,5 @@
-import { db } from './firebase';
-import { 
+import { db } from "./firebase";
+import {
   collection,
   doc,
   addDoc,
@@ -11,28 +11,83 @@ import {
   orderBy,
   serverTimestamp,
   writeBatch,
-  runTransaction
-} from 'firebase/firestore';
-import { TermSet, FragmentRef, TermSetVersion } from '../../types';
+  runTransaction,
+} from "firebase/firestore";
+import { TermSet, FragmentRef, TermSetVersion } from "../../types";
 
 // 機能4: 利用規約セットの作成・管理機能
+
+/**
+ * 規約セットの作成（ユーザー指定版）
+ */
+export async function createUserTermSet(
+  userId: string,
+  title: string,
+  description?: string
+): Promise<string> {
+  const setData = {
+    title,
+    description: description || "",
+    createdBy: userId,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+    currentVersion: 1,
+    isPublic: false,
+  };
+
+  const docRef = await addDoc(collection(db, "userTermSets"), setData);
+  return docRef.id;
+}
+
+/**
+ * ユーザーの利用規約セット一覧を取得
+ */
+export async function getUserTermSets(
+  userId: string
+): Promise<
+  Array<{ id: string; title: string; description: string; createdAt: Date }>
+> {
+  const q = query(collection(db, "userTermSets"), orderBy("createdAt", "desc"));
+
+  const querySnapshot = await getDocs(q);
+  const termSets: Array<{
+    id: string;
+    title: string;
+    description: string;
+    createdAt: Date;
+  }> = [];
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    if (data.createdBy === userId) {
+      termSets.push({
+        id: doc.id,
+        title: data.title,
+        description: data.description,
+        createdAt: data.createdAt?.toDate() || new Date(),
+      });
+    }
+  });
+
+  return termSets;
+}
 
 /**
  * 規約セットの作成
  */
 export async function createTermSet(): Promise<string> {
-  const setData: Omit<TermSet, 'id'> = {
+  const setData: Omit<TermSet, "id"> = {
     createdAt: new Date(),
     updatedAt: new Date(),
-    currentVersion: 1
+    currentVersion: 1,
   };
 
-  const docRef = await addDoc(collection(db, 'termSets'), {
+  const docRef = await addDoc(collection(db, "termSets"), {
     ...setData,
     createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp()
+    updatedAt: serverTimestamp(),
   });
-  
+
   return docRef.id;
 }
 
@@ -45,25 +100,34 @@ export async function addFragmentToSet(
   parameterValues: Record<string, string>,
   order?: number
 ): Promise<void> {
-  const fragmentsCollection = collection(db, 'termSets', termSetId, 'fragments');
-  
+  const fragmentsCollection = collection(
+    db,
+    "userTermSets",
+    termSetId,
+    "fragments"
+  );
+
   // orderが指定されない場合、最後に追加
   if (order === undefined) {
-    const existingFragments = await getDocs(query(fragmentsCollection, orderBy('order', 'desc')));
-    order = existingFragments.empty ? 1 : (existingFragments.docs[0].data().order as number) + 1;
+    const existingFragments = await getDocs(
+      query(fragmentsCollection, orderBy("order", "desc"))
+    );
+    order = existingFragments.empty
+      ? 1
+      : (existingFragments.docs[0].data().order as number) + 1;
   }
 
   const fragmentRef: FragmentRef = {
     fragmentId,
     order,
-    parameterValues
+    parameterValues,
   };
 
   await addDoc(fragmentsCollection, fragmentRef);
-  
+
   // 親セットの更新日時を更新
-  await updateDoc(doc(db, 'termSets', termSetId), {
-    updatedAt: serverTimestamp()
+  await updateDoc(doc(db, "userTermSets", termSetId), {
+    updatedAt: serverTimestamp(),
   });
 }
 
@@ -75,16 +139,22 @@ export async function reorderFragments(
   fragmentOrders: { fragmentRefId: string; newOrder: number }[]
 ): Promise<void> {
   const batch = writeBatch(db);
-  
+
   fragmentOrders.forEach(({ fragmentRefId, newOrder }) => {
-    const fragmentRef = doc(db, 'termSets', termSetId, 'fragments', fragmentRefId);
+    const fragmentRef = doc(
+      db,
+      "termSets",
+      termSetId,
+      "fragments",
+      fragmentRefId
+    );
     batch.update(fragmentRef, { order: newOrder });
   });
-  
+
   // 親セットの更新日時を更新
-  const setRef = doc(db, 'termSets', termSetId);
+  const setRef = doc(db, "termSets", termSetId);
   batch.update(setRef, { updatedAt: serverTimestamp() });
-  
+
   await batch.commit();
 }
 
@@ -93,47 +163,59 @@ export async function reorderFragments(
  */
 export async function updateTermSet(
   termSetId: string,
-  fragments: { fragmentId: string; order: number; parameterValues: Record<string, string> }[]
+  fragments: {
+    fragmentId: string;
+    order: number;
+    parameterValues: Record<string, string>;
+  }[]
 ): Promise<void> {
   await runTransaction(db, async (transaction) => {
-    const setRef = doc(db, 'termSets', termSetId);
+    const setRef = doc(db, "termSets", termSetId);
     const setDoc = await transaction.get(setRef);
-    
+
     if (!setDoc.exists()) {
-      throw new Error('Term set not found');
+      throw new Error("Term set not found");
     }
 
     const currentData = setDoc.data() as TermSet;
-    
+
     // 現在のバージョンを履歴に保存
-    const versionRef = doc(collection(setRef, 'versions'), currentData.currentVersion.toString());
+    const versionRef = doc(
+      collection(setRef, "versions"),
+      currentData.currentVersion.toString()
+    );
     const versionData: TermSetVersion = {
-      createdAt: currentData.updatedAt
+      createdAt: currentData.updatedAt,
     };
     transaction.set(versionRef, versionData);
-    
+
     // 現在のフラグメントを履歴のサブコレクションにコピー
-    const currentFragments = await getDocs(collection(db, 'termSets', termSetId, 'fragments'));
+    const currentFragments = await getDocs(
+      collection(db, "termSets", termSetId, "fragments")
+    );
     currentFragments.forEach((fragmentDoc) => {
-      const versionFragmentRef = doc(collection(versionRef, 'fragments'), fragmentDoc.id);
+      const versionFragmentRef = doc(
+        collection(versionRef, "fragments"),
+        fragmentDoc.id
+      );
       transaction.set(versionFragmentRef, fragmentDoc.data());
     });
-    
+
     // 既存のフラグメントを削除
     currentFragments.forEach((fragmentDoc) => {
       transaction.delete(fragmentDoc.ref);
     });
-    
+
     // 新しいフラグメントを追加
     fragments.forEach((fragment, index) => {
-      const newFragmentRef = doc(collection(setRef, 'fragments'));
+      const newFragmentRef = doc(collection(setRef, "fragments"));
       transaction.set(newFragmentRef, fragment);
     });
-    
+
     // 親セットを更新
     transaction.update(setRef, {
       updatedAt: serverTimestamp(),
-      currentVersion: currentData.currentVersion + 1
+      currentVersion: currentData.currentVersion + 1,
     });
   });
 }
@@ -145,24 +227,27 @@ export async function getTermSetWithFragments(termSetId: string): Promise<{
   set: TermSet & { id: string };
   fragments: (FragmentRef & { id: string })[];
 } | null> {
-  const setDoc = await getDoc(doc(db, 'termSets', termSetId));
-  
+  const setDoc = await getDoc(doc(db, "termSets", termSetId));
+
   if (!setDoc.exists()) {
     return null;
   }
 
   const fragmentsSnapshot = await getDocs(
-    query(collection(db, 'termSets', termSetId, 'fragments'), orderBy('order', 'asc'))
+    query(
+      collection(db, "termSets", termSetId, "fragments"),
+      orderBy("order", "asc")
+    )
   );
-  
-  const fragments = fragmentsSnapshot.docs.map(doc => ({
+
+  const fragments = fragmentsSnapshot.docs.map((doc) => ({
     id: doc.id,
-    ...doc.data()
+    ...doc.data(),
   })) as (FragmentRef & { id: string })[];
 
   return {
     set: { id: setDoc.id, ...setDoc.data() } as TermSet & { id: string },
-    fragments
+    fragments,
   };
 }
 
@@ -171,16 +256,18 @@ export async function getTermSetWithFragments(termSetId: string): Promise<{
  */
 export async function deleteTermSet(termSetId: string): Promise<void> {
   const batch = writeBatch(db);
-  
+
   // フラグメントを削除
-  const fragmentsSnapshot = await getDocs(collection(db, 'termSets', termSetId, 'fragments'));
-  fragmentsSnapshot.docs.forEach(doc => {
+  const fragmentsSnapshot = await getDocs(
+    collection(db, "termSets", termSetId, "fragments")
+  );
+  fragmentsSnapshot.docs.forEach((doc) => {
     batch.delete(doc.ref);
   });
-  
+
   // セット本体を削除
-  batch.delete(doc(db, 'termSets', termSetId));
-  
+  batch.delete(doc(db, "termSets", termSetId));
+
   await batch.commit();
 }
 
@@ -191,38 +278,72 @@ export async function getRenderedTermSet(termSetId: string): Promise<{
   fragments: { title: string; renderedContent: string; order: number }[];
 } | null> {
   const termSetData = await getTermSetWithFragments(termSetId);
-  
+
   if (!termSetData) {
     return null;
   }
 
-  const { getTermFragment } = await import('./termFragments');
+  const { getTermFragment } = await import("./termFragments");
   const renderedFragments = [];
-  
+
   // 正規表現文字をエスケープするヘルパー関数
   function escapeRegExp(string: string): string {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
-  
+
   for (const fragmentRef of termSetData.fragments) {
     const fragment = await getTermFragment(fragmentRef.fragmentId);
-    
+
     if (fragment) {
       let renderedContent = fragment.content;
-      
+
       // パラメータ値を適用してプレースホルダーを置換
       Object.entries(fragmentRef.parameterValues).forEach(([param, value]) => {
         const placeholder = `[${param}]`;
-        renderedContent = renderedContent.replace(new RegExp(escapeRegExp(placeholder), 'g'), value);
+        renderedContent = renderedContent.replace(
+          new RegExp(escapeRegExp(placeholder), "g"),
+          value
+        );
       });
-      
+
       renderedFragments.push({
         title: fragment.title,
         renderedContent,
-        order: fragmentRef.order
+        order: fragmentRef.order,
       });
     }
   }
-  
+
   return { fragments: renderedFragments };
+}
+
+/**
+ * ユーザー規約セットの詳細取得（フラグメント含む）
+ */
+export async function getUserTermSetWithFragments(termSetId: string): Promise<{
+  set: any;
+  fragments: any[];
+} | null> {
+  const setDoc = await getDoc(doc(db, "userTermSets", termSetId));
+
+  if (!setDoc.exists()) {
+    return null;
+  }
+
+  const fragmentsSnapshot = await getDocs(
+    query(
+      collection(db, "userTermSets", termSetId, "fragments"),
+      orderBy("order", "asc")
+    )
+  );
+
+  const fragments = fragmentsSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  return {
+    set: { id: setDoc.id, ...setDoc.data() },
+    fragments,
+  };
 }

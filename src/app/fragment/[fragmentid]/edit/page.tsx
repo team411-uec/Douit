@@ -1,69 +1,123 @@
+"use client";
+
 import {
   Box,
   Flex,
   Heading,
   Button,
-  Text,
   Select,
   ScrollArea,
   Container,
-  SegmentedControl,
+  TextArea,
 } from "@radix-ui/themes";
-import { CheckIcon, Cross2Icon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import Header from "../../../components/Header";
-
-type EditData = {
-  title: string;
-  version: string;
-  versions: string[]; // 利用可能なバージョンのリスト
-  content: string;
-  selectedText: string;
-};
-
-// テストデータ（後でAPIから取得に置き換え）
-const editData: EditData = {
-  title: "PrivacyPolicy for Website",
-  version: "v1",
-  versions: ["v1", "v2", "v3"], // 利用可能なバージョンリスト
-  content: `[PROVIDER]は、本ウェブサイト上で提供するサービス（以下、「本サービス」といいます。）における、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。
-
-第1条（個人情報）
-「個人情報」とは、個人情報保護法にいう「個人情報」を指すものとし、生存する個人に関する情報であって、当該情報に含まれる氏名、生年月日、住所、電話番号、連絡先その他の記述等により特定の個人を識別できる情報及び容貌、指紋、声紋にかかるデータ、及び健康保険証の保険者番号などの当該情報単体から特定の個人を識別できる情報（個人識別情報）を指します。
-
-第2条（個人情報の収集方法）
-当社は、ユーザーが利用登録をする際に氏名、生年月日、住所、電話番号、メールアドレス、銀行口座番号、クレジットカード番号、運転免許証番号などの個人情報をお尋ねすることがあります。また、ユーザーと提携先などとの間でなされたユーザーの個人情報を含む取引記録や決済に関する情報を、当社の提携先（情報提供元、広告主、広告配信先などを含みます。以下、「提携先」といいます。）などから収集することがあります。
-
-第3条（個人情報を収集・利用する目的）
-当社が個人情報を収集・利用する目的は、以下のとおりです。
-
-当社サービスの提供・運営のため
-ユーザーからのお問い合わせに回答するため（本人確認を行うことを含む）
-ユーザーが利用中のサービスの新機能、更新情報、キャンペーン等及び当社が提供する他のサービスの案内のメールを送付するため
-メンテナンス、重要なお知らせなど必要に応じたご連絡のため
-利用規約に違反したユーザーや、不正・不当な目的でサービスを利用しようとするユーザーの特定をし、ご利用をお断りするため`,
-  selectedText: `[PROVIDER]は、本ウェブサイト上で提供するサービス（以下、「本サービス」といいます。）における、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。
-
-第1条（個人情報）
-「個人情報」とは、個人情報保護法にいう「個人情報」を指すものとし、生存する個人に関する情報であって、当該情報に含まれる氏名、生年月日、住所、電話番号、連絡先その他の記述等により特定の個人を識別できる情報及び容貌、指紋、声紋にかかるデータ、及び健康保険証の保険者番号などの当該情報単体から特定の個人を識別できる情報（個人識別情報）を指します。
-
-第2条（個人情報の収集方法）
-当社は、ユーザーが利用登録をする際に氏名、生年月日、住所、電話番号、メールアドレス、銀行口座番号、クレジットカード番号、運転免許証番号などの個人情報をお尋ねすることがあります。また、ユーザーと提携先などとの間でなされたユーザーの個人情報を含む取引記録や決済に関する情報を、当社の提携先（情報提供元、広告主、広告配信先などを含みます。以下、「提携先」といいます。）などから収集することがあります。
-
-第3条（個人情報を収集・利用する目的）
-当社が個人情報を収集・利用する目的は、以下のとおりです。
-
-当社サービスの提供・運営のため
-ユーザーからのお問い合わせに回答するため（本人確認を行うことを含む）
-ユーザーが利用中のサービスの新機能、更新情報、キャンペーン等及び当社が提供する他のサービスの案内のメールを送付するため
-メンテナンス、重要なお知らせなど必要に応じたご連絡のため
-利用規約に違反したユーザーや、不正・不当な目的でサービスを利用しようとするユーザーの特定をし、ご利用をお断りするため`,
-};
+import { useState, useEffect, use } from "react";
+import {
+  getTermFragment,
+  updateTermFragment,
+} from "../../../functions/termFragments";
+import { TermFragment } from "../../../../types";
+import { useAuth } from "../../../contexts/AuthContext";
 
 export default function EditFragmentPage({
   params,
 }: {
-  params: { fragmentid: string };
+  params: Promise<{ fragmentid: string }>;
 }) {
+  const { user } = useAuth();
+  const resolvedParams = use(params);
+  const [fragmentData, setFragmentData] = useState<TermFragment | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [editedContent, setEditedContent] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    const fetchFragment = async () => {
+      try {
+        setLoading(true);
+        const fragment = await getTermFragment(resolvedParams.fragmentid);
+        if (fragment) {
+          setFragmentData(fragment);
+          setEditedContent(fragment.content);
+        } else {
+          setError("規約片が見つかりませんでした");
+        }
+      } catch (err) {
+        console.error("規約片の取得に失敗しました:", err);
+        setError("規約片の取得に失敗しました");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFragment();
+  }, [resolvedParams.fragmentid]);
+
+  const handleSaveEdit = async () => {
+    if (!user || !fragmentData || !editedContent.trim()) return;
+
+    setIsSaving(true);
+    try {
+      await updateTermFragment(
+        resolvedParams.fragmentid,
+        fragmentData.title,
+        editedContent.trim(),
+        fragmentData.tags,
+        fragmentData.parameters || []
+      );
+
+      // 更新後のデータを取得
+      const updatedFragment = await getTermFragment(resolvedParams.fragmentid);
+      if (updatedFragment) {
+        setFragmentData(updatedFragment);
+      }
+
+      console.log("規約片の更新が完了しました");
+    } catch (error) {
+      console.error("規約片の更新に失敗しました:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-lg text-gray-600">ログインが必要です</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <Box className="min-h-screen">
+        <Header showUserIcon={true} />
+        <Container size="1" px="4" py="6">
+          <Box className="text-center py-8">
+            <Heading size="4" color="gray">
+              読み込み中...
+            </Heading>
+          </Box>
+        </Container>
+      </Box>
+    );
+  }
+
+  if (error || !fragmentData) {
+    return (
+      <Box className="min-h-screen">
+        <Header showUserIcon={true} />
+        <Container size="1" px="4" py="6">
+          <Box className="text-center py-8">
+            <Heading size="4" color="red">
+              {error || "規約片が見つかりませんでした"}
+            </Heading>
+          </Box>
+        </Container>
+      </Box>
+    );
+  }
   return (
     <Box className="min-h-screen">
       <Header showUserIcon={true} />
@@ -72,53 +126,48 @@ export default function EditFragmentPage({
         {/* Header with title and version */}
         <Flex align="center" justify="between" className="mb-6">
           <Heading size="6" color="gray" className="flex-1">
-            {editData.title}
+            {fragmentData.title}
           </Heading>
-          <Select.Root defaultValue={editData.version}>
+          <Select.Root defaultValue={`v${fragmentData.currentVersion}`}>
             <Select.Trigger className="w-20" />
             <Select.Content>
-              {editData.versions.map((version) => (
-                <Select.Item key={version} value={version}>
-                  {version}
+              {Array.from({ length: fragmentData.currentVersion }, (_, i) => (
+                <Select.Item key={`v${i + 1}`} value={`v${i + 1}`}>
+                  v{i + 1}
                 </Select.Item>
               ))}
             </Select.Content>
           </Select.Root>
         </Flex>
 
-        {/* Content with highlighted selection */}
+        {/* Content with editable text area */}
         <ScrollArea className="h-96 mb-6">
           <Box className="pr-4">
-            <Box className="p-3 border-2 border-dashed border-violet-400 rounded-lg bg-violet-50">
-              <Text
-                size="3"
-                className="leading-relaxed text-gray-900 whitespace-pre-line"
-              >
-                {editData.selectedText}
-              </Text>
-            </Box>
+            <TextArea
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+              className="w-full h-full p-4 border border-gray-200 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="規約片の内容を入力してください..."
+              style={{ minHeight: "350px" }}
+            />
           </Box>
         </ScrollArea>
 
-        {/* Send Edit Button */}
-        <Button size="3" variant="solid" color="gray" className="w-full mb-8">
-          <PaperPlaneIcon width="16" height="16" />
-          編集を送信
+        {/* Save Button */}
+        <Button
+          size="3"
+          variant="solid"
+          color="blue"
+          className="w-full mb-8"
+          onClick={handleSaveEdit}
+          disabled={
+            isSaving ||
+            !editedContent.trim() ||
+            editedContent === fragmentData?.content
+          }
+        >
+          {isSaving ? "保存中..." : "保存"}
         </Button>
-
-        {/* Bottom Action Buttons */}
-        <Flex justify="center" align="center" gap="4">
-          <Cross2Icon width="28" height="28" className="text-red-500" />
-          <SegmentedControl.Root defaultValue="unknown" size="3">
-            <SegmentedControl.Item value="unknown">
-              <Text size="2">知らない</Text>
-            </SegmentedControl.Item>
-            <SegmentedControl.Item value="understood">
-              <Text size="2">理解した</Text>
-            </SegmentedControl.Item>
-          </SegmentedControl.Root>
-          <CheckIcon width="28" height="28" className="text-green-500" />
-        </Flex>
       </Container>
     </Box>
   );

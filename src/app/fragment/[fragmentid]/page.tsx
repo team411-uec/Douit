@@ -1,13 +1,19 @@
+"use client";
+
 import {
   Box,
   Flex,
   Heading,
-  Button,
   Text,
   Select,
   ScrollArea,
   Container,
   SegmentedControl,
+  IconButton,
+  Link,
+  Button,
+  Dialog,
+  TextField,
 } from "@radix-ui/themes";
 import {
   CheckIcon,
@@ -16,47 +22,212 @@ import {
   Pencil2Icon,
 } from "@radix-ui/react-icons";
 import Header from "../../components/Header";
-
-type FragmentData = {
-  id: string;
-  title: string;
-  version: string;
-  versions: string[]; // 利用可能なバージョンのリスト
-  content: string;
-};
-
-// テストデータ（後でAPIから取得に置き換え）
-const fragmentData: FragmentData = {
-  id: "1",
-  title: "PrivacyPolicy for Website",
-  version: "v1",
-  versions: ["v1", "v2", "v3"], // 利用可能なバージョンリスト
-  content: `[PROVIDER]は、本ウェブサイト上で提供するサービス（以下、「本サービス」といいます。）における、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。
-
-第1条（個人情報）
-「個人情報」とは、個人情報保護法にいう「個人情報」を指すものとし、生存する個人に関する情報であって、当該情報に含まれる氏名、生年月日、住所、電話番号、連絡先その他の記述等により特定の個人を識別できる情報及び容貌、指紋、声紋にかかるデータ、及び健康保険証の保険者番号などの当該情報単体から特定の個人を識別できる情報（個人識別情報）を指します。
-
-第2条（個人情報の収集方法）
-当社は、ユーザーが利用登録をする際に氏名、生年月日、住所、電話番号、メールアドレス、銀行口座番号、クレジットカード番号、運転免許証番号などの個人情報をお尋ねすることがあります。また、ユーザーと提携先などとの間でなされたユーザーの個人情報を含む取引記録や決済に関する情報を、当社の提携先（情報提供元、広告主、広告配信先などを含みます。以下、「提携先」といいます。）などから収集することがあります。
-
-第3条（個人情報を収集・利用する目的）
-当社が個人情報を収集・利用する目的は、以下のとおりです。
-
-当社サービスの提供・運営のため
-ユーザーからのお問い合わせに回答するため（本人確認を行うことを含む）
-ユーザーが利用中のサービスの新機能、更新情報、キャンペーン等及び当社が提供する他のサービスの案内のメールを送付するため
-メンテナンス、重要なお知らせなど必要に応じたご連絡のため
-利用規約に違反したユーザーや、不正・不当な目的でサービスを利用しようとするユーザーの特定をし、ご利用をお断りするため
-ユーザーにご自身の登録情報の閲覧や変更、削除、ご利用状況の閲覧を行っていただくため
-有料サービスにおいて、ユーザーに利用料金を請求するため
-上記の利用目的に付随する目的`,
-};
+import { useState, useEffect, use } from "react";
+import { getTermFragment } from "../../functions/termFragments";
+import {
+  addUnderstoodRecord,
+  removeUnderstoodRecord,
+  isFragmentUnderstood,
+} from "../../functions/understandingService";
+import {
+  getUserTermSets,
+  addFragmentToSet,
+} from "../../functions/termSetService";
+import { TermFragment } from "../../../types";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function FragmentDetailPage({
   params,
 }: {
-  params: { fragmentid: string };
+  params: Promise<{ fragmentid: string }>;
 }) {
+  const resolvedParams = use(params);
+  const [fragmentData, setFragmentData] = useState<TermFragment | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [understanding, setUnderstanding] = useState<string>("unknown");
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [userTermSets, setUserTermSets] = useState<any[]>([]);
+  const [selectedTermSet, setSelectedTermSet] = useState<string>("");
+  const [parameterValues, setParameterValues] = useState<
+    Record<string, string>
+  >({});
+  const { user } = useAuth();
+
+  const handleUnderstandingChange = async (value: string) => {
+    if (!fragmentData || !user) return;
+
+    // 既に同じ状態の場合は何もしない
+    if (value === understanding) return;
+
+    // 理解済みに変更しようとする場合、事前チェック
+    if (value === "understood") {
+      try {
+        const alreadyUnderstood = await isFragmentUnderstood(
+          user.uid,
+          resolvedParams.fragmentid,
+          fragmentData.currentVersion
+        );
+
+        if (alreadyUnderstood) {
+          console.log("この規約片は既に理解済みです");
+          setUnderstanding("understood");
+          return;
+        }
+      } catch (error) {
+        console.error("理解状態の事前チェックに失敗しました:", error);
+      }
+    }
+
+    setUnderstanding(value);
+
+    if (!fragmentData || !user) return;
+
+    try {
+      if (value === "understood") {
+        // 理解記録を追加
+        await addUnderstoodRecord(
+          user.uid,
+          resolvedParams.fragmentid,
+          fragmentData.currentVersion
+        );
+        console.log("理解記録を追加しました");
+      } else if (value === "unknown") {
+        // 理解記録を削除
+        await removeUnderstoodRecord(user.uid, resolvedParams.fragmentid);
+        console.log("理解記録を削除しました");
+      }
+    } catch (error) {
+      console.error("理解記録の更新に失敗しました:", error);
+
+      // エラーが発生した場合、状態を元に戻す
+      if (error instanceof Error && error.message.includes("既に理解済み")) {
+        console.log("既に理解済みの規約片です");
+        // 状態を理解済みに戻す
+        setUnderstanding("understood");
+      } else {
+        // その他のエラーの場合、前の状態に戻す
+        setUnderstanding(value === "understood" ? "unknown" : "understood");
+      }
+    }
+  };
+
+  const handleAddToTermSet = () => {
+    setShowAddDialog(true);
+    // パラメータの初期値を設定
+    if (fragmentData?.parameters) {
+      const initialParams: Record<string, string> = {};
+      fragmentData.parameters.forEach((param) => {
+        initialParams[param] = "";
+      });
+      setParameterValues(initialParams);
+    }
+  };
+
+  const handleConfirmAdd = async () => {
+    if (!selectedTermSet || !fragmentData || !user) return;
+
+    try {
+      await addFragmentToSet(
+        selectedTermSet,
+        resolvedParams.fragmentid,
+        parameterValues
+      );
+
+      console.log("規約セットに追加しました");
+      setShowAddDialog(false);
+      setSelectedTermSet("");
+      setParameterValues({});
+    } catch (error) {
+      console.error("規約セットへの追加に失敗しました:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchFragment = async () => {
+      try {
+        setLoading(true);
+        const fragment = await getTermFragment(resolvedParams.fragmentid);
+        if (fragment) {
+          setFragmentData(fragment);
+        } else {
+          setError("規約片が見つかりませんでした");
+        }
+      } catch (err) {
+        console.error("規約片の取得に失敗しました:", err);
+        setError("規約片の取得に失敗しました");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFragment();
+  }, [resolvedParams.fragmentid]);
+
+  // 理解状態の初期値を取得
+  useEffect(() => {
+    const checkUnderstandingStatus = async () => {
+      if (user && resolvedParams.fragmentid) {
+        try {
+          const isUnderstood = await isFragmentUnderstood(
+            user.uid,
+            resolvedParams.fragmentid
+          );
+          setUnderstanding(isUnderstood ? "understood" : "unknown");
+        } catch (error) {
+          console.error("理解状態の取得に失敗しました:", error);
+        }
+      }
+    };
+
+    checkUnderstandingStatus();
+  }, [user, resolvedParams.fragmentid]);
+
+  // ユーザーの規約セット一覧を取得
+  useEffect(() => {
+    const fetchUserTermSets = async () => {
+      if (user) {
+        try {
+          const termSets = await getUserTermSets(user.uid);
+          setUserTermSets(termSets);
+        } catch (error) {
+          console.error("規約セット一覧の取得に失敗しました:", error);
+        }
+      }
+    };
+
+    fetchUserTermSets();
+  }, [user]);
+
+  if (loading) {
+    return (
+      <Box className="min-h-screen">
+        <Header showUserIcon={true} />
+        <Container size="1" px="4" py="6">
+          <Box className="text-center py-8">
+            <Heading size="4" color="gray">
+              読み込み中...
+            </Heading>
+          </Box>
+        </Container>
+      </Box>
+    );
+  }
+
+  if (error || !fragmentData) {
+    return (
+      <Box className="min-h-screen">
+        <Header showUserIcon={true} />
+        <Container size="1" px="4" py="6">
+          <Box className="text-center py-8">
+            <Heading size="4" color="red">
+              {error || "規約片が見つかりませんでした"}
+            </Heading>
+          </Box>
+        </Container>
+      </Box>
+    );
+  }
   return (
     <Box className="min-h-screen">
       <Header showUserIcon={true} />
@@ -67,12 +238,12 @@ export default function FragmentDetailPage({
           <Heading size="6" color="gray" className="flex-1">
             {fragmentData.title}
           </Heading>
-          <Select.Root defaultValue={fragmentData.version}>
+          <Select.Root defaultValue={`v${fragmentData.currentVersion}`}>
             <Select.Trigger className="w-20" />
             <Select.Content>
-              {fragmentData.versions.map((version) => (
-                <Select.Item key={version} value={version}>
-                  {version}
+              {Array.from({ length: fragmentData.currentVersion }, (_, i) => (
+                <Select.Item key={`v${i + 1}`} value={`v${i + 1}`}>
+                  v{i + 1}
                 </Select.Item>
               ))}
             </Select.Content>
@@ -97,21 +268,33 @@ export default function FragmentDetailPage({
             <Button
               size="3"
               className="flex-1 bg-[#00ADB5] hover:bg-[#009AA2] text-white"
+              onClick={handleAddToTermSet}
             >
-              <PlusIcon width="16" height="16" />
+              <PlusIcon width="18" height="18" />
+              利用規約に追加
             </Button>
-            <Button
-              size="3"
-              className="flex-1 bg-[#00ADB5] hover:bg-[#009AA2] text-white"
+            <Link
+              href={`/fragment/${resolvedParams.fragmentid}/edit`}
+              className="flex-1"
             >
-              <Pencil2Icon width="16" height="16" />
-            </Button>
+              <Button
+                size="3"
+                className="flex-1 bg-[#00ADB5] hover:bg-[#009AA2] text-white"
+              >
+                <Pencil2Icon width="18" height="18" />
+                編集する
+              </Button>
+            </Link>
           </Flex>
 
           {/* Bottom Action Buttons */}
           <Flex justify="center" align="center" gap="4" className="mt-8">
             <Cross2Icon width="24" height="24" className="text-red-500" />
-            <SegmentedControl.Root defaultValue="understood" size="3">
+            <SegmentedControl.Root
+              value={understanding}
+              onValueChange={handleUnderstandingChange}
+              size="3"
+            >
               <SegmentedControl.Item value="unknown">
                 知らない
               </SegmentedControl.Item>
@@ -122,6 +305,83 @@ export default function FragmentDetailPage({
             <CheckIcon width="24" height="24" className="text-green-500" />
           </Flex>
         </Flex>
+
+        {/* Add to Term Set Dialog */}
+        <Dialog.Root open={showAddDialog} onOpenChange={setShowAddDialog}>
+          <Dialog.Content style={{ maxWidth: 450 }}>
+            <Dialog.Title>規約セットに追加</Dialog.Title>
+            <Dialog.Description size="2" mb="4">
+              このフラグメントを追加する規約セットを選択してください。
+            </Dialog.Description>
+
+            <Flex direction="column" gap="3">
+              {/* Term Set Selection */}
+              <label>
+                <Text as="div" size="2" mb="1" weight="bold">
+                  規約セット
+                </Text>
+                <Select.Root
+                  value={selectedTermSet}
+                  onValueChange={setSelectedTermSet}
+                >
+                  <Select.Trigger
+                    className="w-full"
+                    placeholder="規約セットを選択してください"
+                  />
+                  <Select.Content>
+                    {userTermSets.map((termSet) => (
+                      <Select.Item key={termSet.id} value={termSet.id}>
+                        {termSet.title}
+                      </Select.Item>
+                    ))}
+                  </Select.Content>
+                </Select.Root>
+              </label>
+
+              {/* Parameter Values */}
+              {fragmentData?.parameters &&
+                fragmentData.parameters.length > 0 && (
+                  <>
+                    <Text as="div" size="2" weight="bold" mt="2">
+                      パラメータ値
+                    </Text>
+                    {fragmentData.parameters.map((param) => (
+                      <label key={param}>
+                        <Text as="div" size="2" mb="1">
+                          {param}
+                        </Text>
+                        <TextField.Root
+                          placeholder={`${param}の値を入力`}
+                          value={parameterValues[param] || ""}
+                          onChange={(e) =>
+                            setParameterValues((prev) => ({
+                              ...prev,
+                              [param]: e.target.value,
+                            }))
+                          }
+                        />
+                      </label>
+                    ))}
+                  </>
+                )}
+            </Flex>
+
+            <Flex gap="3" mt="4" justify="end">
+              <Dialog.Close>
+                <Button variant="soft" color="gray">
+                  キャンセル
+                </Button>
+              </Dialog.Close>
+              <Button
+                onClick={handleConfirmAdd}
+                disabled={!selectedTermSet}
+                className="bg-[#00ADB5] hover:bg-[#009AA2] text-white"
+              >
+                追加
+              </Button>
+            </Flex>
+          </Dialog.Content>
+        </Dialog.Root>
       </Container>
     </Box>
   );

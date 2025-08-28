@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Box,
   Flex,
@@ -15,97 +17,154 @@ import {
   QuestionMarkIcon,
 } from "@radix-ui/react-icons";
 import Header from "../../components/Header";
-
-type TermDetail = {
-  id: string;
-  title: string;
-  author: string;
-  commonParams: {
-    provider: string;
-    contact: string;
-  };
-  fragments: {
-    id: string;
-    title: string;
-    status: "approved" | "rejected" | "none";
-    author?: string;
-    params?: Record<string, string>;
-  }[];
-};
-
-// テストデータ（後でAPIから取得に置き換え）
-const termDetailData: TermDetail = {
-  id: "1",
-  title: "サークル会則",
-  author: "team411",
-  commonParams: {
-    provider: "team411",
-    contact: "000-0000-0000",
-  },
-  fragments: [
-    {
-      id: "1",
-      title: "PrivacyPolicy for Web...",
-      status: "approved",
-      author: "fuga",
-      params: { HOGE: "fuga" },
-    },
-    {
-      id: "2",
-      title: "PrivacyPolicy",
-      status: "rejected",
-      params: { FOO: "BAR", CONTACT: "000-0000-0000" },
-    },
-    {
-      id: "3",
-      title: "No Param Sample",
-      status: "approved",
-    },
-  ],
-};
-
-// ステータスに応じたアイコンを返す関数
-function getStatusIcon(
-  status: "approved" | "rejected" | "none"
-): React.ReactNode {
-  switch (status) {
-    case "approved":
-      return <CheckIcon width="16" height="16" />;
-    case "rejected":
-      return <Cross2Icon width="16" height="16" />;
-    default:
-      return <QuestionMarkIcon width="16" height="16" />;
-  }
-}
-
-// ステータスに応じたTailwindクラスを返す関数
-function getStatusTextClass(status: "approved" | "rejected" | "none"): string {
-  switch (status) {
-    case "approved":
-      return "text-green-600";
-    case "rejected":
-      return "text-red-600";
-    default:
-      return "text-gray-500";
-  }
-}
+import { useAuth } from "../../contexts/AuthContext";
+import Link from "next/link";
+import { useState, useEffect, use } from "react";
+import { getUserTermSetWithFragments } from "../../functions/termSetService";
+import { getUnderstandingStatusForSet } from "../../functions/understandingService";
+import { getTermFragment } from "../../functions/termFragments";
+import { User } from "firebase/auth";
 
 export default function TermDetailPage({
   params,
 }: {
-  params: { termid: string };
+  params: Promise<{ termid: string }>;
 }) {
+  const { user } = useAuth();
+  const resolvedParams = use(params);
+  const [termSetData, setTermSetData] = useState<any>(null);
+  const [understandingStatus, setUnderstandingStatus] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const handleShareButtonClick = async () => {
+    try {
+      const shareUrl = `${window.location.origin}/accept-check/${resolvedParams.termid}`;
+      await navigator.clipboard.writeText(shareUrl);
+      setCopySuccess(true);
+      
+      // 2秒後にコピー成功状態をリセット
+      setTimeout(() => {
+        setCopySuccess(false);
+      }, 2000);
+    } catch (error) {
+      console.error("リンクのコピーに失敗しました:", error);
+      // フォールバック: 古いブラウザ対応
+      const textArea = document.createElement("textarea");
+      textArea.value = `${window.location.origin}/accept-check/${resolvedParams.termid}`;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        setCopySuccess(true);
+        setTimeout(() => {
+          setCopySuccess(false);
+        }, 2000);
+      } catch (fallbackError) {
+        console.error("フォールバックコピーも失敗しました:", fallbackError);
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) return;
+      
+      try {
+        setLoading(true);
+        
+        // 規約セットの詳細を取得
+        const termSetWithFragments = await getUserTermSetWithFragments(resolvedParams.termid);
+        
+        if (!termSetWithFragments) {
+          setError("規約セットが見つかりませんでした");
+          return;
+        }
+        
+        setTermSetData(termSetWithFragments);
+        
+        // 理解状況を取得
+        const understandingStatusData = await getUnderstandingStatusForSet(
+          user.uid,
+          resolvedParams.termid
+        );
+        
+        setUnderstandingStatus(understandingStatusData);
+        
+      } catch (err) {
+        console.error("データの取得に失敗しました:", err);
+        setError("データの取得に失敗しました");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [user, resolvedParams.termid]);
+
+  if (!user) {
+    return (
+      <Box className="min-h-screen">
+        <Header />
+        <Container size="1" className="px-6 py-6">
+          <Box className="text-center py-8">
+            <Heading size="4" color="gray">
+              ログインが必要です
+            </Heading>
+            <Link href="/login">
+              <Button className="mt-4 bg-[#00ADB5] hover:bg-[#009AA2] text-white">
+                ログインページへ
+              </Button>
+            </Link>
+          </Box>
+        </Container>
+      </Box>
+    );
+  }
+
+  if (loading) {
+    return (
+      <Box className="min-h-screen">
+        <Header />
+        <Container size="1" className="px-6 py-6">
+          <Box className="text-center py-8">
+            <Heading size="4" color="gray">
+              読み込み中...
+            </Heading>
+          </Box>
+        </Container>
+      </Box>
+    );
+  }
+
+  if (error || !termSetData) {
+    return (
+      <Box className="min-h-screen">
+        <Header />
+        <Container size="1" className="px-6 py-6">
+          <Box className="text-center py-8">
+            <Heading size="4" color="red">
+              {error || "規約セットが見つかりませんでした"}
+            </Heading>
+          </Box>
+        </Container>
+      </Box>
+    );
+  }
+
   return (
     <Box className="min-h-screen">
-      <Header showNumber={true} number="4" />
+      <Header />
 
       <Container size="1" px="4" py="6">
         {/* Title */}
         <Heading size="6" color="gray" mb="2">
-          {termDetailData.title}
+          {termSetData.set.title}
         </Heading>
         <Text size="3" color="gray" mb="6">
-          {termDetailData.author}
+          作成者: {user.displayName || user.email}
         </Text>
 
         {/* Common Parameters */}
@@ -120,7 +179,7 @@ export default function TermDetailPage({
                   PROVIDER
                 </Text>
                 <Text size="3" color="gray">
-                  {termDetailData.commonParams.provider}
+                  {user.displayName || user.email}
                 </Text>
               </Flex>
               <Flex justify="between">
@@ -128,7 +187,7 @@ export default function TermDetailPage({
                   CONTACT
                 </Text>
                 <Text size="3" color="gray">
-                  {termDetailData.commonParams.contact}
+                  {user.email}
                 </Text>
               </Flex>
             </Flex>
@@ -137,18 +196,42 @@ export default function TermDetailPage({
 
         {/* Fragments */}
         <Flex direction="column" gap="4" mb="6">
-          {termDetailData.fragments.map((fragment) => (
-            <FragmentCard key={fragment.id} fragment={fragment} />
-          ))}
+          {termSetData.fragments.map((fragment: any) => {
+            const fragmentUnderstanding = understandingStatus.find(
+              (status) => status.fragmentId === fragment.fragmentId
+            );
+            return (
+              <FragmentCard 
+                key={fragment.id} 
+                fragment={fragment} 
+                user={user}
+                isUnderstood={fragmentUnderstanding?.isUnderstood || false}
+              />
+            );
+          })}
         </Flex>
 
         {/* Share Button */}
         <Button
           size="3"
-          className="w-full bg-[#00ADB5] hover:bg-[#009AA2] text-white"
+          className={`w-full ${
+            copySuccess 
+              ? 'bg-green-600 hover:bg-green-700' 
+              : 'bg-[#00ADB5] hover:bg-[#009AA2]'
+          } text-white`}
+          onClick={handleShareButtonClick}
         >
-          <CopyIcon width="16" height="16" />
-          共有リンクをコピー
+          {copySuccess ? (
+            <>
+              <CheckIcon width="16" height="16" />
+              コピーしました！
+            </>
+          ) : (
+            <>
+              <CopyIcon width="16" height="16" />
+              共有リンクをコピー
+            </>
+          )}
         </Button>
       </Container>
     </Box>
@@ -156,36 +239,61 @@ export default function TermDetailPage({
 }
 
 type FragmentCardProps = {
-  fragment: TermDetail["fragments"][0];
+  fragment: any;
+  user: User;
+  isUnderstood: boolean;
 };
 
-function FragmentCard({ fragment }: FragmentCardProps) {
+function FragmentCard({ fragment, user, isUnderstood }: FragmentCardProps) {
+  const [fragmentDetails, setFragmentDetails] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchFragmentDetails = async () => {
+      try {
+        const details = await getTermFragment(fragment.fragmentId);
+        setFragmentDetails(details);
+      } catch (error) {
+        console.error("フラグメント詳細の取得に失敗しました:", error);
+      }
+    };
+
+    if (fragment.fragmentId) {
+      fetchFragmentDetails();
+    }
+  }, [fragment.fragmentId]);
+
+  if (!fragmentDetails) {
+    return (
+      <Card size="2">
+        <Text size="3" color="gray">読み込み中...</Text>
+      </Card>
+    );
+  }
+
   return (
     <Card size="2">
       <Flex align="center" justify="between" className="mb-3">
         <Flex align="center" gap="2">
-          <Box className={getStatusTextClass(fragment.status)}>
-            {getStatusIcon(fragment.status)}
+          <Box className={isUnderstood ? "text-green-600" : "text-gray-500"}>
+            {isUnderstood ? <CheckIcon width="16" height="16" /> : <QuestionMarkIcon width="16" height="16" />}
           </Box>
-          <Heading size="4" className={getStatusTextClass(fragment.status)}>
-            {fragment.title}
+          <Heading size="4" className={isUnderstood ? "text-green-600" : "text-gray-500"}>
+            {fragmentDetails.title}
           </Heading>
         </Flex>
-        <Button
-          size="2"
-          className={
-            fragment.status === "rejected"
-              ? "bg-red-500 hover:bg-red-600 text-white"
-              : "bg-[#00ADB5] hover:bg-[#009AA2] text-white"
-          }
-        >
-          読む
-        </Button>
+        <Link href={`/fragment/${fragment.fragmentId}`}>
+          <Button
+            size="2"
+            className="bg-[#00ADB5] hover:bg-[#009AA2] text-white"
+          >
+            読む
+          </Button>
+        </Link>
       </Flex>
 
       {/* Parameters */}
-      {fragment.params &&
-        Object.entries(fragment.params).map(([key, value], index) => (
+      {fragment.parameterValues &&
+        Object.entries(fragment.parameterValues).map(([key, value], index) => (
           <Box key={key}>
             {index > 0 && <Separator my="1" />}
             <Flex justify="between">
@@ -193,25 +301,24 @@ function FragmentCard({ fragment }: FragmentCardProps) {
                 {key}
               </Text>
               <Text size="2" color="gray">
-                {value}
+                {String(value)}
               </Text>
             </Flex>
           </Box>
         ))}
 
-      {fragment.author && (
-        <Box>
-          <Separator my="1" />
-          <Flex justify="between">
-            <Text size="2" color="gray">
-              CONTACT
-            </Text>
-            <Text size="2" color="gray">
-              000-0000-0000
-            </Text>
-          </Flex>
-        </Box>
-      )}
+      {/* Contact */}
+      <Box>
+        <Separator my="1" />
+        <Flex justify="between">
+          <Text size="2" color="gray">
+            CONTACT
+          </Text>
+          <Text size="2" color="gray">
+            {user.email}
+          </Text>
+        </Flex>
+      </Box>
     </Card>
   );
 }
