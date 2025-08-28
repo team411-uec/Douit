@@ -9,7 +9,7 @@ import {
   Badge,
 } from "@radix-ui/themes";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import Header from "../components/Header";
+import Header from "../../components/Header";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -38,8 +38,8 @@ const fragmentsData: FragmentCard[] = [
   },
 ];
 
-function SearchContent({ searchParams }: { searchParams: { tag?: string } }) {
-  const searchTag = searchParams.tag;
+function SearchContent({ params }: { params: { tag: string } }) {
+  const searchTag = params.tag ? decodeURIComponent(params.tag) : "";
 
   const filteredFragments = searchTag
     ? fragmentsData.filter((fragment) =>
@@ -91,14 +91,10 @@ function SearchContent({ searchParams }: { searchParams: { tag?: string } }) {
   );
 }
 
-export default function SearchPage({
-  searchParams,
-}: {
-  searchParams: { tag?: string };
-}) {
+export default function SearchPage({ params }: { params: { tag: string } }) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <SearchContent searchParams={searchParams} />
+      <SearchContent params={params} />
     </Suspense>
   );
 }

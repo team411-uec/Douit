@@ -7,21 +7,21 @@ import {
   Select,
   ScrollArea,
   Container,
+  SegmentedControl,
 } from "@radix-ui/themes";
 import {
+  CheckIcon,
+  Cross2Icon,
   PlusIcon,
   Pencil2Icon,
-  QuestionMarkIcon,
-  CheckIcon,
-  FaceIcon,
 } from "@radix-ui/react-icons";
 import Header from "../../components/Header";
-import Link from "next/link";
 
 type FragmentData = {
   id: string;
   title: string;
   version: string;
+  versions: string[]; // 利用可能なバージョンのリスト
   content: string;
 };
 
@@ -30,6 +30,7 @@ const fragmentData: FragmentData = {
   id: "1",
   title: "PrivacyPolicy for Website",
   version: "v1",
+  versions: ["v1", "v2", "v3"], // 利用可能なバージョンリスト
   content: `[PROVIDER]は、本ウェブサイト上で提供するサービス（以下、「本サービス」といいます。）における、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。
 
 第1条（個人情報）
@@ -69,8 +70,11 @@ export default function FragmentDetailPage({
           <Select.Root defaultValue={fragmentData.version}>
             <Select.Trigger className="w-20" />
             <Select.Content>
-              <Select.Item value="v1">v1</Select.Item>
-              <Select.Item value="v2">v2</Select.Item>
+              {fragmentData.versions.map((version) => (
+                <Select.Item key={version} value={version}>
+                  {version}
+                </Select.Item>
+              ))}
             </Select.Content>
           </Select.Root>
         </Flex>
@@ -105,21 +109,17 @@ export default function FragmentDetailPage({
           </Flex>
 
           {/* Bottom Action Buttons */}
-          <Flex justify="center" gap="6" className="mt-8">
-            <Button variant="ghost" size="3" className="text-[#00ADB5]">
-              <Box className="text-center">
-                <QuestionMarkIcon width="20" height="20" />
-                <br />
-                <Text size="2">知らない</Text>
-              </Box>
-            </Button>
-            <Button variant="ghost" size="3" color="gray">
-              <CheckIcon width="20" height="20" />
-              <Text size="2">理解した</Text>
-            </Button>
-            <Button variant="ghost" size="3" className="text-[#00ADB5]">
-              <FaceIcon width="20" height="20" />
-            </Button>
+          <Flex justify="center" align="center" gap="4" className="mt-8">
+            <Cross2Icon width="24" height="24" className="text-red-500" />
+            <SegmentedControl.Root defaultValue="understood" size="3">
+              <SegmentedControl.Item value="unknown">
+                知らない
+              </SegmentedControl.Item>
+              <SegmentedControl.Item value="understood">
+                理解した
+              </SegmentedControl.Item>
+            </SegmentedControl.Root>
+            <CheckIcon width="24" height="24" className="text-green-500" />
           </Flex>
         </Flex>
       </Container>

@@ -45,7 +45,7 @@ export default function HomePage() {
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      window.location.href = `/search?tag=${encodeURIComponent(searchQuery)}`;
+      window.location.href = `/search/${encodeURIComponent(searchQuery)}`;
     }
   };
 
