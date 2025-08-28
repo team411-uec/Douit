@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+<<<<<<< HEAD
 import { Theme } from "@radix-ui/themes";
+=======
+import { Theme, ThemePanel } from "@radix-ui/themes";
+>>>>>>> 31fbf6d (追い付いてない分)
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,7 +35,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+<<<<<<< HEAD
         <Theme accentColor="teal">{children}</Theme>
+=======
+        <Theme accentColor="teal">
+          {children}
+          <ThemePanel />
+        </Theme>
+>>>>>>> 31fbf6d (追い付いてない分)
       </body>
     </html>
   );
