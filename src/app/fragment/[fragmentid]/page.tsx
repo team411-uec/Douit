@@ -15,12 +15,7 @@ import {
   Dialog,
   TextField,
 } from "@radix-ui/themes";
-import {
-  CheckIcon,
-  Cross2Icon,
-  PlusIcon,
-  Pencil2Icon,
-} from "@radix-ui/react-icons";
+import { CheckIcon, Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import Header from "../../components/Header";
 import { useState, useEffect, use } from "react";
 import { getTermFragment } from "../../functions/termFragments";
@@ -29,10 +24,7 @@ import {
   removeUnderstoodRecord,
   isFragmentUnderstood,
 } from "../../functions/understandingService";
-import {
-  getUserTermSets,
-  addFragmentToSet,
-} from "../../functions/termSetService";
+import { getUserTermSets, addFragmentToSet } from "../../functions/termSetService";
 import { TermFragment } from "../../../types";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -49,9 +41,7 @@ export default function FragmentDetailPage({
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [userTermSets, setUserTermSets] = useState<any[]>([]);
   const [selectedTermSet, setSelectedTermSet] = useState<string>("");
-  const [parameterValues, setParameterValues] = useState<
-    Record<string, string>
-  >({});
+  const [parameterValues, setParameterValues] = useState<Record<string, string>>({});
   const { user } = useAuth();
 
   const handleUnderstandingChange = async (value: string) => {
@@ -86,11 +76,7 @@ export default function FragmentDetailPage({
     try {
       if (value === "understood") {
         // 理解記録を追加
-        await addUnderstoodRecord(
-          user.uid,
-          resolvedParams.fragmentid,
-          fragmentData.currentVersion
-        );
+        await addUnderstoodRecord(user.uid, resolvedParams.fragmentid, fragmentData.currentVersion);
         console.log("理解記録を追加しました");
       } else if (value === "unknown") {
         // 理解記録を削除
@@ -117,7 +103,7 @@ export default function FragmentDetailPage({
     // パラメータの初期値を設定
     if (fragmentData?.parameters) {
       const initialParams: Record<string, string> = {};
-      fragmentData.parameters.forEach((param) => {
+      fragmentData.parameters.forEach(param => {
         initialParams[param] = "";
       });
       setParameterValues(initialParams);
@@ -128,11 +114,7 @@ export default function FragmentDetailPage({
     if (!selectedTermSet || !fragmentData || !user) return;
 
     try {
-      await addFragmentToSet(
-        selectedTermSet,
-        resolvedParams.fragmentid,
-        parameterValues
-      );
+      await addFragmentToSet(selectedTermSet, resolvedParams.fragmentid, parameterValues);
 
       console.log("規約セットに追加しました");
       setShowAddDialog(false);
@@ -169,10 +151,7 @@ export default function FragmentDetailPage({
     const checkUnderstandingStatus = async () => {
       if (user && resolvedParams.fragmentid) {
         try {
-          const isUnderstood = await isFragmentUnderstood(
-            user.uid,
-            resolvedParams.fragmentid
-          );
+          const isUnderstood = await isFragmentUnderstood(user.uid, resolvedParams.fragmentid);
           setUnderstanding(isUnderstood ? "understood" : "unknown");
         } catch (error) {
           console.error("理解状態の取得に失敗しました:", error);
@@ -253,10 +232,7 @@ export default function FragmentDetailPage({
         {/* Content */}
         <ScrollArea className="h-96 mb-6">
           <Box className="pr-4">
-            <Text
-              size="3"
-              className="leading-relaxed text-gray-900 whitespace-pre-line"
-            >
+            <Text size="3" className="leading-relaxed text-gray-900 whitespace-pre-line">
               {fragmentData.content}
             </Text>
           </Box>
@@ -273,14 +249,8 @@ export default function FragmentDetailPage({
               <PlusIcon width="18" height="18" />
               利用規約に追加
             </Button>
-            <Link
-              href={`/fragment/${resolvedParams.fragmentid}/edit`}
-              className="flex-1"
-            >
-              <Button
-                size="3"
-                className="flex-1 bg-[#00ADB5] hover:bg-[#009AA2] text-white"
-              >
+            <Link href={`/fragment/${resolvedParams.fragmentid}/edit`} className="flex-1">
+              <Button size="3" className="flex-1 bg-[#00ADB5] hover:bg-[#009AA2] text-white">
                 <Pencil2Icon width="18" height="18" />
                 編集する
               </Button>
@@ -295,12 +265,8 @@ export default function FragmentDetailPage({
               onValueChange={handleUnderstandingChange}
               size="3"
             >
-              <SegmentedControl.Item value="unknown">
-                知らない
-              </SegmentedControl.Item>
-              <SegmentedControl.Item value="understood">
-                理解した
-              </SegmentedControl.Item>
+              <SegmentedControl.Item value="unknown">知らない</SegmentedControl.Item>
+              <SegmentedControl.Item value="understood">理解した</SegmentedControl.Item>
             </SegmentedControl.Root>
             <CheckIcon width="24" height="24" className="text-green-500" />
           </Flex>
@@ -320,16 +286,10 @@ export default function FragmentDetailPage({
                 <Text as="div" size="2" mb="1" weight="bold">
                   規約セット
                 </Text>
-                <Select.Root
-                  value={selectedTermSet}
-                  onValueChange={setSelectedTermSet}
-                >
-                  <Select.Trigger
-                    className="w-full"
-                    placeholder="規約セットを選択してください"
-                  />
+                <Select.Root value={selectedTermSet} onValueChange={setSelectedTermSet}>
+                  <Select.Trigger className="w-full" placeholder="規約セットを選択してください" />
                   <Select.Content>
-                    {userTermSets.map((termSet) => (
+                    {userTermSets.map(termSet => (
                       <Select.Item key={termSet.id} value={termSet.id}>
                         {termSet.title}
                       </Select.Item>
@@ -339,31 +299,30 @@ export default function FragmentDetailPage({
               </label>
 
               {/* Parameter Values */}
-              {fragmentData?.parameters &&
-                fragmentData.parameters.length > 0 && (
-                  <>
-                    <Text as="div" size="2" weight="bold" mt="2">
-                      パラメータ値
-                    </Text>
-                    {fragmentData.parameters.map((param) => (
-                      <label key={param}>
-                        <Text as="div" size="2" mb="1">
-                          {param}
-                        </Text>
-                        <TextField.Root
-                          placeholder={`${param}の値を入力`}
-                          value={parameterValues[param] || ""}
-                          onChange={(e) =>
-                            setParameterValues((prev) => ({
-                              ...prev,
-                              [param]: e.target.value,
-                            }))
-                          }
-                        />
-                      </label>
-                    ))}
-                  </>
-                )}
+              {fragmentData?.parameters && fragmentData.parameters.length > 0 && (
+                <>
+                  <Text as="div" size="2" weight="bold" mt="2">
+                    パラメータ値
+                  </Text>
+                  {fragmentData.parameters.map(param => (
+                    <label key={param}>
+                      <Text as="div" size="2" mb="1">
+                        {param}
+                      </Text>
+                      <TextField.Root
+                        placeholder={`${param}の値を入力`}
+                        value={parameterValues[param] || ""}
+                        onChange={e =>
+                          setParameterValues(prev => ({
+                            ...prev,
+                            [param]: e.target.value,
+                          }))
+                        }
+                      />
+                    </label>
+                  ))}
+                </>
+              )}
             </Flex>
 
             <Flex gap="3" mt="4" justify="end">

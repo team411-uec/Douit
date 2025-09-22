@@ -7,7 +7,12 @@
     "dev:turbo": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "knip": "knip",
+    "postinstall": "lefthook install"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -32,9 +37,13 @@
     "@types/react-dom": "^19",
     "eslint": "^9.33.0",
     "eslint-config-next": "15.4.7",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.3.0",
     "jest": "^30.0.5",
+    "knip": "^5.63.1",
+    "lefthook": "^1.11.5",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "ts-jest": "^29.4.1",
     "typescript": "^5",

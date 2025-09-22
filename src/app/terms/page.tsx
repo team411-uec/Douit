@@ -1,6 +1,16 @@
 "use client";
 
-import { Box, Flex, Heading, Button, Container, Card, Text, Dialog, TextField } from "@radix-ui/themes";
+import {
+  Box,
+  Flex,
+  Heading,
+  Button,
+  Container,
+  Card,
+  Text,
+  Dialog,
+  TextField,
+} from "@radix-ui/themes";
 import { PlusIcon } from "@radix-ui/react-icons";
 import Header from "../components/Header";
 import Link from "next/link";
@@ -34,12 +44,14 @@ export default function TermsPage() {
       } catch (error) {
         console.error("利用規約の取得に失敗しました:", error);
         // フォールバック用のテストデータ
-        setTermsData([{ 
-          id: "1", 
-          title: "サークル会則", 
-          description: "テスト用の利用規約です",
-          createdAt: new Date()
-        }]);
+        setTermsData([
+          {
+            id: "1",
+            title: "サークル会則",
+            description: "テスト用の利用規約です",
+            createdAt: new Date(),
+          },
+        ]);
       } finally {
         setLoading(false);
       }
@@ -49,15 +61,15 @@ export default function TermsPage() {
 
   const handleCreateTerm = async () => {
     if (!user || !newTermTitle.trim()) return;
-    
+
     setIsCreating(true);
     try {
       await createUserTermSet(user.uid, newTermTitle.trim(), newTermDescription.trim());
-      
+
       // リストを再取得
       const terms = await getUserTermSets(user.uid);
       setTermsData(terms);
-      
+
       // フォームをリセット
       setNewTermTitle("");
       setNewTermDescription("");
@@ -93,8 +105,10 @@ export default function TermsPage() {
       <Header />
 
       <Container size="1" className="px-6 py-6">
-        <Heading size="6" className="mb-6">作成した利用規約</Heading>
-        
+        <Heading size="6" className="mb-6">
+          作成した利用規約
+        </Heading>
+
         {/* Terms List */}
         {loading ? (
           <Box className="text-center py-8">
@@ -111,9 +125,7 @@ export default function TermsPage() {
                 </Text>
               </Box>
             ) : (
-              termsData.map((term) => (
-                <TermsCard key={term.id} term={term} />
-              ))
+              termsData.map(term => <TermsCard key={term.id} term={term} />)
             )}
           </Flex>
         )}
@@ -145,7 +157,7 @@ export default function TermsPage() {
                 <TextField.Root
                   placeholder="例: サークル会則"
                   value={newTermTitle}
-                  onChange={(e) => setNewTermTitle(e.target.value)}
+                  onChange={e => setNewTermTitle(e.target.value)}
                 />
               </label>
               <label>
@@ -155,7 +167,7 @@ export default function TermsPage() {
                 <TextField.Root
                   placeholder="例: サークル活動に関する規約"
                   value={newTermDescription}
-                  onChange={(e) => setNewTermDescription(e.target.value)}
+                  onChange={e => setNewTermDescription(e.target.value)}
                 />
               </label>
             </Flex>
@@ -166,7 +178,7 @@ export default function TermsPage() {
                   キャンセル
                 </Button>
               </Dialog.Close>
-              <Button 
+              <Button
                 onClick={handleCreateTerm}
                 disabled={!newTermTitle.trim() || isCreating}
                 className="bg-[#00ADB5] hover:bg-[#009AA2] text-white"

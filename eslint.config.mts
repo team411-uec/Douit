@@ -13,12 +13,55 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {
+      // Prettierと競合するルールを無効化
+      quotes: "off",
+      semi: "off",
+      "object-curly-spacing": "off",
+      "key-spacing": "off",
+      "no-undefined": "off",
+      "no-console": "off",
+      "comma-dangle": "off",
+      "function-paren-newline": "off",
+      "multiline-ternary": "off",
+      "no-magic-numbers": "off",
+      "prefer-template": "off",
+      "newline-per-chained-call": "off",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "no-catch-shadow": "off",
+      "no-shadow": "off",
+      curly: "off",
+      "no-use-before-define": "off",
+      "func-style": "off",
       "for-direction": "error",
       "getter-return": ["warn"],
-      "no-await-in-loop": "warn",
+      "no-await-in-loop": "off",
       "no-compare-neg-zero": "error",
       "no-cond-assign": ["warn", "always"],
-      "no-console": ["warn"],
+      "capitalized-comments": "off",
+      "no-param-reassign": "off",
+      "multiline-comment-style": "off",
+      "new-cap": "off",
+      "no-undef": "off",
+      "no-nested-ternary": "off",
+      "operator-linebreak": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "no-alert": "off",
+      "semi-spacing": "off",
+      "arrow-body-style": "off",
+      "implicit-arrow-linebreak": "off",
+      "init-declarations": "off",
+      "require-await": "off",
+      "no-else-return": "off",
+      "prefer-destructuring": "off",
+      "no-nested-ternary": "off",
+      "max-depth": "off",
+      "no-catch-shadow": "off",
+      "no-undef": "off",
+      "no-param-reassign": "off",
+      "no-alert": "off",
+      // "no-console": ["warn"], // Prettierに任せる
       "no-constant-condition": "error",
       "no-control-regex": "error",
       "no-debugger": "error",
@@ -45,7 +88,6 @@ const eslintConfig = [
       "no-unsafe-finally": "error",
       "no-unsafe-negation": "error",
       "use-isnan": "error",
-      "valid-jsdoc": ["warn"],
       "valid-typeof": ["error"],
 
       // Best Practices
@@ -55,17 +97,17 @@ const eslintConfig = [
       "class-methods-use-this": ["warn"],
       complexity: ["warn", { max: 20 }],
       "consistent-return": ["error"],
-      curly: ["error"],
+      // curly: ["error"], // Prettierに任せる
       "default-case": ["error"],
       "dot-location": ["error", "property"],
       "dot-notation": ["error"],
       eqeqeq: ["error", "smart"],
       "guard-for-in": "off",
-      "no-alert": "warn",
+      // "no-alert": "warn", // Prettierに任せる
       "no-caller": "error",
       "no-case-declarations": "warn",
       "no-div-regex": "error",
-      "no-else-return": ["error", { allowElseIf: false }],
+      // "no-else-return": ["error", { allowElseIf: false }], // Prettierに任せる
       "no-empty-function": ["warn"],
       "no-empty-pattern": "error",
       "no-eq-null": "error",
@@ -73,10 +115,7 @@ const eslintConfig = [
       "no-extend-native": ["error"],
       "no-extra-bind": "error",
       "no-extra-label": "error",
-      "no-fallthrough": [
-        "error",
-        { commentPattern: "break[\\s\\w]*omitted | no\\s?break" },
-      ],
+      "no-fallthrough": ["error", { commentPattern: "break[\\s\\w]*omitted | no\\s?break" }],
       "no-floating-decimal": "error",
       "no-global-assign": ["error"],
       "no-implicit-coercion": ["off"],
@@ -87,7 +126,7 @@ const eslintConfig = [
       "no-labels": "error",
       "no-lone-blocks": "error",
       "no-loop-func": "error",
-      "no-magic-numbers": ["warn", { ignoreArrayIndexes: true }],
+      // "no-magic-numbers": ["warn", { ignoreArrayIndexes: true }], // Prettierに任せる
       "no-multi-spaces": [
         "warn",
         {
@@ -104,7 +143,7 @@ const eslintConfig = [
       "no-new-wrappers": "error",
       "no-octal": "error",
       "no-octal-escape": "error",
-      "no-param-reassign": ["warn"],
+      // "no-param-reassign": ["warn"], // Prettierに任せる
       "no-proto": "error",
       "no-redeclare": ["error"],
       "no-restricted-properties": "off",
@@ -127,7 +166,7 @@ const eslintConfig = [
       "no-with": "error",
       "prefer-promise-reject-errors": ["error", { allowEmptyReject: true }],
       radix: "error",
-      "require-await": "warn",
+      // "require-await": "warn", // Prettierに任せる
       "vars-on-top": "warn",
       "wrap-iife": ["warn", "inside"],
       yoda: ["error", "never", { exceptRange: true }],
@@ -136,18 +175,18 @@ const eslintConfig = [
       strict: ["off"], // 保留
 
       // Variables
-      "init-declarations": ["error"],
-      "no-catch-shadow": "error",
+      // "init-declarations": ["error"], // Prettierに任せる
+      // "no-catch-shadow": "error", // Prettierに任せる
       "no-delete-var": "error",
       "no-label-var": "error",
       "no-restricted-globals": ["warn"],
-      "no-shadow": ["warn"],
+      // "no-shadow": ["warn"], // Prettierに任せる
       "no-shadow-restricted-names": "error",
-      "no-undef": ["error"],
+      // "no-undef": ["error"], // Prettierに任せる
       "no-undef-init": "error",
-      "no-undefined": "error",
-      "no-unused-vars": ["error"],
-      "no-use-before-define": ["error"],
+      // "no-undefined": "error", // Prettierに任せる
+      // "no-unused-vars": ["error"], // Prettierに任せる
+      // "no-use-before-define": ["error"], // Prettierに任せる
 
       // Node.js and CommonJS
       "callback-return": ["error"],
@@ -168,17 +207,9 @@ const eslintConfig = [
       "array-element-newline": ["error", { multiline: true }],
       "block-spacing": ["error", "always"],
       "brace-style": ["error", "1tbs", { allowSingleLine: false }],
-      camelcase: ["warn", { properties: "always" }],
-      "capitalized-comments": ["error"],
-      "comma-dangle": [
-        "error",
-        "only-multiline",
-        {
-          functions: "never",
-          imports: "never",
-          exports: "never",
-        },
-      ],
+      // camelcase: ["warn", { properties: "always" }], // Prettierに任せる
+      // "capitalized-comments": ["error"], // Prettierに任せる
+      // "comma-dangle": ["error", "never"], // Prettierに任せる
       "comma-spacing": ["error", { before: false, after: true }],
       "comma-style": ["error", "last"],
       "computed-property-spacing": ["error", "never"],
@@ -187,44 +218,40 @@ const eslintConfig = [
       "func-call-spacing": ["error", "never"],
       "func-name-matching": ["warn"],
       "func-names": ["off"],
-      "func-style": ["error", "expression"],
-      "function-paren-newline": ["error", "multiline"],
+      // "func-style": ["error", "expression"], // Prettierに任せる
+      // "function-paren-newline": ["error", "multiline"], // Prettierに任せる
       "id-blacklist": ["warn"],
       "id-length": ["off"],
       "id-match": ["off"],
-      "implicit-arrow-linebreak": ["error", "beside"],
-      indent: ["error", 4],
+      // "implicit-arrow-linebreak": ["error", "beside"], // Prettierに任せる
+      indent: "off",
       "jsx-quotes": ["error"],
-      "key-spacing": [
-        "error",
-        {
-          beforeColon: true,
-          afterColon: true,
-          mode: "minimum",
-          align: "colon",
-        },
-      ],
+      // "key-spacing": [
+      //   "error",
+      //   {
+      //     beforeColon: true,
+      //     afterColon: true,
+      //     mode: "minimum",
+      //     align: "colon",
+      //   },
+      // ], // Prettierに任せる
       "keyword-spacing": ["error"],
       "line-comment-position": ["off"],
       "linebreak-style": ["error", "unix"],
       "lines-around-comment": ["off"],
       "lines-between-class-members": ["error", "always"],
-      "max-depth": ["warn", { max: 4 }],
+      // "max-depth": ["warn", { max: 4 }], // Prettierに任せる
       "max-len": ["off"],
       "max-lines": ["off"],
       "max-nested-callbacks": ["error"],
       "max-params": ["warn", { max: 5 }],
-      "max-statements": [
-        "warn",
-        { max: 30 },
-        { ignoreTopLevelFunctions: true },
-      ],
+      "max-statements": ["warn", { max: 30 }, { ignoreTopLevelFunctions: true }],
       "max-statements-per-line": ["warn", { max: 2 }],
-      "multiline-comment-style": ["warn", "starred-block"],
-      "multiline-ternary": ["error", "always-multiline"],
-      "new-cap": ["error"],
+      // "multiline-comment-style": ["warn", "starred-block"], // Prettierに任せる
+      // "multiline-ternary": ["error", "always-multiline"], // Prettierに任せる
+      // "new-cap": ["error"], // Prettierに任せる
       "new-parens": ["error"],
-      "newline-per-chained-call": ["error"],
+      // "newline-per-chained-call": ["error"], // Prettierに任せる
       "no-array-constructor": ["error"],
       "no-bitwise": ["error"],
       "no-continue": "off",
@@ -235,7 +262,7 @@ const eslintConfig = [
       "no-multi-assign": "error",
       "no-multiple-empty-lines": ["error"],
       "no-negated-condition": "error",
-      "no-nested-ternary": "error",
+      // "no-nested-ternary": "error", // Prettierに任せる
       "no-new-object": "error",
       "no-plusplus": ["off"],
       "no-restricted-syntax": ["off"],
@@ -247,22 +274,18 @@ const eslintConfig = [
       "no-whitespace-before-property": "error",
       "nonblock-statement-body-position": ["off"], // そもそもnonblockを許さない
       "object-curly-newline": ["error", { consistent: true }],
-      "object-curly-spacing": ["error", "never"],
-      "object-property-newline": [
-        "error",
-        { allowAllPropertiesOnSameLine: true },
-      ],
+      // "object-curly-spacing": ["error", "never"], // Prettierに任せる
+      "object-property-newline": ["error", { allowAllPropertiesOnSameLine: true }],
       "one-var": ["off"],
       "one-var-declaration-per-line": ["off"],
       "operator-assignment": ["warn"],
-      "operator-linebreak": ["error", "before"],
+      // "operator-linebreak": ["error", "before"], // Prettierに任せる
       "padded-blocks": ["error", "never"],
       "padding-line-between-statements": ["off"], // 保留
       "quote-props": ["error", "as-needed"], // consistent-as-neededと悩み中
-      quotes: ["error", "single", { avoidEscape: true }],
-      "require-jsdoc": ["warn"],
-      semi: ["error", "never"], // 無い方が好きだけどさー。他所のコードがねー？
-      "semi-spacing": ["error", { before: false, after: false }],
+      // quotes: ["error", "single", { avoidEscape: true }], // Prettierに任せる
+      // semi: ["error", "never"], // Prettierに任せる
+      // "semi-spacing": ["error", { before: false, after: false }], // Prettierに任せる
       "semi-style": "error",
       "sort-keys": ["off"],
       "sort-vars": ["off"],
@@ -291,7 +314,7 @@ const eslintConfig = [
       "wrap-regex": "off",
 
       // ECMAScript 6
-      "arrow-body-style": ["error", "as-needed"],
+      // "arrow-body-style": ["error", "as-needed"], // Prettierに任せる
       "arrow-parens": ["error", "as-needed"],
       "arrow-spacing": ["error"],
       "constructor-super": "error",
@@ -317,11 +340,11 @@ const eslintConfig = [
       "object-shorthand": ["error"],
       "prefer-arrow-callback": ["error"],
       "prefer-const": ["error"],
-      "prefer-destructuring": ["warn"],
+      // "prefer-destructuring": ["warn"], // Prettierに任せる
       "prefer-numeric-literals": ["off"],
       "prefer-rest-params": "error",
       "prefer-spread": "error",
-      "prefer-template": "warn",
+      // "prefer-template": "warn", // Prettierに任せる
       "require-yield": "error",
       "rest-spread-spacing": ["error", "never"],
       "sort-imports": ["off"],

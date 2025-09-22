@@ -12,18 +12,11 @@ import {
 } from "@radix-ui/themes";
 import Header from "../../../components/Header";
 import { useState, useEffect, use } from "react";
-import {
-  getTermFragment,
-  updateTermFragment,
-} from "../../../functions/termFragments";
+import { getTermFragment, updateTermFragment } from "../../../functions/termFragments";
 import { TermFragment } from "../../../../types";
 import { useAuth } from "../../../contexts/AuthContext";
 
-export default function EditFragmentPage({
-  params,
-}: {
-  params: Promise<{ fragmentid: string }>;
-}) {
+export default function EditFragmentPage({ params }: { params: Promise<{ fragmentid: string }> }) {
   const { user } = useAuth();
   const resolvedParams = use(params);
   const [fragmentData, setFragmentData] = useState<TermFragment | null>(null);
@@ -145,7 +138,7 @@ export default function EditFragmentPage({
           <Box className="pr-4">
             <TextArea
               value={editedContent}
-              onChange={(e) => setEditedContent(e.target.value)}
+              onChange={e => setEditedContent(e.target.value)}
               className="w-full h-full p-4 border border-gray-200 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="規約片の内容を入力してください..."
               style={{ minHeight: "350px" }}
@@ -160,11 +153,7 @@ export default function EditFragmentPage({
           color="blue"
           className="w-full mb-8"
           onClick={handleSaveEdit}
-          disabled={
-            isSaving ||
-            !editedContent.trim() ||
-            editedContent === fragmentData?.content
-          }
+          disabled={isSaving || !editedContent.trim() || editedContent === fragmentData?.content}
         >
           {isSaving ? "保存中..." : "保存"}
         </Button>

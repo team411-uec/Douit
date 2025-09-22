@@ -1,21 +1,7 @@
 "use client";
 
-import {
-  Box,
-  Flex,
-  Heading,
-  Button,
-  Text,
-  Container,
-  Card,
-  Separator,
-} from "@radix-ui/themes";
-import {
-  CopyIcon,
-  CheckIcon,
-  Cross2Icon,
-  QuestionMarkIcon,
-} from "@radix-ui/react-icons";
+import { Box, Flex, Heading, Button, Text, Container, Card, Separator } from "@radix-ui/themes";
+import { CopyIcon, CheckIcon, Cross2Icon, QuestionMarkIcon } from "@radix-ui/react-icons";
 import Header from "../../components/Header";
 import { useAuth } from "../../contexts/AuthContext";
 import Link from "next/link";
@@ -25,11 +11,7 @@ import { getUnderstandingStatusForSet } from "../../functions/understandingServi
 import { getTermFragment } from "../../functions/termFragments";
 import { User } from "firebase/auth";
 
-export default function TermDetailPage({
-  params,
-}: {
-  params: Promise<{ termid: string }>;
-}) {
+export default function TermDetailPage({ params }: { params: Promise<{ termid: string }> }) {
   const { user } = useAuth();
   const resolvedParams = use(params);
   const [termSetData, setTermSetData] = useState<any>(null);
@@ -43,7 +25,7 @@ export default function TermDetailPage({
       const shareUrl = `${window.location.origin}/accept-check/${resolvedParams.termid}`;
       await navigator.clipboard.writeText(shareUrl);
       setCopySuccess(true);
-      
+
       // 2秒後にコピー成功状態をリセット
       setTimeout(() => {
         setCopySuccess(false);
@@ -71,28 +53,27 @@ export default function TermDetailPage({
   useEffect(() => {
     const fetchData = async () => {
       if (!user) return;
-      
+
       try {
         setLoading(true);
-        
+
         // 規約セットの詳細を取得
         const termSetWithFragments = await getUserTermSetWithFragments(resolvedParams.termid);
-        
+
         if (!termSetWithFragments) {
           setError("規約セットが見つかりませんでした");
           return;
         }
-        
+
         setTermSetData(termSetWithFragments);
-        
+
         // 理解状況を取得
         const understandingStatusData = await getUnderstandingStatusForSet(
           user.uid,
           resolvedParams.termid
         );
-        
+
         setUnderstandingStatus(understandingStatusData);
-        
       } catch (err) {
         console.error("データの取得に失敗しました:", err);
         setError("データの取得に失敗しました");
@@ -198,12 +179,12 @@ export default function TermDetailPage({
         <Flex direction="column" gap="4" mb="6">
           {termSetData.fragments.map((fragment: any) => {
             const fragmentUnderstanding = understandingStatus.find(
-              (status) => status.fragmentId === fragment.fragmentId
+              status => status.fragmentId === fragment.fragmentId
             );
             return (
-              <FragmentCard 
-                key={fragment.id} 
-                fragment={fragment} 
+              <FragmentCard
+                key={fragment.id}
+                fragment={fragment}
                 user={user}
                 isUnderstood={fragmentUnderstanding?.isUnderstood || false}
               />
@@ -215,9 +196,7 @@ export default function TermDetailPage({
         <Button
           size="3"
           className={`w-full ${
-            copySuccess 
-              ? 'bg-green-600 hover:bg-green-700' 
-              : 'bg-[#00ADB5] hover:bg-[#009AA2]'
+            copySuccess ? "bg-green-600 hover:bg-green-700" : "bg-[#00ADB5] hover:bg-[#009AA2]"
           } text-white`}
           onClick={handleShareButtonClick}
         >
@@ -265,7 +244,9 @@ function FragmentCard({ fragment, user, isUnderstood }: FragmentCardProps) {
   if (!fragmentDetails) {
     return (
       <Card size="2">
-        <Text size="3" color="gray">読み込み中...</Text>
+        <Text size="3" color="gray">
+          読み込み中...
+        </Text>
       </Card>
     );
   }
@@ -275,17 +256,18 @@ function FragmentCard({ fragment, user, isUnderstood }: FragmentCardProps) {
       <Flex align="center" justify="between" className="mb-3">
         <Flex align="center" gap="2">
           <Box className={isUnderstood ? "text-green-600" : "text-gray-500"}>
-            {isUnderstood ? <CheckIcon width="16" height="16" /> : <QuestionMarkIcon width="16" height="16" />}
+            {isUnderstood ? (
+              <CheckIcon width="16" height="16" />
+            ) : (
+              <QuestionMarkIcon width="16" height="16" />
+            )}
           </Box>
           <Heading size="4" className={isUnderstood ? "text-green-600" : "text-gray-500"}>
             {fragmentDetails.title}
           </Heading>
         </Flex>
         <Link href={`/fragment/${fragment.fragmentId}`}>
-          <Button
-            size="2"
-            className="bg-[#00ADB5] hover:bg-[#009AA2] text-white"
-          >
+          <Button size="2" className="bg-[#00ADB5] hover:bg-[#009AA2] text-white">
             読む
           </Button>
         </Link>

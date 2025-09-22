@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import {
   User,
   onAuthStateChanged,
@@ -47,15 +41,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async user => {
       if (user) {
         // ユーザーがログインした場合、Firestoreにユーザー情報を保存
         try {
-          await ensureUser(
-            user.uid,
-            user.displayName || "ユーザー",
-            user.email || undefined
-          );
+          await ensureUser(user.uid, user.displayName || "ユーザー", user.email || undefined);
         } catch (error) {
           console.error("ユーザー情報の保存に失敗しました:", error);
         }
@@ -86,11 +76,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const signUp = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const result = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const result = await createUserWithEmailAndPassword(auth, email, password);
       // アカウント作成時にFirestoreにユーザー情報を保存
       await ensureUser(
         result.user.uid,
