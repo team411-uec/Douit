@@ -44,9 +44,7 @@ export async function createUserTermSet(
  */
 export async function getUserTermSets(
   userId: string
-): Promise<
-  Array<{ id: string; title: string; description: string; createdAt: Date }>
-> {
+): Promise<Array<{ id: string; title: string; description: string; createdAt: Date }>> {
   const q = query(collection(db, "userTermSets"), orderBy("createdAt", "desc"));
 
   const querySnapshot = await getDocs(q);
@@ -57,7 +55,7 @@ export async function getUserTermSets(
     createdAt: Date;
   }> = [];
 
-  querySnapshot.forEach((doc) => {
+  querySnapshot.forEach(doc => {
     const data = doc.data();
     if (data.createdBy === userId) {
       termSets.push({
@@ -100,21 +98,12 @@ export async function addFragmentToSet(
   parameterValues: Record<string, string>,
   order?: number
 ): Promise<void> {
-  const fragmentsCollection = collection(
-    db,
-    "userTermSets",
-    termSetId,
-    "fragments"
-  );
+  const fragmentsCollection = collection(db, "userTermSets", termSetId, "fragments");
 
   // orderが指定されない場合、最後に追加
   if (order === undefined) {
-    const existingFragments = await getDocs(
-      query(fragmentsCollection, orderBy("order", "desc"))
-    );
-    order = existingFragments.empty
-      ? 1
-      : (existingFragments.docs[0].data().order as number) + 1;
+    const existingFragments = await getDocs(query(fragmentsCollection, orderBy("order", "desc")));
+    order = existingFragments.empty ? 1 : (existingFragments.docs[0].data().order as number) + 1;
   }
 
   const fragmentRef: FragmentRef = {
@@ -134,20 +123,14 @@ export async function addFragmentToSet(
 /**
  * フラグメントの並べ替え
  */
-export async function reorderFragments(
+async function reorderFragments(
   termSetId: string,
   fragmentOrders: { fragmentRefId: string; newOrder: number }[]
 ): Promise<void> {
   const batch = writeBatch(db);
 
   fragmentOrders.forEach(({ fragmentRefId, newOrder }) => {
-    const fragmentRef = doc(
-      db,
-      "termSets",
-      termSetId,
-      "fragments",
-      fragmentRefId
-    );
+    const fragmentRef = doc(db, "termSets", termSetId, "fragments", fragmentRefId);
     batch.update(fragmentRef, { order: newOrder });
   });
 
@@ -161,7 +144,7 @@ export async function reorderFragments(
 /**
  * 規約セットの編集（バージョン管理付き）
  */
-export async function updateTermSet(
+async function updateTermSet(
   termSetId: string,
   fragments: {
     fragmentId: string;
@@ -169,7 +152,7 @@ export async function updateTermSet(
     parameterValues: Record<string, string>;
   }[]
 ): Promise<void> {
-  await runTransaction(db, async (transaction) => {
+  await runTransaction(db, async transaction => {
     const setRef = doc(db, "termSets", termSetId);
     const setDoc = await transaction.get(setRef);
 
@@ -180,29 +163,21 @@ export async function updateTermSet(
     const currentData = setDoc.data() as TermSet;
 
     // 現在のバージョンを履歴に保存
-    const versionRef = doc(
-      collection(setRef, "versions"),
-      currentData.currentVersion.toString()
-    );
+    const versionRef = doc(collection(setRef, "versions"), currentData.currentVersion.toString());
     const versionData: TermSetVersion = {
       createdAt: currentData.updatedAt,
     };
     transaction.set(versionRef, versionData);
 
     // 現在のフラグメントを履歴のサブコレクションにコピー
-    const currentFragments = await getDocs(
-      collection(db, "termSets", termSetId, "fragments")
-    );
-    currentFragments.forEach((fragmentDoc) => {
-      const versionFragmentRef = doc(
-        collection(versionRef, "fragments"),
-        fragmentDoc.id
-      );
+    const currentFragments = await getDocs(collection(db, "termSets", termSetId, "fragments"));
+    currentFragments.forEach(fragmentDoc => {
+      const versionFragmentRef = doc(collection(versionRef, "fragments"), fragmentDoc.id);
       transaction.set(versionFragmentRef, fragmentDoc.data());
     });
 
     // 既存のフラグメントを削除
-    currentFragments.forEach((fragmentDoc) => {
+    currentFragments.forEach(fragmentDoc => {
       transaction.delete(fragmentDoc.ref);
     });
 
@@ -234,13 +209,10 @@ export async function getTermSetWithFragments(termSetId: string): Promise<{
   }
 
   const fragmentsSnapshot = await getDocs(
-    query(
-      collection(db, "termSets", termSetId, "fragments"),
-      orderBy("order", "asc")
-    )
+    query(collection(db, "termSets", termSetId, "fragments"), orderBy("order", "asc"))
   );
 
-  const fragments = fragmentsSnapshot.docs.map((doc) => ({
+  const fragments = fragmentsSnapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data(),
   })) as (FragmentRef & { id: string })[];
@@ -254,14 +226,12 @@ export async function getTermSetWithFragments(termSetId: string): Promise<{
 /**
  * 規約セットの削除
  */
-export async function deleteTermSet(termSetId: string): Promise<void> {
+async function deleteTermSet(termSetId: string): Promise<void> {
   const batch = writeBatch(db);
 
   // フラグメントを削除
-  const fragmentsSnapshot = await getDocs(
-    collection(db, "termSets", termSetId, "fragments")
-  );
-  fragmentsSnapshot.docs.forEach((doc) => {
+  const fragmentsSnapshot = await getDocs(collection(db, "termSets", termSetId, "fragments"));
+  fragmentsSnapshot.docs.forEach(doc => {
     batch.delete(doc.ref);
   });
 
@@ -274,7 +244,7 @@ export async function deleteTermSet(termSetId: string): Promise<void> {
 /**
  * レンダリング済み規約セットの取得（プレビュー/公開表示用）
  */
-export async function getRenderedTermSet(termSetId: string): Promise<{
+async function getRenderedTermSet(termSetId: string): Promise<{
   fragments: { title: string; renderedContent: string; order: number }[];
 } | null> {
   const termSetData = await getTermSetWithFragments(termSetId);
@@ -331,13 +301,10 @@ export async function getUserTermSetWithFragments(termSetId: string): Promise<{
   }
 
   const fragmentsSnapshot = await getDocs(
-    query(
-      collection(db, "userTermSets", termSetId, "fragments"),
-      orderBy("order", "asc")
-    )
+    query(collection(db, "userTermSets", termSetId, "fragments"), orderBy("order", "asc"))
   );
 
-  const fragments = fragmentsSnapshot.docs.map((doc) => ({
+  const fragments = fragmentsSnapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data(),
   }));

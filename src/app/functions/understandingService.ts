@@ -34,9 +34,7 @@ export async function addUnderstoodRecord(
   const existingSnapshot = await getDocs(existingQuery);
 
   if (!existingSnapshot.empty) {
-    throw new Error(
-      "この規約片のバージョンは既に理解済みとして記録されています"
-    );
+    throw new Error("この規約片のバージョンは既に理解済みとして記録されています");
   }
 
   const recordData: Omit<UnderstoodRecord, "id"> = {
@@ -56,10 +54,7 @@ export async function addUnderstoodRecord(
 /**
  * 理解記録の削除
  */
-export async function removeUnderstoodRecord(
-  userId: string,
-  fragmentId: string
-): Promise<void> {
+export async function removeUnderstoodRecord(userId: string, fragmentId: string): Promise<void> {
   const q = query(
     collection(db, "users", userId, "understood"),
     where("fragmentId", "==", fragmentId)
@@ -68,7 +63,7 @@ export async function removeUnderstoodRecord(
   const querySnapshot = await getDocs(q);
 
   // 該当する記録をすべて削除
-  const deletePromises = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
+  const deletePromises = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
   await Promise.all(deletePromises);
 }
 
@@ -79,13 +74,10 @@ export async function getUserUnderstoodRecords(
   userId: string
 ): Promise<(UnderstoodRecord & { id: string })[]> {
   const querySnapshot = await getDocs(
-    query(
-      collection(db, "users", userId, "understood"),
-      orderBy("understoodAt", "desc")
-    )
+    query(collection(db, "users", userId, "understood"), orderBy("understoodAt", "desc"))
   );
 
-  return querySnapshot.docs.map((doc) => ({
+  return querySnapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data(),
   })) as (UnderstoodRecord & { id: string })[];
@@ -115,19 +107,15 @@ export async function isFragmentUnderstood(
 /**
  * 理解済みフラグメントIDのセットを取得（高速化用）
  */
-export async function getUnderstoodFragmentIds(
-  userId: string
-): Promise<Set<string>> {
+export async function getUnderstoodFragmentIds(userId: string): Promise<Set<string>> {
   const records = await getUserUnderstoodRecords(userId);
-  return new Set(records.map((record) => record.fragmentId));
+  return new Set(records.map(record => record.fragmentId));
 }
 
 /**
  * 理解記録一覧（フラグメント情報付き）を取得
  */
-export async function getUnderstoodRecordsWithFragments(
-  userId: string
-): Promise<
+export async function getUnderstoodRecordsWithFragments(userId: string): Promise<
   {
     record: UnderstoodRecord & { id: string };
     fragment: TermFragment | null;
@@ -171,11 +159,9 @@ export async function getUnderstandingStatusForSet(
   }
 
   const understoodRecords = await getUserUnderstoodRecords(userId);
-  const understoodMap = new Map(
-    understoodRecords.map((record) => [record.fragmentId, record])
-  );
+  const understoodMap = new Map(understoodRecords.map(record => [record.fragmentId, record]));
 
-  return termSetData.fragments.map((fragmentRef) => {
+  return termSetData.fragments.map(fragmentRef => {
     const understood = understoodMap.get(fragmentRef.fragmentId);
     return {
       fragmentId: fragmentRef.fragmentId,

@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Flex,
-  Heading,
-  Button,
-  Container,
-  Avatar,
-  TextField,
-  Text,
-} from "@radix-ui/themes";
+import { Box, Flex, Heading, Button, Container, Avatar, TextField, Text } from "@radix-ui/themes";
 import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
 import { useState, useEffect } from "react";
@@ -42,10 +33,7 @@ export default function LoginPage() {
         await signIn(email, password);
       }
     } catch (error: any) {
-      setError(
-        error.message ||
-          `${isSignUp ? "アカウント作成" : "ログイン"}に失敗しました`
-      );
+      setError(error.message || `${isSignUp ? "アカウント作成" : "ログイン"}に失敗しました`);
     } finally {
       setIsLoading(false);
     }
@@ -79,12 +67,7 @@ export default function LoginPage() {
             <Heading size="6" color="gray">
               {user.displayName || user.email}
             </Heading>
-            <Button
-              size="3"
-              variant="outline"
-              onClick={logout}
-              className="mt-4"
-            >
+            <Button size="3" variant="outline" onClick={logout} className="mt-4">
               ログアウト
             </Button>
           </Flex>
@@ -99,12 +82,7 @@ export default function LoginPage() {
 
       <Container size="1" className="px-6 py-8">
         {/* Login Form */}
-        <Flex
-          direction="column"
-          align="center"
-          gap="6"
-          className="max-w-md mx-auto"
-        >
+        <Flex direction="column" align="center" gap="6" className="max-w-md mx-auto">
           <Heading size="6" color="gray" className="mb-4">
             {isSignUp ? "アカウント作成" : "ログイン"}
           </Heading>
@@ -121,7 +99,7 @@ export default function LoginPage() {
               type="email"
               placeholder="メールアドレス"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               required
               className="w-full"
             />
@@ -129,7 +107,7 @@ export default function LoginPage() {
               type="password"
               placeholder="パスワード"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               required
               className="w-full"
             />
@@ -142,8 +120,8 @@ export default function LoginPage() {
               {isLoading
                 ? `${isSignUp ? "作成中" : "ログイン中"}...`
                 : isSignUp
-                ? "アカウント作成"
-                : "ログイン"}
+                  ? "アカウント作成"
+                  : "ログイン"}
             </Button>
           </form>
 
@@ -154,9 +132,7 @@ export default function LoginPage() {
             onClick={() => setIsSignUp(!isSignUp)}
             className="text-[#00ADB5] hover:bg-[#00ADB5]/10"
           >
-            {isSignUp
-              ? "既にアカウントをお持ちの方はこちら"
-              : "新規アカウント作成"}
+            {isSignUp ? "既にアカウントをお持ちの方はこちら" : "新規アカウント作成"}
           </Button>
 
           <Box className="w-full">

@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   experimental: {
     // Turbopackでのバンドリング最適化
     turbo: {
-      resolveExtensions: ['.mdx', '.tsx', '.ts', '.jsx', '.js', '.mjs', '.json'],
-    }
+      resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
+    },
   },
   // Firebase関連のモジュール設定
   webpack: (config: any) => {
@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
       tls: false,
     };
     return config;
-  }
+  },
 };
 
 export default nextConfig;

@@ -1,30 +1,20 @@
-import { db } from './firebase';
-import { 
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  serverTimestamp
-} from 'firebase/firestore';
-import { User } from '../../types';
+import { db } from "./firebase";
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { User } from "../../types";
 
 /**
  * ユーザーの作成
  */
-export async function createUser(
-  userId: string,
-  name: string,
-  email?: string
-): Promise<void> {
-  const userData: Omit<User, 'id'> = {
+export async function createUser(userId: string, name: string, email?: string): Promise<void> {
+  const userData: Omit<User, "id"> = {
     name,
-    email: email || '',
-    createdAt: new Date()
+    email: email || "",
+    createdAt: new Date(),
   };
 
-  await setDoc(doc(db, 'users', userId), {
+  await setDoc(doc(db, "users", userId), {
     ...userData,
-    createdAt: serverTimestamp()
+    createdAt: serverTimestamp(),
   });
 }
 
@@ -32,8 +22,8 @@ export async function createUser(
  * ユーザー情報の取得
  */
 export async function getUser(userId: string): Promise<User | null> {
-  const userDoc = await getDoc(doc(db, 'users', userId));
-  
+  const userDoc = await getDoc(doc(db, "users", userId));
+
   if (!userDoc.exists()) {
     return null;
   }
@@ -44,12 +34,8 @@ export async function getUser(userId: string): Promise<User | null> {
 /**
  * ユーザー情報の更新
  */
-export async function updateUser(
-  userId: string,
-  name?: string,
-  email?: string
-): Promise<void> {
-  const userRef = doc(db, 'users', userId);
+export async function updateUser(userId: string, name?: string, email?: string): Promise<void> {
+  const userRef = doc(db, "users", userId);
   const updateData: any = {};
 
   if (name !== undefined) {
@@ -67,13 +53,9 @@ export async function updateUser(
 /**
  * ユーザーが存在しない場合は作成する
  */
-export async function ensureUser(
-  userId: string,
-  name: string,
-  email?: string
-): Promise<void> {
+export async function ensureUser(userId: string, name: string, email?: string): Promise<void> {
   const existingUser = await getUser(userId);
-  
+
   if (!existingUser) {
     await createUser(userId, name, email);
   }

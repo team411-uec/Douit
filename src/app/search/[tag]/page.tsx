@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Flex,
-  Heading,
-  Button,
-  Container,
-  Card,
-  TextField,
-  Badge,
-} from "@radix-ui/themes";
+import { Box, Flex, Heading, Button, Container, Card, TextField, Badge } from "@radix-ui/themes";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import Header from "../../components/Header";
 import Link from "next/link";
@@ -25,12 +16,8 @@ type FragmentCard = {
 
 function SearchContent({ params }: { params: Promise<{ tag: string }> }) {
   const resolvedParams = use(params);
-  const searchTag = resolvedParams.tag
-    ? decodeURIComponent(resolvedParams.tag)
-    : "";
-  const [fragments, setFragments] = useState<
-    { id: string; data: TermFragment }[]
-  >([]);
+  const searchTag = resolvedParams.tag ? decodeURIComponent(resolvedParams.tag) : "";
+  const [fragments, setFragments] = useState<{ id: string; data: TermFragment }[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchTag);
 
@@ -73,7 +60,7 @@ function SearchContent({ params }: { params: Promise<{ tag: string }> }) {
             placeholder="規約片をタグで検索"
             className="flex-1"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             onKeyPress={handleKeyPress}
           >
             <TextField.Slot side="left">
@@ -110,7 +97,7 @@ function SearchContent({ params }: { params: Promise<{ tag: string }> }) {
         {/* Fragment Cards */}
         {!loading && (
           <Flex direction="column" gap="4">
-            {fragments.map((fragmentItem) => (
+            {fragments.map(fragmentItem => (
               <FragmentSearchCard
                 key={fragmentItem.id}
                 fragment={{
@@ -127,11 +114,7 @@ function SearchContent({ params }: { params: Promise<{ tag: string }> }) {
   );
 }
 
-export default function SearchPage({
-  params,
-}: {
-  params: Promise<{ tag: string }>;
-}) {
+export default function SearchPage({ params }: { params: Promise<{ tag: string }> }) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <SearchContent params={params} />

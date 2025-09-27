@@ -74,14 +74,16 @@ Firestore
 本プロジェクトでは、以下の関数群が `src/app/functions/` ディレクトリに実装されています：
 
 ### 型定義 (`types.ts`)
+
 - `TermFragment`: 規約片の型定義
-- `TermSet`: 規約セットの型定義  
+- `TermSet`: 規約セットの型定義
 - `FragmentRef`: セット内フラグメント参照の型定義
 - `UnderstoodRecord`: 理解記録の型定義
 - `User`: ユーザー情報の型定義
 - `ApiKey`: APIキーの型定義
 
 ### Firebase接続 (`firebase.ts`)
+
 - Firebase初期化設定
 - Firestore データベース接続
 - Analytics設定（クライアントサイドのみ）

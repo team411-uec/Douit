@@ -1,51 +1,50 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { TermFragment, TermSet, FragmentRef, UnderstoodRecord, ApiKey } from '../../types';
-import { searchTermFragments } from '../functions/tagSearch';
-import { 
-  createTermFragment, 
-  getTermFragment, 
-  updateTermFragment, 
-  deleteTermFragment 
-} from '../functions/termFragments';
+import React, { useState, useEffect } from "react";
+import { TermFragment, TermSet, FragmentRef, UnderstoodRecord, ApiKey } from "../../types";
+import { searchTermFragments } from "../functions/tagSearch";
 import {
-  createTermSet,
-  addFragmentToSet
-} from '../functions/termSetService';
+  createTermFragment,
+  getTermFragment,
+  updateTermFragment,
+  deleteTermFragment,
+} from "../functions/termFragments";
+import { createTermSet, addFragmentToSet } from "../functions/termSetService";
 import {
   addUnderstoodRecord,
   getUserUnderstoodRecords,
-  getUnderstoodFragmentIds
-} from '../functions/understandingService';
-import { createUser, getUser, updateUser, ensureUser } from '../functions/userService';
-import { db } from '../functions/firebase';
-import { getDocs, collection } from 'firebase/firestore';
+  getUnderstoodFragmentIds,
+} from "../functions/understandingService";
+import { createUser, getUser, updateUser, ensureUser } from "../functions/userService";
+import { db } from "../functions/firebase";
+import { getDocs, collection } from "firebase/firestore";
 
 export default function TestPage() {
   // State管理
-  const [fragments, setFragments] = useState<{id: string, data: TermFragment}[]>([]);
-  const [termSets, setTermSets] = useState<{id: string, data: TermSet}[]>([]);
-  const [understoodRecords, setUnderstoodRecords] = useState<(UnderstoodRecord & { id: string })[]>([]);
-  const [currentUserId, setCurrentUserId] = useState('test-user-001');
-  const [searchTag, setSearchTag] = useState('');
+  const [fragments, setFragments] = useState<{ id: string; data: TermFragment }[]>([]);
+  const [termSets, setTermSets] = useState<{ id: string; data: TermSet }[]>([]);
+  const [understoodRecords, setUnderstoodRecords] = useState<(UnderstoodRecord & { id: string })[]>(
+    []
+  );
+  const [currentUserId, setCurrentUserId] = useState("test-user-001");
+  const [searchTag, setSearchTag] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // フォーム用State
   const [fragmentForm, setFragmentForm] = useState({
-    title: '',
-    content: '',
-    parameters: '',
-    tags: ''
+    title: "",
+    content: "",
+    parameters: "",
+    tags: "",
   });
 
   const [termSetForm, setTermSetForm] = useState({
-    name: '',
-    selectedFragments: [] as string[]
+    name: "",
+    selectedFragments: [] as string[],
   });
 
-  const [apiKey, setApiKey] = useState<string>('');
+  const [apiKey, setApiKey] = useState<string>("");
 
   // 初期化
   useEffect(() => {
@@ -55,7 +54,7 @@ export default function TestPage() {
 
   // エラーハンドリング用ヘルパー
   const handleError = (error: any, message: string) => {
-    setError(`${message}: ${error.message || 'Unknown error'}`);
+    setError(`${message}: ${error.message || "Unknown error"}`);
   };
 
   // Firebase接続テスト
@@ -63,13 +62,13 @@ export default function TestPage() {
     try {
       setLoading(true);
       setError(null);
-      
+
       // 簡単な接続テスト：空のクエリを実行
-      const querySnapshot = await getDocs(collection(db, 'test-connection'));
-      
-      setError('✅ Firebase接続成功！');
+      const querySnapshot = await getDocs(collection(db, "test-connection"));
+
+      setError("✅ Firebase接続成功！");
     } catch (error) {
-      handleError(error, '❌ Firebase接続失敗');
+      handleError(error, "❌ Firebase接続失敗");
     } finally {
       setLoading(false);
     }
@@ -83,7 +82,7 @@ export default function TestPage() {
       setFragments(results);
       setError(null);
     } catch (error) {
-      handleError(error, '規約片の読み込みに失敗しました');
+      handleError(error, "規約片の読み込みに失敗しました");
     } finally {
       setLoading(false);
     }
@@ -93,39 +92,34 @@ export default function TestPage() {
   const createFragment = async () => {
     try {
       const parameters = fragmentForm.parameters
-        .split(',')
+        .split(",")
         .map(p => p.trim())
         .filter(p => p);
       const tags = fragmentForm.tags
-        .split(',')
+        .split(",")
         .map(t => t.trim())
         .filter(t => t);
 
-      await createTermFragment(
-        fragmentForm.title,
-        fragmentForm.content,
-        tags,
-        parameters
-      );
+      await createTermFragment(fragmentForm.title, fragmentForm.content, tags, parameters);
 
-      setFragmentForm({ title: '', content: '', parameters: '', tags: '' });
+      setFragmentForm({ title: "", content: "", parameters: "", tags: "" });
       await loadFragments();
-      setError('✅ 規約片が正常に作成されました！');
+      setError("✅ 規約片が正常に作成されました！");
     } catch (error) {
-      handleError(error, '規約片の作成に失敗しました');
+      handleError(error, "規約片の作成に失敗しました");
     }
   };
 
   // 3. 規約片の削除
   const deleteFragment = async (fragmentId: string) => {
-    if (!confirm('この規約片を削除しますか？')) return;
-    
+    if (!confirm("この規約片を削除しますか？")) return;
+
     try {
       await deleteTermFragment(fragmentId);
       loadFragments();
       setError(null);
     } catch (error) {
-      handleError(error, '規約片の削除に失敗しました');
+      handleError(error, "規約片の削除に失敗しました");
     }
   };
 
@@ -135,7 +129,7 @@ export default function TestPage() {
       const records = await getUserUnderstoodRecords(currentUserId);
       setUnderstoodRecords(records);
     } catch (error) {
-      handleError(error, '理解記録の読み込みに失敗しました');
+      handleError(error, "理解記録の読み込みに失敗しました");
     }
   };
 
@@ -146,7 +140,7 @@ export default function TestPage() {
       loadUnderstoodRecords();
       setError(null);
     } catch (error) {
-      handleError(error, '理解記録の保存に失敗しました');
+      handleError(error, "理解記録の保存に失敗しました");
     }
   };
 
@@ -159,17 +153,17 @@ export default function TestPage() {
         const fragmentId = termSetForm.selectedFragments[i];
         await addFragmentToSet(termSetId, fragmentId, {}, i + 1);
       }
-      setTermSetForm({ name: '', selectedFragments: [] });
+      setTermSetForm({ name: "", selectedFragments: [] });
       setError(null);
       alert(`規約セットが作成されました: ${termSetId}`);
     } catch (error) {
-      handleError(error, '規約セットの作成に失敗しました');
+      handleError(error, "規約セットの作成に失敗しました");
     }
   };
 
   // 7. APIキーの生成（簡易版）
   const generateApiKey = () => {
-    const key = 'test-api-key-' + Math.random().toString(36).substr(2, 9);
+    const key = "test-api-key-" + Math.random().toString(36).substr(2, 9);
     setApiKey(key);
   };
 
@@ -178,7 +172,7 @@ export default function TestPage() {
     let result = content;
     parameters.forEach((param, index) => {
       const placeholder = `[${param}]`;
-      result = result.replace(new RegExp(`\\[${param}\\]`, 'g'), `<サンプル値${index + 1}>`);
+      result = result.replace(new RegExp(`\\[${param}\\]`, "g"), `<サンプル値${index + 1}>`);
     });
     return result;
   };
@@ -186,11 +180,15 @@ export default function TestPage() {
   return (
     <div className="container mx-auto p-6 max-w-6xl">
       <h1 className="text-3xl font-bold mb-8">Douit テスト用UI</h1>
-      
+
       {error && (
-        <div className={`px-4 py-3 rounded mb-4 ${
-          error.includes('✅') ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'
-        }`}>
+        <div
+          className={`px-4 py-3 rounded mb-4 ${
+            error.includes("✅")
+              ? "bg-green-100 border border-green-400 text-green-700"
+              : "bg-red-100 border border-red-400 text-red-700"
+          }`}
+        >
           {error}
         </div>
       )}
@@ -203,12 +201,11 @@ export default function TestPage() {
           disabled={loading}
           className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 disabled:opacity-50"
         >
-          {loading ? '接続テスト中...' : 'Firebase接続をテスト'}
+          {loading ? "接続テスト中..." : "Firebase接続をテスト"}
         </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
         {/* 左側: 規約片管理 */}
         <div className="space-y-6">
           <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg shadow">
@@ -218,13 +215,13 @@ export default function TestPage() {
                 type="text"
                 placeholder="タイトル"
                 value={fragmentForm.title}
-                onChange={(e) => setFragmentForm({...fragmentForm, title: e.target.value})}
+                onChange={e => setFragmentForm({ ...fragmentForm, title: e.target.value })}
                 className="w-full p-2 border rounded text-gray-900 placeholder-gray-500"
               />
               <textarea
                 placeholder="内容（[パラメータ名]でプレースホルダーを指定）"
                 value={fragmentForm.content}
-                onChange={(e) => setFragmentForm({...fragmentForm, content: e.target.value})}
+                onChange={e => setFragmentForm({ ...fragmentForm, content: e.target.value })}
                 rows={4}
                 className="w-full p-2 border rounded text-gray-900 placeholder-gray-500"
               />
@@ -232,14 +229,14 @@ export default function TestPage() {
                 type="text"
                 placeholder="パラメータ（カンマ区切り）"
                 value={fragmentForm.parameters}
-                onChange={(e) => setFragmentForm({...fragmentForm, parameters: e.target.value})}
+                onChange={e => setFragmentForm({ ...fragmentForm, parameters: e.target.value })}
                 className="w-full p-2 border rounded text-gray-900 placeholder-gray-500"
               />
               <input
                 type="text"
                 placeholder="タグ（カンマ区切り）"
                 value={fragmentForm.tags}
-                onChange={(e) => setFragmentForm({...fragmentForm, tags: e.target.value})}
+                onChange={e => setFragmentForm({ ...fragmentForm, tags: e.target.value })}
                 className="w-full p-2 border rounded text-gray-900 placeholder-gray-500"
               />
               <button
@@ -258,7 +255,7 @@ export default function TestPage() {
                 type="text"
                 placeholder="タグで検索（空の場合は全て表示）"
                 value={searchTag}
-                onChange={(e) => setSearchTag(e.target.value)}
+                onChange={e => setSearchTag(e.target.value)}
                 className="flex-1 p-2 border rounded text-gray-900 placeholder-gray-500"
               />
               <button
@@ -266,7 +263,7 @@ export default function TestPage() {
                 disabled={loading}
                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50"
               >
-                {loading ? '検索中...' : '検索'}
+                {loading ? "検索中..." : "検索"}
               </button>
             </div>
           </div>
@@ -279,21 +276,23 @@ export default function TestPage() {
                   規約片を選択:
                 </label>
                 <div className="max-h-32 overflow-y-auto border border-gray-300 rounded p-2 bg-white">
-                  {fragments.map((fragment) => (
+                  {fragments.map(fragment => (
                     <label key={fragment.id} className="flex items-center space-x-2 mb-1">
                       <input
                         type="checkbox"
                         checked={termSetForm.selectedFragments.includes(fragment.id)}
-                        onChange={(e) => {
+                        onChange={e => {
                           if (e.target.checked) {
                             setTermSetForm({
                               ...termSetForm,
-                              selectedFragments: [...termSetForm.selectedFragments, fragment.id]
+                              selectedFragments: [...termSetForm.selectedFragments, fragment.id],
                             });
                           } else {
                             setTermSetForm({
                               ...termSetForm,
-                              selectedFragments: termSetForm.selectedFragments.filter(id => id !== fragment.id)
+                              selectedFragments: termSetForm.selectedFragments.filter(
+                                id => id !== fragment.id
+                              ),
                             });
                           }
                         }}
@@ -321,11 +320,7 @@ export default function TestPage() {
               >
                 APIキーを生成
               </button>
-              {apiKey && (
-                <div className="p-2 bg-gray-100 rounded font-mono text-sm">
-                  {apiKey}
-                </div>
-              )}
+              {apiKey && <div className="p-2 bg-gray-100 rounded font-mono text-sm">{apiKey}</div>}
             </div>
           </div>
         </div>
@@ -337,16 +332,16 @@ export default function TestPage() {
               規約片一覧 ({fragments.length}件)
             </h2>
             <div className="space-y-4 max-h-96 overflow-y-auto">
-              {fragments.map((fragment) => {
+              {fragments.map(fragment => {
                 const isUnderstood = understoodRecords.some(
                   record => record.fragmentId === fragment.id
                 );
-                
+
                 return (
                   <div
                     key={fragment.id}
                     className={`p-4 border-2 rounded-lg ${
-                      isUnderstood ? 'bg-green-100 border-green-300' : 'bg-white border-gray-300'
+                      isUnderstood ? "bg-green-100 border-green-300" : "bg-white border-gray-300"
                     }`}
                   >
                     <div className="flex justify-between items-start mb-2">
@@ -368,11 +363,11 @@ export default function TestPage() {
                         </button>
                       </div>
                     </div>
-                    
+
                     <p className="text-sm text-gray-800 mb-2">
                       {replaceParameters(fragment.data.content, fragment.data.parameters)}
                     </p>
-                    
+
                     <div className="flex flex-wrap gap-1 mb-2">
                       {fragment.data.tags.map((tag, index) => (
                         <span
@@ -383,18 +378,14 @@ export default function TestPage() {
                         </span>
                       ))}
                     </div>
-                    
+
                     {fragment.data.parameters.length > 0 && (
                       <div className="text-xs text-gray-700">
-                        パラメータ: {fragment.data.parameters.join(', ')}
+                        パラメータ: {fragment.data.parameters.join(", ")}
                       </div>
                     )}
-                    
-                    {isUnderstood && (
-                      <div className="text-xs text-green-600 mt-1">
-                        ✓ 理解済み
-                      </div>
-                    )}
+
+                    {isUnderstood && <div className="text-xs text-green-600 mt-1">✓ 理解済み</div>}
                   </div>
                 );
               })}
@@ -409,15 +400,18 @@ export default function TestPage() {
               {understoodRecords.map((record, index) => {
                 const fragment = fragments.find(f => f.id === record.fragmentId);
                 return (
-                  <div key={index} className="p-2 bg-green-50 border border-green-200 rounded text-sm">
+                  <div
+                    key={index}
+                    className="p-2 bg-green-50 border border-green-200 rounded text-sm"
+                  >
                     <div className="font-medium text-gray-900">
                       {fragment?.data.title || `Fragment ID: ${record.fragmentId}`}
                     </div>
                     <div className="text-gray-800 text-xs">
-                      理解日時: {record.understoodAt instanceof Date 
+                      理解日時:{" "}
+                      {record.understoodAt instanceof Date
                         ? record.understoodAt.toLocaleString()
-                        : new Date((record.understoodAt as any).seconds * 1000).toLocaleString()
-                      }
+                        : new Date((record.understoodAt as any).seconds * 1000).toLocaleString()}
                     </div>
                   </div>
                 );
@@ -429,14 +423,14 @@ export default function TestPage() {
             <h2 className="text-xl font-semibold mb-4 text-gray-900">ユーザー情報</h2>
             <div className="space-y-2">
               <div className="text-sm">
-                <span className="font-medium text-gray-900">現在のユーザーID:</span> 
+                <span className="font-medium text-gray-900">現在のユーザーID:</span>
                 <span className="text-gray-800">{currentUserId}</span>
               </div>
               <input
                 type="text"
                 placeholder="ユーザーIDを変更"
                 value={currentUserId}
-                onChange={(e) => setCurrentUserId(e.target.value)}
+                onChange={e => setCurrentUserId(e.target.value)}
                 className="w-full p-2 border rounded text-sm text-gray-900 placeholder-gray-500"
               />
               <button

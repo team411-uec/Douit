@@ -31,9 +31,7 @@ type FragmentCard = {
 export default function HomePage() {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
-  const [fragments, setFragments] = useState<
-    { id: string; data: TermFragment }[]
-  >([]);
+  const [fragments, setFragments] = useState<{ id: string; data: TermFragment }[]>([]);
   const [loading, setLoading] = useState(true);
 
   // 規約片作成用の状態
@@ -78,8 +76,8 @@ export default function HomePage() {
     try {
       const tags = newFragmentTags
         .split(",")
-        .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0);
+        .map(tag => tag.trim())
+        .filter(tag => tag.length > 0);
 
       await createTermFragment(
         newFragmentTitle.trim(),
@@ -116,7 +114,7 @@ export default function HomePage() {
             placeholder="規約片をタグで検索"
             className="flex-1"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             onKeyPress={handleKeyPress}
           >
             <TextField.Slot side="left">
@@ -141,7 +139,7 @@ export default function HomePage() {
           </Box>
         ) : (
           <Flex direction="column" gap="4">
-            {fragments.map((fragmentItem) => (
+            {fragments.map(fragmentItem => (
               <FragmentSearchCard
                 key={fragmentItem.id}
                 fragment={{
@@ -157,10 +155,7 @@ export default function HomePage() {
 
       {/* Create Fragment Button - Fixed position */}
       {user && (
-        <Dialog.Root
-          open={isCreateDialogOpen}
-          onOpenChange={setIsCreateDialogOpen}
-        >
+        <Dialog.Root open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <Dialog.Trigger>
             <Box className="fixed bottom-6 right-6">
               <Button
@@ -186,7 +181,7 @@ export default function HomePage() {
                 <TextField.Root
                   placeholder="例: プライバシーポリシー"
                   value={newFragmentTitle}
-                  onChange={(e) => setNewFragmentTitle(e.target.value)}
+                  onChange={e => setNewFragmentTitle(e.target.value)}
                 />
               </label>
 
@@ -197,7 +192,7 @@ export default function HomePage() {
                 <TextArea
                   placeholder="規約片の内容を入力してください..."
                   value={newFragmentContent}
-                  onChange={(e) => setNewFragmentContent(e.target.value)}
+                  onChange={e => setNewFragmentContent(e.target.value)}
                   rows={6}
                 />
               </label>
@@ -209,7 +204,7 @@ export default function HomePage() {
                 <TextField.Root
                   placeholder="例: プライバシー, データ保護, GDPR"
                   value={newFragmentTags}
-                  onChange={(e) => setNewFragmentTags(e.target.value)}
+                  onChange={e => setNewFragmentTags(e.target.value)}
                 />
               </label>
             </Flex>
@@ -222,11 +217,7 @@ export default function HomePage() {
               </Dialog.Close>
               <Button
                 onClick={handleCreateFragment}
-                disabled={
-                  !newFragmentTitle.trim() ||
-                  !newFragmentContent.trim() ||
-                  isCreating
-                }
+                disabled={!newFragmentTitle.trim() || !newFragmentContent.trim() || isCreating}
                 className="bg-green-600 hover:bg-green-700 text-white"
               >
                 {isCreating ? "作成中..." : "作成"}

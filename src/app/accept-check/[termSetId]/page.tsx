@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Flex,
-  Heading,
-  Text,
-  Container,
-  Button,
-  Card,
-  Link,
-} from "@radix-ui/themes";
+import { Box, Flex, Heading, Text, Container, Button, Card, Link } from "@radix-ui/themes";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import Header from "../../components/Header";
 import { useState, useEffect, use } from "react";
@@ -25,11 +16,7 @@ interface FragmentWithData {
   understood: boolean;
 }
 
-export default function AcceptCheckPage({
-  params,
-}: {
-  params: Promise<{ termSetId: string }>;
-}) {
+export default function AcceptCheckPage({ params }: { params: Promise<{ termSetId: string }> }) {
   const resolvedParams = use(params);
   const [termSetData, setTermSetData] = useState<any>(null);
   const [fragments, setFragments] = useState<FragmentWithData[]>([]);
@@ -41,7 +28,7 @@ export default function AcceptCheckPage({
   const getCommonParameters = () => {
     const allParams: Record<string, string> = {};
 
-    fragments.forEach((fragment) => {
+    fragments.forEach(fragment => {
       Object.entries(fragment.ref.parameterValues).forEach(([key, value]) => {
         if (allParams[key] && allParams[key] !== value) {
           // 値が異なる場合は共通パラメータから除外
@@ -61,9 +48,7 @@ export default function AcceptCheckPage({
         setLoading(true);
 
         // 規約セットとフラグメント参照を取得
-        const termSetResult = await getUserTermSetWithFragments(
-          resolvedParams.termSetId
-        );
+        const termSetResult = await getUserTermSetWithFragments(resolvedParams.termSetId);
         if (!termSetResult) {
           setError("規約セットが見つかりませんでした");
           return;
@@ -80,10 +65,7 @@ export default function AcceptCheckPage({
             if (fragmentData) {
               let understood = false;
               if (user) {
-                understood = await isFragmentUnderstood(
-                  user.uid,
-                  fragmentRef.fragmentId
-                );
+                understood = await isFragmentUnderstood(user.uid, fragmentRef.fragmentId);
               }
 
               fragmentsWithData.push({
@@ -93,10 +75,7 @@ export default function AcceptCheckPage({
               });
             }
           } catch (error) {
-            console.error(
-              `フラグメント ${fragmentRef.fragmentId} の取得に失敗:`,
-              error
-            );
+            console.error(`フラグメント ${fragmentRef.fragmentId} の取得に失敗:`, error);
           }
         }
 
@@ -170,12 +149,7 @@ export default function AcceptCheckPage({
             </Heading>
             <Card className="p-4">
               {Object.entries(commonParams).map(([key, value]) => (
-                <Flex
-                  key={key}
-                  justify="between"
-                  align="center"
-                  className="mb-2 last:mb-0"
-                >
+                <Flex key={key} justify="between" align="center" className="mb-2 last:mb-0">
                   <Text size="3" weight="medium" className="text-gray-600">
                     {key}
                   </Text>
@@ -203,48 +177,36 @@ export default function AcceptCheckPage({
                 <Flex align="center" gap="3" className="flex-1">
                   {/* Status Icon */}
                   {fragment.understood ? (
-                    <CheckIcon
-                      width="20"
-                      height="20"
-                      className="text-green-500"
-                    />
+                    <CheckIcon width="20" height="20" className="text-green-500" />
                   ) : (
-                    <Cross2Icon
-                      width="20"
-                      height="20"
-                      className="text-red-500"
-                    />
+                    <Cross2Icon width="20" height="20" className="text-red-500" />
                   )}
 
                   {/* Fragment Info */}
                   <Box className="flex-1">
                     <Heading
                       size="4"
-                      className={`mb-2 ${
-                        fragment.understood ? "text-green-700" : "text-red-700"
-                      }`}
+                      className={`mb-2 ${fragment.understood ? "text-green-700" : "text-red-700"}`}
                     >
                       {fragment.data.title}
                     </Heading>
 
                     {/* Fragment-specific Parameters */}
-                    {Object.entries(fragment.ref.parameterValues).map(
-                      ([key, value]) => {
-                        // 共通パラメータは表示しない
-                        if (commonParams[key]) return null;
+                    {Object.entries(fragment.ref.parameterValues).map(([key, value]) => {
+                      // 共通パラメータは表示しない
+                      if (commonParams[key]) return null;
 
-                        return (
-                          <Flex key={key} gap="2" className="mb-1">
-                            <Text size="2" color="gray">
-                              {key}
-                            </Text>
-                            <Text size="2" weight="bold">
-                              {value}
-                            </Text>
-                          </Flex>
-                        );
-                      }
-                    )}
+                      return (
+                        <Flex key={key} gap="2" className="mb-1">
+                          <Text size="2" color="gray">
+                            {key}
+                          </Text>
+                          <Text size="2" weight="bold">
+                            {value}
+                          </Text>
+                        </Flex>
+                      );
+                    })}
                   </Box>
                 </Flex>
 
@@ -270,8 +232,7 @@ export default function AcceptCheckPage({
         {fragments.length > 0 && (
           <Box className="mt-8 text-center">
             <Text size="3" color="gray">
-              理解済み: {fragments.filter((f) => f.understood).length} /{" "}
-              {fragments.length}
+              理解済み: {fragments.filter(f => f.understood).length} / {fragments.length}
             </Text>
           </Box>
         )}

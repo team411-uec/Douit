@@ -30,24 +30,14 @@ export default function Header({
                 height="32px"
                 className="flex items-center justify-center cursor-pointer"
               >
-                <Image
-                  src="/Douit.svg"
-                  alt="Douit Logo"
-                  width={24}
-                  height={24}
-                />
+                <Image src="/Douit.svg" alt="Douit Logo" width={24} height={24} />
               </Box>
             </Link>
           </Flex>
 
           {/* Center - Title */}
           <Link href="/" className="no-underline">
-            <Heading
-              size="5"
-              weight="bold"
-              color="gray"
-              className="cursor-pointer"
-            >
+            <Heading size="5" weight="bold" color="gray" className="cursor-pointer">
               Douit
             </Heading>
           </Link>
