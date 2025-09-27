@@ -2,11 +2,11 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const _filename = fileURLToPath(import.meta.url);
+const _dirname = dirname(_filename);
 
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
+  baseDirectory: _dirname,
 });
 
 const eslintConfig = [
@@ -55,12 +55,7 @@ const eslintConfig = [
       "require-await": "off",
       "no-else-return": "off",
       "prefer-destructuring": "off",
-      "no-nested-ternary": "off",
       "max-depth": "off",
-      "no-catch-shadow": "off",
-      "no-undef": "off",
-      "no-param-reassign": "off",
-      "no-alert": "off",
       // "no-console": ["warn"], // Prettierに任せる
       "no-constant-condition": "error",
       "no-control-regex": "error",
