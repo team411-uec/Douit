@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Douit - 利用規約事前同意システム
 
-## Getting Started
+## 📋 アプリ概要
 
-First, run the development server:
+Douit は、利用規約の複雑化と読み飛ばし問題を解決する革新的なプラットフォームです。利用規約を再利用可能な最小単位（規約片）に分割し、ユーザーが一度理解した内容は自動で同意処理することで、効率的で透明性の高い同意プロセスを実現します。
+
+### ⚙️ 技術スタック
+
+- **フロントエンド**: Next.js 15, React 19, TypeScript, TailwindCSS
+- **バックエンド**: Firebase/Firestore
+- **UI**: Radix UI Themes
+- **認証**: Firebase Authentication
+
+### 🚀 開発・実行
 
 ```bash
+# 依存関係のインストール
+npm install
+
+# 開発サーバーの起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# 本番ビルド
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 📚 詳細ドキュメント
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [開発方法](src/docs/rule.md) - 開発の進め方
+- [企画書](src/docs/planning.md) - プロジェクトの詳細な企画内容
+- [用語集](src/docs/dictionary.md) - プロジェクト内で使用する用語の定義
+- [データベース設計](src/docs/firestore.md) - Firestore の設計と実装状況
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
