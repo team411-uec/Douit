@@ -19,7 +19,7 @@ export default function UserPage() {
       console.error("ログアウトに失敗しました:", error);
     }
   };
-
+  
   return (
     <AuthGuard>
       <PageLayout padding="px-6 py-8">
@@ -27,15 +27,15 @@ export default function UserPage() {
         <Flex direction="column" align="center" gap="4" className="mb-8">
           <Avatar
             size="7"
-            src={user?.photoURL || undefined}
-            fallback={user?.displayName?.[0] || user?.email?.[0] || "U"}
+            src={user!.photoURL || undefined}
+            fallback={user!.displayName?.[0] || user!.email?.[0] || "U"}
             style={{ backgroundColor: "#00ADB5", color: "white" }}
           />
           <Heading size="6" color="gray">
-            {user?.displayName || "名前未設定"}
+            {user!.displayName || "名前未設定"}
           </Heading>
           <Text size="3" color="gray">
-            {user?.email}
+            {user!.email}
           </Text>
         </Flex>
 

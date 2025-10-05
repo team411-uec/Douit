@@ -49,7 +49,7 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
   }, [resolvedParams.fragmentid]);
 
   const handleSaveEdit = async () => {
-    if (!user || !fragmentData || !editedContent.trim()) return;
+    if (!fragmentData || !editedContent.trim()) return;
 
     setIsSaving(true);
     try {
@@ -74,10 +74,6 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
       setIsSaving(false);
     }
   };
-
-  if (!user) {
-    return null; // AuthGuardが処理
-  }
 
   if (loading) {
     return (
