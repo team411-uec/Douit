@@ -28,11 +28,6 @@ jobs:
 
       - name: Deploy Project Artifacts to Vercel (Branch-specific)
         run: |
-          # ブランチ名をURLで使える形式に変換
           SANITIZED_BRANCH=$(echo "${{ github.ref_name }}" | tr '/' '-')
-
-          # ブランチ名ごとに一意な名前でデプロイ
-          vercel deploy --prebuilt \
-            --name=${{ github.event.repository.name }}-${SANITIZED_BRANCH} \
-            --token=$VERCEL_TOKEN \
-            --yes
+          DEPLOY_URL=$(vercel deploy --prebuilt --token=$VERCEL_TOKEN --yes)
+          vercel alias set "$DEPLOY_URL" "${SANITIZED_BRANCH}-douit-electr2s-projects.vercel.app" --token=$VERCEL_TOKEN
