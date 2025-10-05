@@ -4,7 +4,6 @@ import {
   Flex,
   Heading,
   Button,
-  Card,
   Text,
   Dialog,
   TextField,
@@ -14,17 +13,12 @@ import AuthGuard from "@/components/AuthGuard";
 import PageLayout from "@/components/Layout/PageLayout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import EmptyState from "@/components/EmptyState";
-import Link from "next/link";
+import TermsCard, { type TermsItemData } from "@/components/UI/TermsCard";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import { createUserTermSet, getUserTermSets } from "@/functions/termSetService";
 
-type TermsItem = {
-  id: string;
-  title: string;
-  description: string;
-  createdAt: Date;
-};
+type TermsItem = TermsItemData;
 
 export default function TermsPage() {
   const { user } = useAuth();
@@ -171,31 +165,5 @@ export default function TermsPage() {
         </Dialog.Root>
       </PageLayout>
     </AuthGuard>
-  );
-}
-
-type TermsCardProps = {
-  term: TermsItem;
-};
-
-function TermsCard({ term }: TermsCardProps) {
-  return (
-    <Link href={`/terms/${term.id}`} className="no-underline">
-      <Card size="2" className="hover:shadow-md transition-shadow cursor-pointer">
-        <Flex direction="column" gap="2">
-          <Heading size="4" color="gray">
-            {term.title}
-          </Heading>
-          {term.description && (
-            <Text size="2" color="gray">
-              {term.description}
-            </Text>
-          )}
-          <Text size="1" color="gray">
-            作成日: {term.createdAt.toLocaleDateString()}
-          </Text>
-        </Flex>
-      </Card>
-    </Link>
   );
 }

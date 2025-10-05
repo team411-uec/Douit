@@ -6,27 +6,19 @@ import {
   Heading,
   Button,
   Container,
-  Card,
   TextField,
-  Badge,
   Dialog,
   TextArea,
   Text,
 } from "@radix-ui/themes";
 import { MagnifyingGlassIcon, PlusIcon } from "@radix-ui/react-icons";
 import Header from "@/components/Header";
-import Link from "next/link";
+import FragmentCard  from "@/components/UI/FragmentCard";
 import { useState, useEffect } from "react";
 import { getAllTermFragments } from "@/functions/tagSearch";
 import { createTermFragment } from "@/functions/termFragments";
 import { TermFragment } from "@/types";
 import { useAuth } from "@/contexts/AuthContext";
-
-type FragmentCard = {
-  id: string;
-  title: string;
-  tags: string[];
-};
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -140,7 +132,7 @@ export default function HomePage() {
         ) : (
           <Flex direction="column" gap="4">
             {fragments.map(fragmentItem => (
-              <FragmentSearchCard
+              <FragmentCard
                 key={fragmentItem.id}
                 fragment={{
                   id: fragmentItem.id,
@@ -227,35 +219,5 @@ export default function HomePage() {
         </Dialog.Root>
       )}
     </Box>
-  );
-}
-
-type FragmentSearchCardProps = {
-  fragment: FragmentCard;
-};
-
-function FragmentSearchCard({ fragment }: FragmentSearchCardProps) {
-  return (
-    <Link href={`/fragment/${fragment.id}`} className="no-underline">
-      <Card
-        size="3"
-        className="border-2 hover:border-solid hover:shadow-md transition-all cursor-pointer"
-      >
-        <Flex direction="column" gap="3">
-          <Heading size="5" color="gray">
-            {fragment.title}
-          </Heading>
-
-          <Flex align="center" gap="2" wrap="wrap">
-            <Box className="text-gray-600">Tags</Box>
-            {fragment.tags.map((tag, index) => (
-              <Badge key={index} size="2" className="bg-[#00ADB5] text-white">
-                {tag}
-              </Badge>
-            ))}
-          </Flex>
-        </Flex>
-      </Card>
-    </Link>
   );
 }

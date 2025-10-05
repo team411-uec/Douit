@@ -1,28 +1,23 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { TermFragment, TermSet, FragmentRef, UnderstoodRecord, ApiKey } from "@/types";
+import { TermFragment, UnderstoodRecord } from "@/types";
 import { searchTermFragments } from "@/functions/tagSearch";
 import {
   createTermFragment,
-  getTermFragment,
-  updateTermFragment,
   deleteTermFragment,
 } from "@/functions/termFragments";
 import { createTermSet, addFragmentToSet } from "@/functions/termSetService";
 import {
   addUnderstoodRecord,
   getUserUnderstoodRecords,
-  getUnderstoodFragmentIds,
 } from "@/functions/understandingService";
-import { createUser, getUser, updateUser, ensureUser } from "@/functions/userService";
 import { db } from "@/functions/firebase";
 import { getDocs, collection } from "firebase/firestore";
 
 export default function TestPage() {
   // State管理
   const [fragments, setFragments] = useState<{ id: string; data: TermFragment }[]>([]);
-  const [termSets, setTermSets] = useState<{ id: string; data: TermSet }[]>([]);
   const [understoodRecords, setUnderstoodRecords] = useState<(UnderstoodRecord & { id: string })[]>(
     []
   );
@@ -171,7 +166,6 @@ export default function TestPage() {
   const replaceParameters = (content: string, parameters: string[]) => {
     let result = content;
     parameters.forEach((param, index) => {
-      const placeholder = `[${param}]`;
       result = result.replace(new RegExp(`\\[${param}\\]`, "g"), `<サンプル値${index + 1}>`);
     });
     return result;

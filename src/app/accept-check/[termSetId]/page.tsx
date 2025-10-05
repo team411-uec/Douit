@@ -5,6 +5,8 @@ import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import PageLayout from "@/components/Layout/PageLayout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import EmptyState from "@/components/EmptyState";
+import ParameterDisplay from "@/components/UI/ParameterDisplay";
+import FragmentCheckCard from "@/components/UI/FragmentCheckCard";
 import { useState, useEffect, use } from "react";
 import { getUserTermSetWithFragments } from "@/functions/termSetService";
 import { getTermFragment } from "@/functions/termFragments";
@@ -129,89 +131,19 @@ export default function AcceptCheckPage({ params }: { params: Promise<{ termSetI
         </Text>
 
         {/* Common Parameters */}
-        {Object.keys(commonParams).length > 0 && (
-          <Box className="mb-6">
-            <Heading size="4" className="mb-4">
-              共通パラメータ
-            </Heading>
-            <Card className="p-4">
-              {Object.entries(commonParams).map(([key, value]) => (
-                <Flex key={key} justify="between" align="center" className="mb-2 last:mb-0">
-                  <Text size="3" weight="medium" className="text-gray-600">
-                    {key}
-                  </Text>
-                  <Text size="3" weight="bold">
-                    {value}
-                  </Text>
-                </Flex>
-              ))}
-            </Card>
-          </Box>
-        )}
+        <ParameterDisplay
+          title="共通パラメータ"
+          parameters={commonParams}
+        />
 
         {/* Fragments List */}
         <Box>
           {fragments.map((fragment, index) => (
-            <Card
+            <FragmentCheckCard
               key={fragment.ref.fragmentId}
-              className={`mb-4 p-4 border-l-4 ${
-                fragment.understood
-                  ? "border-l-green-500 bg-green-50"
-                  : "border-l-red-500 bg-red-50"
-              }`}
-            >
-              <Flex align="center" justify="between">
-                <Flex align="center" gap="3" className="flex-1">
-                  {/* Status Icon */}
-                  {fragment.understood ? (
-                    <CheckIcon width="20" height="20" className="text-green-500" />
-                  ) : (
-                    <Cross2Icon width="20" height="20" className="text-red-500" />
-                  )}
-
-                  {/* Fragment Info */}
-                  <Box className="flex-1">
-                    <Heading
-                      size="4"
-                      className={`mb-2 ${fragment.understood ? "text-green-700" : "text-red-700"}`}
-                    >
-                      {fragment.data.title}
-                    </Heading>
-
-                    {/* Fragment-specific Parameters */}
-                    {Object.entries(fragment.ref.parameterValues).map(([key, value]) => {
-                      // 共通パラメータは表示しない
-                      if (commonParams[key]) return null;
-
-                      return (
-                        <Flex key={key} gap="2" className="mb-1">
-                          <Text size="2" color="gray">
-                            {key}
-                          </Text>
-                          <Text size="2" weight="bold">
-                            {value}
-                          </Text>
-                        </Flex>
-                      );
-                    })}
-                  </Box>
-                </Flex>
-
-                {/* Read Button */}
-                <Link href={`/fragment/${fragment.ref.fragmentId}`}>
-                  <Button
-                    size="2"
-                    className={`${
-                      fragment.understood
-                        ? "bg-green-600 hover:bg-green-700"
-                        : "bg-red-600 hover:bg-red-700"
-                    } text-white`}
-                  >
-                    読む
-                  </Button>
-                </Link>
-              </Flex>
-            </Card>
+              fragment={fragment}
+              commonParams={commonParams}
+            />
           ))}
         </Box>
 
