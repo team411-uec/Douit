@@ -31,4 +31,13 @@ npm run build
 - [用語集](src/docs/dictionary.md) - プロジェクト内で使用する用語の定義
 - [データベース設計](src/docs/firestore.md) - Firestore の設計と実装状況
 
+### 外部リンク
+
+[検証環境](douit-nxm9ye6du-electr2s-projects.vercel.app)  
+main以外のbranchにpushするとこれが更新されます、このURLの前にブランチ名とハイフンをつけるとそのブランチの状態が出るはずです。  
+例）feat/docs→feat-docs-douit-nxm9ye6du-electr2s-projects.vercel.app  
+スラッシュはハイフンに置換されるので注意してください  
+[本番環境](https://douit.vercel.app/)  
+mainにmergeされたときに更新されます
+
 ---
