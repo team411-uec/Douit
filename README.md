@@ -33,9 +33,9 @@ npm run build
 
 ### 外部リンク
 
-[検証環境](https://douit-nxm9ye6du-electr2s-projects.vercel.app)  
+[検証環境](https://douit-electr2s-projects.vercel.app)  
 main以外のbranchにpushするとこれが更新されます、このURLの前にブランチ名とハイフンをつけるとそのブランチの状態が出るはずです。  
-例）feat/docs→feat-docs-douit-nxm9ye6du-electr2s-projects.vercel.app  
+例）feat/docs→feat-docs-douit-electr2s-projects.vercel.app  
 スラッシュはハイフンに置換されるので注意してください  
 [本番環境](https://douit.vercel.app/)  
 mainにmergeされたときに更新されます
