@@ -1,8 +1,10 @@
 "use client";
 
-import { Box, Flex, Heading, Text, Container, Button, Card, Link } from "@radix-ui/themes";
+import { Flex, Heading, Text, Card, Link, Button, Box } from "@radix-ui/themes";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
-import Header from "../../components/Header";
+import PageLayout from "../../components/PageLayout";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import EmptyState from "../../components/EmptyState";
 import { useState, useEffect, use } from "react";
 import { getUserTermSetWithFragments } from "../../functions/termSetService";
 import { getTermFragment } from "../../functions/termFragments";
@@ -93,45 +95,30 @@ export default function AcceptCheckPage({ params }: { params: Promise<{ termSetI
 
   if (loading) {
     return (
-      <Box className="min-h-screen">
-        <Header showUserIcon={true} />
-        <Container size="1" px="4" py="6">
-          <Box className="text-center py-8">
-            <Heading size="4" color="gray">
-              読み込み中...
-            </Heading>
-          </Box>
-        </Container>
-      </Box>
+      <PageLayout showUserIcon={true}>
+        <LoadingSpinner />
+      </PageLayout>
     );
   }
 
   if (error || !termSetData) {
     return (
-      <Box className="min-h-screen">
-        <Header showUserIcon={true} />
-        <Container size="1" px="4" py="6">
-          <Box className="text-center py-8">
-            <Heading size="4" color="red">
-              {error || "規約セットが見つかりませんでした"}
-            </Heading>
-          </Box>
-        </Container>
-      </Box>
+      <PageLayout showUserIcon={true}>
+        <EmptyState 
+          title={error || "規約セットが見つかりませんでした"}
+        />
+      </PageLayout>
     );
   }
 
   const commonParams = getCommonParameters();
 
   return (
-    <Box className="min-h-screen">
-      <Header showUserIcon={true} />
-
-      <Container size="1" px="4" py="6">
-        {/* Page Title */}
-        <Heading size="6" color="gray" className="mb-6">
-          利用規約同意可能性確認画面
-        </Heading>
+    <PageLayout showUserIcon={true}>
+      {/* Page Title */}
+      <Heading size="6" color="gray" className="mb-6">
+        利用規約同意可能性確認画面
+      </Heading>
 
         {/* Term Set Title */}
         <Heading size="5" className="mb-2">
@@ -236,7 +223,6 @@ export default function AcceptCheckPage({ params }: { params: Promise<{ termSetI
             </Text>
           </Box>
         )}
-      </Container>
-    </Box>
+    </PageLayout>
   );
 }

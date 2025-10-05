@@ -1,16 +1,17 @@
 "use client";
 
 import {
-  Box,
   Flex,
   Heading,
   Button,
   Select,
   ScrollArea,
-  Container,
   TextArea,
 } from "@radix-ui/themes";
-import Header from "../../../components/Header";
+import AuthGuard from "../../../components/AuthGuard";
+import PageLayout from "../../../components/PageLayout";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import EmptyState from "../../../components/EmptyState";
 import { useState, useEffect, use } from "react";
 import { getTermFragment, updateTermFragment } from "../../../functions/termFragments";
 import { TermFragment } from "../../../../types";
@@ -75,47 +76,35 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
   };
 
   if (!user) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-lg text-gray-600">ログインが必要です</p>
-      </div>
-    );
+    return null; // AuthGuardが処理
   }
 
   if (loading) {
     return (
-      <Box className="min-h-screen">
-        <Header showUserIcon={true} />
-        <Container size="1" px="4" py="6">
-          <Box className="text-center py-8">
-            <Heading size="4" color="gray">
-              読み込み中...
-            </Heading>
-          </Box>
-        </Container>
-      </Box>
+      <AuthGuard showUserIcon={true}>
+        <PageLayout showUserIcon={true}>
+          <LoadingSpinner />
+        </PageLayout>
+      </AuthGuard>
     );
   }
 
   if (error || !fragmentData) {
     return (
-      <Box className="min-h-screen">
-        <Header showUserIcon={true} />
-        <Container size="1" px="4" py="6">
-          <Box className="text-center py-8">
-            <Heading size="4" color="red">
-              {error || "規約片が見つかりませんでした"}
-            </Heading>
-          </Box>
-        </Container>
-      </Box>
+      <AuthGuard showUserIcon={true}>
+        <PageLayout showUserIcon={true}>
+          <EmptyState 
+            title={error || "規約片が見つかりませんでした"}
+            actionText="ホームに戻る"
+            actionHref="/"
+          />
+        </PageLayout>
+      </AuthGuard>
     );
   }
   return (
-    <Box className="min-h-screen">
-      <Header showUserIcon={true} />
-
-      <Container size="1" px="4" py="6">
+    <AuthGuard showUserIcon={true}>
+      <PageLayout showUserIcon={true}>
         {/* Header with title and version */}
         <Flex align="center" justify="between" className="mb-6">
           <Heading size="6" color="gray" className="flex-1">
@@ -135,7 +124,7 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
 
         {/* Content with editable text area */}
         <ScrollArea className="h-96 mb-6">
-          <Box className="pr-4">
+          <div className="pr-4">
             <TextArea
               value={editedContent}
               onChange={e => setEditedContent(e.target.value)}
@@ -143,7 +132,7 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
               placeholder="規約片の内容を入力してください..."
               style={{ minHeight: "350px" }}
             />
-          </Box>
+          </div>
         </ScrollArea>
 
         {/* Save Button */}
@@ -157,7 +146,7 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
         >
           {isSaving ? "保存中..." : "保存"}
         </Button>
-      </Container>
-    </Box>
+      </PageLayout>
+    </AuthGuard>
   );
 }

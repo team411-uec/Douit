@@ -1,7 +1,10 @@
 "use client";
 
-import { Box, Flex, Heading, Button, Container, Card } from "@radix-ui/themes";
-import Header from "../components/Header";
+import { Flex, Heading, Card, Box } from "@radix-ui/themes";
+import AuthGuard from "../components/AuthGuard";
+import PageLayout from "../components/PageLayout";
+import LoadingSpinner from "../components/LoadingSpinner";
+import EmptyState from "../components/EmptyState";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getUnderstoodRecordsWithFragments } from "../functions/understandingService";
@@ -31,49 +34,19 @@ export default function UnderstoodPage() {
     fetchUnderstoodRecords();
   }, [user]);
 
-  if (!user) {
-    return (
-      <Box className="min-h-screen">
-        <Header showUserIcon={true} />
-        <Container size="1" className="px-6 py-6">
-          <Box className="text-center py-8">
-            <Heading size="4" color="gray">
-              ログインが必要です
-            </Heading>
-            <Link href="/login">
-              <Button className="mt-4 bg-[#00ADB5] hover:bg-[#009AA2] text-white">
-                ログインページへ
-              </Button>
-            </Link>
-          </Box>
-        </Container>
-      </Box>
-    );
-  }
-
   return (
-    <Box className="min-h-screen">
-      <Header showUserIcon={true} />
-
-      <Container size="1" className="px-6 py-6">
+    <AuthGuard showUserIcon={true}>
+      <PageLayout showUserIcon={true}>
         <Heading size="6" className="mb-6">
           理解済み規約片
         </Heading>
 
         {loading ? (
-          <Box className="text-center py-8">
-            <Heading size="4" color="gray">
-              読み込み中...
-            </Heading>
-          </Box>
+          <LoadingSpinner />
         ) : (
           <Flex direction="column" gap="4">
             {understoodRecords.length === 0 ? (
-              <Box className="text-center py-8">
-                <Heading size="4" color="gray">
-                  理解済みの規約片がありません
-                </Heading>
-              </Box>
+              <EmptyState title="理解済みの規約片がありません" />
             ) : (
               understoodRecords.map(record => (
                 <UnderstoodTermCard key={record.id} record={record} />
@@ -81,8 +54,8 @@ export default function UnderstoodPage() {
             )}
           </Flex>
         )}
-      </Container>
-    </Box>
+      </PageLayout>
+    </AuthGuard>
   );
 }
 

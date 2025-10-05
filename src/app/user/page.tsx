@@ -1,7 +1,8 @@
 "use client";
 
-import { Box, Flex, Heading, Button, Container, Avatar, Text } from "@radix-ui/themes";
-import Header from "../components/Header";
+import { Flex, Heading, Button, Avatar, Text } from "@radix-ui/themes";
+import AuthGuard from "../components/AuthGuard";
+import PageLayout from "../components/PageLayout";
 import Link from "next/link";
 import { useAuth } from "../contexts/AuthContext";
 import { useRouter } from "next/navigation";
@@ -20,29 +21,12 @@ export default function UserPage() {
   };
 
   if (!user) {
-    return (
-      <Box className="min-h-screen">
-        <Header />
-        <Container size="1" className="px-6 py-8">
-          <Box className="text-center py-8">
-            <Heading size="4" color="gray">
-              ログインが必要です
-            </Heading>
-            <Link href="/login">
-              <Button className="mt-4 bg-[#00ADB5] hover:bg-[#009AA2] text-white">
-                ログインページへ
-              </Button>
-            </Link>
-          </Box>
-        </Container>
-      </Box>
-    );
+    return null; // AuthGuardが処理するため不要
   }
+  
   return (
-    <Box className="min-h-screen">
-      <Header />
-
-      <Container size="1" className="px-6 py-8">
+    <AuthGuard>
+      <PageLayout padding="px-6 py-8">
         {/* Profile Section */}
         <Flex direction="column" align="center" gap="4" className="mb-8">
           <Avatar
@@ -88,7 +72,7 @@ export default function UserPage() {
             ログアウト
           </Button>
         </Flex>
-      </Container>
-    </Box>
+      </PageLayout>
+    </AuthGuard>
   );
 }
