@@ -1,10 +1,10 @@
 "use client";
 
 import { Flex, Heading, Button, Avatar, Text } from "@radix-ui/themes";
-import AuthGuard from "../components/AuthGuard";
-import PageLayout from "../components/PageLayout";
+import AuthGuard from "@/components/AuthGuard";
+import PageLayout from "@/components/Layout/PageLayout";
 import Link from "next/link";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 
 export default function UserPage() {

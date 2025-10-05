@@ -2,15 +2,15 @@
 
 import { Flex, Heading, Text, Card, Link, Button, Box } from "@radix-ui/themes";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
-import PageLayout from "../../components/PageLayout";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import EmptyState from "../../components/EmptyState";
+import PageLayout from "@/components/Layout/PageLayout";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import EmptyState from "@/components/EmptyState";
 import { useState, useEffect, use } from "react";
-import { getUserTermSetWithFragments } from "../../functions/termSetService";
-import { getTermFragment } from "../../functions/termFragments";
-import { isFragmentUnderstood } from "../../functions/understandingService";
-import { TermFragment, FragmentRef } from "../../../types";
-import { useAuth } from "../../contexts/AuthContext";
+import { getUserTermSetWithFragments } from "@/functions/termSetService";
+import { getTermFragment } from "@/functions/termFragments";
+import { isFragmentUnderstood } from "@/functions/understandingService";
+import { TermFragment, FragmentRef } from "@/types";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface FragmentWithData {
   ref: FragmentRef;
@@ -104,7 +104,7 @@ export default function AcceptCheckPage({ params }: { params: Promise<{ termSetI
   if (error || !termSetData) {
     return (
       <PageLayout showUserIcon={true}>
-        <EmptyState 
+        <EmptyState
           title={error || "規約セットが見つかりませんでした"}
         />
       </PageLayout>

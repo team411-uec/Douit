@@ -8,14 +8,14 @@ import {
   ScrollArea,
   TextArea,
 } from "@radix-ui/themes";
-import AuthGuard from "../../../components/AuthGuard";
-import PageLayout from "../../../components/PageLayout";
-import LoadingSpinner from "../../../components/LoadingSpinner";
-import EmptyState from "../../../components/EmptyState";
+import AuthGuard from "@/components/AuthGuard";
+import PageLayout from "@/components/Layout/PageLayout";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import EmptyState from "@/components/EmptyState";
 import { useState, useEffect, use } from "react";
-import { getTermFragment, updateTermFragment } from "../../../functions/termFragments";
-import { TermFragment } from "../../../../types";
-import { useAuth } from "../../../contexts/AuthContext";
+import { getTermFragment, updateTermFragment } from "@/functions/termFragments";
+import { TermFragment } from "@/types";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function EditFragmentPage({ params }: { params: Promise<{ fragmentid: string }> }) {
   const { user } = useAuth();
@@ -89,7 +89,7 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
     return (
       <AuthGuard showUserIcon={true}>
         <PageLayout showUserIcon={true}>
-          <EmptyState 
+          <EmptyState
             title={error || "規約片が見つかりませんでした"}
             actionText="ホームに戻る"
             actionHref="/"

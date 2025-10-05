@@ -1,15 +1,15 @@
 "use client";
 
 import { Flex, Heading, Card, Box } from "@radix-ui/themes";
-import AuthGuard from "../components/AuthGuard";
-import PageLayout from "../components/PageLayout";
-import LoadingSpinner from "../components/LoadingSpinner";
-import EmptyState from "../components/EmptyState";
+import AuthGuard from "@/components/AuthGuard";
+import PageLayout from "@/components/Layout/PageLayout";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import EmptyState from "@/components/EmptyState";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { getUnderstoodRecordsWithFragments } from "../functions/understandingService";
-import { TermFragment, UnderstoodRecord } from "../../types";
-import { useAuth } from "../contexts/AuthContext";
+import { getUnderstoodRecordsWithFragments } from "@/functions/understandingService";
+import { TermFragment, UnderstoodRecord } from "@/types";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function UnderstoodPage() {
   const [understoodRecords, setUnderstoodRecords] = useState<any[]>([]);

@@ -11,12 +11,12 @@ interface EmptyStateProps {
   size?: "small" | "medium" | "large";
 }
 
-export default function EmptyState({ 
-  title, 
-  description, 
-  actionText, 
+export default function EmptyState({
+  title,
+  description,
+  actionText,
   actionHref,
-  size = "medium" 
+  size = "medium"
 }: EmptyStateProps) {
   const headingSize = size === "small" ? "3" : size === "large" ? "5" : "4";
 

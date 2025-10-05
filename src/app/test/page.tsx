@@ -1,22 +1,22 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { TermFragment, TermSet, FragmentRef, UnderstoodRecord, ApiKey } from "../../types";
-import { searchTermFragments } from "../functions/tagSearch";
+import { TermFragment, TermSet, FragmentRef, UnderstoodRecord, ApiKey } from "@/types";
+import { searchTermFragments } from "@/functions/tagSearch";
 import {
   createTermFragment,
   getTermFragment,
   updateTermFragment,
   deleteTermFragment,
-} from "../functions/termFragments";
-import { createTermSet, addFragmentToSet } from "../functions/termSetService";
+} from "@/functions/termFragments";
+import { createTermSet, addFragmentToSet } from "@/functions/termSetService";
 import {
   addUnderstoodRecord,
   getUserUnderstoodRecords,
   getUnderstoodFragmentIds,
-} from "../functions/understandingService";
-import { createUser, getUser, updateUser, ensureUser } from "../functions/userService";
-import { db } from "../functions/firebase";
+} from "@/functions/understandingService";
+import { createUser, getUser, updateUser, ensureUser } from "@/functions/userService";
+import { db } from "@/functions/firebase";
 import { getDocs, collection } from "firebase/firestore";
 
 export default function TestPage() {

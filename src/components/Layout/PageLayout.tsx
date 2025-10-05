@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Container } from "@radix-ui/themes";
-import Header from "./Header";
+import Header from "../Header";
 import { ReactNode } from "react";
 
 interface PageLayoutProps {
@@ -13,10 +13,10 @@ interface PageLayoutProps {
   padding?: string;
 }
 
-export default function PageLayout({ 
-  children, 
-  showUserIcon = false, 
-  showNumber = false, 
+export default function PageLayout({
+  children,
+  showUserIcon = false,
+  showNumber = false,
   number = "4",
   size = "1",
   padding = "px-6 py-6"

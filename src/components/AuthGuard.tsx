@@ -3,7 +3,7 @@
 import { Box, Flex, Heading, Button, Container } from "@radix-ui/themes";
 import Header from "./Header";
 import Link from "next/link";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { ReactNode } from "react";
 
 interface AuthGuardProps {
@@ -13,11 +13,11 @@ interface AuthGuardProps {
   number?: string;
 }
 
-export default function AuthGuard({ 
-  children, 
-  showUserIcon = false, 
-  showNumber = false, 
-  number = "4" 
+export default function AuthGuard({
+  children,
+  showUserIcon = false,
+  showNumber = false,
+  number = "4"
 }: AuthGuardProps) {
   const { user } = useAuth();
 

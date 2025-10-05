@@ -10,8 +10,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { auth } from "../functions/firebase";
-import { ensureUser } from "../functions/userService";
+import { auth } from "@/functions/firebase";
+import { ensureUser } from "@/functions/userService";
 
 interface AuthContextType {
   user: User | null;

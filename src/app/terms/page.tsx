@@ -10,14 +10,14 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import { PlusIcon } from "@radix-ui/react-icons";
-import AuthGuard from "../components/AuthGuard";
-import PageLayout from "../components/PageLayout";
-import LoadingSpinner from "../components/LoadingSpinner";
-import EmptyState from "../components/EmptyState";
+import AuthGuard from "@/components/AuthGuard";
+import PageLayout from "@/components/Layout/PageLayout";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import EmptyState from "@/components/EmptyState";
 import Link from "next/link";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
-import { createUserTermSet, getUserTermSets } from "../functions/termSetService";
+import { createUserTermSet, getUserTermSets } from "@/functions/termSetService";
 
 type TermsItem = {
   id: string;
@@ -100,7 +100,7 @@ export default function TermsPage() {
         ) : (
           <Flex direction="column" gap="3" className="mb-6">
             {termsData.length === 0 ? (
-              <EmptyState 
+              <EmptyState
                 title="まだ利用規約を作成していません"
                 description="最初の利用規約セットを作成してみましょう"
               />
@@ -137,7 +137,7 @@ export default function TermsPage() {
                 <TextField.Root
                   placeholder="例: サークル会則"
                   value={newTermTitle}
-                  onChange={(e) => setNewTermTitle(e.target.value)}
+                  onChange={e => setNewTermTitle(e.target.value)}
                 />
               </label>
 
@@ -148,7 +148,7 @@ export default function TermsPage() {
                 <TextField.Root
                   placeholder="例: team411"
                   value={newTermDescription}
-                  onChange={(e) => setNewTermDescription(e.target.value)}
+                  onChange={e => setNewTermDescription(e.target.value)}
                 />
               </label>
             </Flex>
