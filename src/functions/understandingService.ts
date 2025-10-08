@@ -23,7 +23,6 @@ export async function addUnderstoodRecord(
   version: number
 ): Promise<ApiResult<string>> {
   try {
-    // 既に同じフラグメントIDとバージョンの記録が存在するかチェック
     const existingQuery = query(
       collection(db, "users", userId, "understood"),
       where("fragmentId", "==", fragmentId),
@@ -58,9 +57,6 @@ export async function addUnderstoodRecord(
   }
 }
 
-/**
- * 理解記録の削除
- */
 export async function removeUnderstoodRecord(
   userId: string,
   fragmentId: string
@@ -73,7 +69,6 @@ export async function removeUnderstoodRecord(
 
     const querySnapshot = await getDocs(q);
 
-    // 該当する記録をすべて削除
     const deletePromises = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
     await Promise.all(deletePromises);
 
@@ -85,9 +80,6 @@ export async function removeUnderstoodRecord(
   }
 }
 
-/**
- * ユーザーの理解記録を取得
- */
 export async function getUserUnderstoodRecords(
   userId: string
 ): Promise<ApiResult<(UnderstoodRecord & { id: string })[]>> {
@@ -109,9 +101,6 @@ export async function getUserUnderstoodRecords(
   }
 }
 
-/**
- * 特定のフラグメントを理解しているかチェック
- */
 export async function isFragmentUnderstood(
   userId: string,
   fragmentId: string,
@@ -136,9 +125,6 @@ export async function isFragmentUnderstood(
   }
 }
 
-/**
- * 理解記録一覧（フラグメント情報付き）を取得
- */
 export async function getUnderstoodRecordsWithFragments(userId: string): Promise<
   ApiResult<
     {

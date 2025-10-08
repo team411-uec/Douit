@@ -37,9 +37,6 @@ export async function createUserTermSet(
   return docRef.id;
 }
 
-/**
- * ユーザーの利用規約セット一覧を取得
- */
 export async function getUserTermSets(
   userId: string
 ): Promise<ApiResult<Array<{ id: string; title: string; description: string; createdAt: Date }>>> {
@@ -79,9 +76,6 @@ export async function getUserTermSets(
   }
 }
 
-/**
- * 規約セットの作成
- */
 export async function createTermSet(
   title: string = "新しい規約セット",
   userId: string = "system"
@@ -109,9 +103,6 @@ export async function createTermSet(
   }
 }
 
-/**
- * 規約セットにフラグメントを追加
- */
 export async function addFragmentToSet(
   termSetId: string,
   fragmentId: string,
@@ -120,7 +111,6 @@ export async function addFragmentToSet(
 ): Promise<void> {
   const fragmentsCollection = collection(db, "userTermSets", termSetId, "fragments");
 
-  // orderが指定されない場合、最後に追加
   if (order === undefined) {
     const existingFragments = await getDocs(query(fragmentsCollection, orderBy("order", "desc")));
     if (existingFragments.empty) {
@@ -140,38 +130,11 @@ export async function addFragmentToSet(
 
   await addDoc(fragmentsCollection, fragmentRef);
 
-  // 親セットの更新日時を更新
   await updateDoc(doc(db, "userTermSets", termSetId), {
     updatedAt: serverTimestamp(),
   });
 }
 
-/**
- * フラグメントの並べ替え
- */
-/*
-async function reorderFragments(
-  termSetId: string,
-  fragmentOrders: { fragmentRefId: string; newOrder: number }[]
-): Promise<void> {
-  const batch = writeBatch(db);
-
-  fragmentOrders.forEach(({ fragmentRefId, newOrder }) => {
-    const fragmentRef = doc(db, "termSets", termSetId, "fragments", fragmentRefId);
-    batch.update(fragmentRef, { order: newOrder });
-  });
-
-  // 親セットの更新日時を更新
-  const setRef = doc(db, "termSets", termSetId);
-  batch.update(setRef, { updatedAt: serverTimestamp() });
-
-  await batch.commit();
-}
-*/
-
-/**
- * ユーザー規約セットの詳細取得（フラグメント含む）
- */
 export async function getUserTermSetWithFragments(termSetId: string): Promise<{
   set: TermSet | null;
   fragments: FragmentRef[];

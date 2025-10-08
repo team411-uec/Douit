@@ -42,9 +42,6 @@ export async function createTermFragment(
   }
 }
 
-/**
- * 規約片の編集
- */
 export async function updateTermFragment(
   fragmentId: string,
   title: string,
@@ -62,7 +59,6 @@ export async function updateTermFragment(
 
     const currentData = fragmentDoc.data() as TermFragment;
 
-    // 現在のバージョンを履歴に保存
     await addDoc(collection(db, "termFragments", fragmentId, "versions"), {
       title: currentData.title,
       content: currentData.content,
@@ -72,7 +68,6 @@ export async function updateTermFragment(
       updatedAt: currentData.updatedAt,
     });
 
-    // 親ドキュメント更新
     await updateDoc(fragmentRef, {
       title,
       content,

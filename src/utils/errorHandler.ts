@@ -11,7 +11,6 @@ export enum ErrorType {
   UNKNOWN = "UNKNOWN",
 }
 
-// エラータイプの定義
 export interface CustomError extends Error {
   code?: string;
   details?: unknown;
@@ -40,14 +39,12 @@ export class AppError extends Error {
       this.details = details;
     }
 
-    // Error.captureStackTrace が利用可能な場合のみ使用
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, AppError);
     }
   }
 }
 
-// Firebase エラーコードのマッピング
 const FIREBASE_ERROR_MESSAGES: Record<string, string> = {
   "auth/user-not-found": "ユーザーが見つかりません。",
   "auth/wrong-password": "パスワードが間違っています。",
@@ -73,9 +70,6 @@ const FIREBASE_ERROR_MESSAGES: Record<string, string> = {
   "data-loss": "データが失われました。",
 };
 
-/**
- * Firebase エラーを AppError に変換
- */
 export const convertFirebaseError = (error: unknown): AppError => {
   if (error instanceof AppError) {
     return error;
@@ -89,16 +83,12 @@ export const convertFirebaseError = (error: unknown): AppError => {
   return new AppError(errorMessage, ErrorType.FIREBASE, errorCode, error);
 };
 
-/**
- * エラーハンドリングのユーティリティ関数
- */
 export const handleError = (error: unknown): AppError => {
   if (error instanceof AppError) {
     return error;
   }
 
   if (error instanceof Error) {
-    // Firebase エラーかどうかをチェック
     if (error.message.includes("Firebase") || (error as any).code) {
       return convertFirebaseError(error);
     }
@@ -106,18 +96,13 @@ export const handleError = (error: unknown): AppError => {
     return new AppError(error.message, ErrorType.UNKNOWN, undefined, error);
   }
 
-  // エラーが文字列の場合
   if (typeof error === "string") {
     return new AppError(error, ErrorType.UNKNOWN);
   }
 
-  // その他の場合
   return new AppError("不明なエラーが発生しました。", ErrorType.UNKNOWN, undefined, error);
 };
 
-/**
- * エラーログの出力
- */
 export const logError = (error: AppError | Error | unknown, context?: string): void => {
   const prefix = context ? `[${context}]` : "";
 
@@ -140,17 +125,11 @@ export const logError = (error: AppError | Error | unknown, context?: string): v
   }
 };
 
-/**
- * 成功結果を作成
- */
 export const createSuccessResult = <T>(data: T): ApiResult<T> => ({
   success: true,
   data,
 });
 
-/**
- * エラー結果を作成
- */
 export const createErrorResult = <T>(error: string | AppError): ApiResult<T> => {
   const errorMessage = error instanceof AppError ? error.message : error;
   return {
@@ -159,9 +138,6 @@ export const createErrorResult = <T>(error: string | AppError): ApiResult<T> => 
   };
 };
 
-/**
- * 非同期操作を安全に実行し、結果を ApiResult として返す
- */
 export const safeExecute = async <T>(
   operation: () => Promise<T>,
   context?: string
@@ -176,30 +152,18 @@ export const safeExecute = async <T>(
   }
 };
 
-/**
- * エラーが特定のタイプかどうかをチェック
- */
 export const isErrorType = (error: unknown, type: ErrorType): boolean => {
   return error instanceof AppError && error.type === type;
 };
 
-/**
- * エラーが Firebase 認証エラーかどうかをチェック
- */
 export const isAuthError = (error: unknown): boolean => {
   return isErrorType(error, ErrorType.AUTHENTICATION);
 };
 
-/**
- * エラーが Firebase データベースエラーかどうかをチェック
- */
 export const isFirebaseError = (error: unknown): boolean => {
   return isErrorType(error, ErrorType.FIREBASE);
 };
 
-/**
- * エラーがネットワークエラーかどうかをチェック
- */
 export const isNetworkError = (error: unknown): boolean => {
   return isErrorType(error, ErrorType.NETWORK);
 };

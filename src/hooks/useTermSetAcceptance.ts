@@ -27,14 +27,12 @@ export function useTermSetAcceptance(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 共通パラメータを抽出する関数
   const getCommonParameters = (fragmentList: FragmentWithData[]): Record<string, string> => {
     const allParams: Record<string, string> = {};
 
     fragmentList.forEach(fragment => {
       Object.entries(fragment.ref.parameterValues).forEach(([key, value]) => {
         if (allParams[key] && allParams[key] !== value) {
-          // 値が異なる場合は共通パラメータから除外
           delete allParams[key];
         } else {
           allParams[key] = value;
@@ -50,7 +48,6 @@ export function useTermSetAcceptance(
       try {
         setLoading(true);
 
-        // 規約セットとフラグメント参照を取得
         const termSetResult = await getUserTermSetWithFragments(termSetId);
         if (!termSetResult) {
           setError("規約セットが見つかりませんでした");
@@ -59,7 +56,6 @@ export function useTermSetAcceptance(
 
         setTermSetData(termSetResult.set);
 
-        // 各フラグメントの詳細データと理解状態を取得
         const fragmentsWithData: FragmentWithData[] = [];
 
         for (const fragmentRef of termSetResult.fragments) {
