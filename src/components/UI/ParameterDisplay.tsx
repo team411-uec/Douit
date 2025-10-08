@@ -15,7 +15,7 @@ interface ParameterDisplayProps {
 export default function ParameterDisplay({
   title,
   parameters,
-  className = "mb-6"
+  className = "mb-6",
 }: ParameterDisplayProps) {
   if (Object.keys(parameters).length === 0) {
     return null;

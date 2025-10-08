@@ -2,12 +2,13 @@
 
 import { Box, Flex, Heading, Button, Container, Avatar, TextField, Text } from "@radix-ui/themes";
 import Header from "@/components/Header";
-import { useAuth } from "@/contexts/AuthContext";
+import { useUser, useAuthActions } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const { user, signIn, signUp, signInWithGoogle, logout } = useAuth();
+  const user = useUser();
+  const { signIn, signUp, signInWithGoogle, logout } = useAuthActions();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -32,8 +33,12 @@ export default function LoginPage() {
       } else {
         await signIn(email, password);
       }
-    } catch (error: any) {
-      setError(error.message || `${isSignUp ? "アカウント作成" : "ログイン"}に失敗しました`);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : `${isSignUp ? "アカウント作成" : "ログイン"}に失敗しました`;
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -45,8 +50,9 @@ export default function LoginPage() {
 
     try {
       await signInWithGoogle();
-    } catch (error: any) {
-      setError(error.message || "Googleログインに失敗しました");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Googleログインに失敗しました";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+  useMemo,
+  useCallback,
+} from "react";
 import {
   User,
   onAuthStateChanged,
@@ -32,6 +40,12 @@ export const useAuth = () => {
   return context;
 };
 
+export const useUser = () => useAuth().user;
+export const useAuthActions = () => {
+  const { signIn, signUp, signInWithGoogle, logout } = useAuth();
+  return { signIn, signUp, signInWithGoogle, logout };
+};
+
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -57,7 +71,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return unsubscribe;
   }, []);
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = useCallback(async (email: string, password: string) => {
     setLoading(true);
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
@@ -71,9 +85,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(false);
       throw error;
     }
-  };
+  }, []);
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = useCallback(async (email: string, password: string) => {
     setLoading(true);
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
@@ -87,9 +101,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(false);
       throw error;
     }
-  };
+  }, []);
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = useCallback(async () => {
     setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
@@ -104,25 +118,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(false);
       throw error;
     }
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setLoading(true);
     try {
       await signOut(auth);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const value: AuthContextType = {
-    user,
-    loading,
-    signIn,
-    signUp,
-    signInWithGoogle,
-    logout,
-  };
+  const value: AuthContextType = useMemo(
+    () => ({
+      user,
+      loading,
+      signIn,
+      signUp,
+      signInWithGoogle,
+      logout,
+    }),
+    [user, loading, signIn, signUp, signInWithGoogle, logout]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

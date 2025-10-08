@@ -9,7 +9,7 @@ interface LoadingSpinnerProps {
 
 export default function LoadingSpinner({
   message = "読み込み中...",
-  size = "medium"
+  size = "medium",
 }: LoadingSpinnerProps) {
   const headingSize = size === "small" ? "3" : size === "large" ? "5" : "4";
 

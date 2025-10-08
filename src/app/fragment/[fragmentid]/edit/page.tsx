@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Flex,
-  Heading,
-  Button,
-  Select,
-  ScrollArea,
-  TextArea,
-} from "@radix-ui/themes";
+import { Flex, Heading, Button, Select, ScrollArea, TextArea } from "@radix-ui/themes";
 import AuthGuard from "@/components/AuthGuard";
 import PageLayout from "@/components/Layout/PageLayout";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -15,10 +8,8 @@ import EmptyState from "@/components/EmptyState";
 import { useState, useEffect, use } from "react";
 import { getTermFragment, updateTermFragment } from "@/functions/termFragments";
 import { TermFragment } from "@/types";
-import { useAuth } from "@/contexts/AuthContext";
 
 export default function EditFragmentPage({ params }: { params: Promise<{ fragmentid: string }> }) {
-  const { user } = useAuth();
   const resolvedParams = use(params);
   const [fragmentData, setFragmentData] = useState<TermFragment | null>(null);
   const [loading, setLoading] = useState(true);
@@ -30,12 +21,12 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
     const fetchFragment = async () => {
       try {
         setLoading(true);
-        const fragment = await getTermFragment(resolvedParams.fragmentid);
-        if (fragment) {
-          setFragmentData(fragment);
-          setEditedContent(fragment.content);
+        const fragmentResult = await getTermFragment(resolvedParams.fragmentid);
+        if (fragmentResult.success && fragmentResult.data) {
+          setFragmentData(fragmentResult.data);
+          setEditedContent(fragmentResult.data.content);
         } else {
-          setError("規約片が見つかりませんでした");
+          setError(fragmentResult.error || "規約片が見つかりませんでした");
         }
       } catch (err) {
         console.error("規約片の取得に失敗しました:", err);
@@ -58,13 +49,13 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
         fragmentData.title,
         editedContent.trim(),
         fragmentData.tags,
-        fragmentData.parameters || []
+        fragmentData.templateParams || []
       );
 
       // 更新後のデータを取得
-      const updatedFragment = await getTermFragment(resolvedParams.fragmentid);
-      if (updatedFragment) {
-        setFragmentData(updatedFragment);
+      const updatedFragmentResult = await getTermFragment(resolvedParams.fragmentid);
+      if (updatedFragmentResult.success && updatedFragmentResult.data) {
+        setFragmentData(updatedFragmentResult.data);
       }
 
       console.log("規約片の更新が完了しました");

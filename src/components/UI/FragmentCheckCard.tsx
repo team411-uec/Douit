@@ -25,9 +25,7 @@ export default function FragmentCheckCard({ fragment, commonParams }: FragmentCh
   return (
     <Card
       className={`mb-4 p-4 border-l-4 ${
-        fragment.understood
-          ? "border-l-green-500 bg-green-50"
-          : "border-l-red-500 bg-red-50"
+        fragment.understood ? "border-l-green-500 bg-green-50" : "border-l-red-500 bg-red-50"
       }`}
     >
       <Flex align="center" justify="between">

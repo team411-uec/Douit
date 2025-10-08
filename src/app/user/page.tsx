@@ -1,15 +1,15 @@
 "use client";
 
-import { Flex, Heading, Avatar, Text } from "@radix-ui/themes";
 import AuthGuard from "@/components/AuthGuard";
 import PageLayout from "@/components/Layout/PageLayout";
 import UserMenu from "@/components/UI/UserMenu";
 import UserProfile from "@/components/UI/UserProfile";
-import { useAuth } from "@/contexts/AuthContext";
+import { useUser, useAuthActions } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 
 export default function UserPage() {
-  const { user, logout } = useAuth();
+  const user = useUser();
+  const { logout } = useAuthActions();
   const router = useRouter();
 
   const handleLogout = async () => {

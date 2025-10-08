@@ -1,83 +1,31 @@
 "use client";
 
-import {
-  Flex,
-  Heading,
-  Button,
-  Text,
-  Dialog,
-  TextField,
-} from "@radix-ui/themes";
+import { Flex, Heading, Button, Text, Dialog, TextField } from "@radix-ui/themes";
 import { PlusIcon } from "@radix-ui/react-icons";
 import AuthGuard from "@/components/AuthGuard";
 import PageLayout from "@/components/Layout/PageLayout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import EmptyState from "@/components/EmptyState";
-import TermsCard, { type TermsItemData } from "@/components/UI/TermsCard";
-import { useAuth } from "@/contexts/AuthContext";
-import { useState, useEffect } from "react";
-import { createUserTermSet, getUserTermSets } from "@/functions/termSetService";
-
-type TermsItem = TermsItemData;
+import TermsCard from "@/components/UI/TermsCard";
+import { useUser } from "@/contexts/AuthContext";
+import { useState } from "react";
+import { useTerms } from "@/hooks/useTerms";
 
 export default function TermsPage() {
-  const { user } = useAuth();
-  const [termsData, setTermsData] = useState<TermsItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const user = useUser();
+  const { terms, loading, isCreating, createTerm } = useTerms(user?.uid || null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newTermTitle, setNewTermTitle] = useState("");
   const [newTermDescription, setNewTermDescription] = useState("");
-  const [isCreating, setIsCreating] = useState(false);
-
-  useEffect(() => {
-    const fetchUserTerms = async () => {
-      if (!user) return;
-      try {
-        setLoading(true);
-        const terms = await getUserTermSets(user.uid);
-        setTermsData(terms);
-      } catch (error) {
-        console.error("利用規約の取得に失敗しました:", error);
-        // フォールバック用のテストデータ
-        setTermsData([
-          {
-            id: "1",
-            title: "サークル会則",
-            description: "team411",
-            createdAt: new Date(),
-          },
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserTerms();
-  }, [user]);
 
   const handleCreateTerm = async () => {
-    if (!user || !newTermTitle.trim()) return;
+    if (!newTermTitle.trim()) return;
 
-    try {
-      setIsCreating(true);
-      const termSetId = await createUserTermSet(
-        user.uid,
-        newTermTitle.trim(),
-        newTermDescription.trim()
-      );
-
-      // 成功時の処理
+    const success = await createTerm(newTermTitle, newTermDescription);
+    if (success) {
       setNewTermTitle("");
       setNewTermDescription("");
       setIsDialogOpen(false);
-
-      // リストを再取得
-      const updatedTerms = await getUserTermSets(user.uid);
-      setTermsData(updatedTerms);
-    } catch (error) {
-      console.error("利用規約の作成に失敗しました:", error);
-    } finally {
-      setIsCreating(false);
     }
   };
 
@@ -93,13 +41,13 @@ export default function TermsPage() {
           <LoadingSpinner />
         ) : (
           <Flex direction="column" gap="3" className="mb-6">
-            {termsData.length === 0 ? (
+            {terms.length === 0 ? (
               <EmptyState
                 title="まだ利用規約を作成していません"
                 description="最初の利用規約セットを作成してみましょう"
               />
             ) : (
-              termsData.map(term => <TermsCard key={term.id} term={term} />)
+              terms.map(term => <TermsCard key={term.id} term={term} />)
             )}
           </Flex>
         )}

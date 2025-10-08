@@ -19,7 +19,7 @@ export default function PageLayout({
   showNumber = false,
   number = "4",
   size = "1",
-  padding = "px-6 py-6"
+  padding = "px-6 py-6",
 }: PageLayoutProps) {
   return (
     <Box className="min-h-screen">

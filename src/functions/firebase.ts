@@ -25,11 +25,10 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 // Initialize Analytics (only on client side)
-let analytics;
 if (typeof window !== "undefined") {
   isSupported().then(supported => {
     if (supported) {
-      analytics = getAnalytics(app);
+      getAnalytics(app);
     }
   });
 }

@@ -13,15 +13,15 @@ import {
 } from "@radix-ui/themes";
 import { MagnifyingGlassIcon, PlusIcon } from "@radix-ui/react-icons";
 import Header from "@/components/Header";
-import FragmentCard  from "@/components/UI/FragmentCard";
+import FragmentCard from "@/components/UI/FragmentCard";
 import { useState, useEffect } from "react";
 import { getAllTermFragments } from "@/functions/tagSearch";
 import { createTermFragment } from "@/functions/termFragments";
 import { TermFragment } from "@/types";
-import { useAuth } from "@/contexts/AuthContext";
+import { useUser } from "@/contexts/AuthContext";
 
 export default function HomePage() {
-  const { user } = useAuth();
+  const user = useUser();
   const [searchQuery, setSearchQuery] = useState("");
   const [fragments, setFragments] = useState<{ id: string; data: TermFragment }[]>([]);
   const [loading, setLoading] = useState(true);

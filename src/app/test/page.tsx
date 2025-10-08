@@ -3,15 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { TermFragment, UnderstoodRecord } from "@/types";
 import { searchTermFragments } from "@/functions/tagSearch";
-import {
-  createTermFragment,
-  deleteTermFragment,
-} from "@/functions/termFragments";
+import { createTermFragment, deleteTermFragment } from "@/functions/termFragments";
 import { createTermSet, addFragmentToSet } from "@/functions/termSetService";
-import {
-  addUnderstoodRecord,
-  getUserUnderstoodRecords,
-} from "@/functions/understandingService";
+import { addUnderstoodRecord, getUserUnderstoodRecords } from "@/functions/understandingService";
 import { db } from "@/functions/firebase";
 import { getDocs, collection } from "firebase/firestore";
 
@@ -48,8 +42,9 @@ export default function TestPage() {
   }, []);
 
   // エラーハンドリング用ヘルパー
-  const handleError = (error: any, message: string) => {
-    setError(`${message}: ${error.message || "Unknown error"}`);
+  const handleError = (error: unknown, message: string) => {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    setError(`${message}: ${errorMessage}`);
   };
 
   // Firebase接続テスト
@@ -59,7 +54,7 @@ export default function TestPage() {
       setError(null);
 
       // 簡単な接続テスト：空のクエリを実行
-      const querySnapshot = await getDocs(collection(db, "test-connection"));
+      await getDocs(collection(db, "test-connection"));
 
       setError("✅ Firebase接続成功！");
     } catch (error) {
@@ -121,8 +116,12 @@ export default function TestPage() {
   // 4. 理解記録の読み込み
   const loadUnderstoodRecords = async () => {
     try {
-      const records = await getUserUnderstoodRecords(currentUserId);
-      setUnderstoodRecords(records);
+      const result = await getUserUnderstoodRecords(currentUserId);
+      if (result.success && result.data) {
+        setUnderstoodRecords(result.data);
+      } else {
+        throw new Error(result.error);
+      }
     } catch (error) {
       handleError(error, "理解記録の読み込みに失敗しました");
     }
@@ -142,11 +141,19 @@ export default function TestPage() {
   // 6. 規約セットの作成
   const createSet = async () => {
     try {
-      const termSetId = await createTermSet();
+      const termSetResult = await createTermSet();
+      if (!termSetResult.success || !termSetResult.data) {
+        throw new Error(termSetResult.error || "規約セットの作成に失敗しました");
+      }
+
+      const termSetId = termSetResult.data as string;
+
       // 選択されたフラグメントを追加
       for (let i = 0; i < termSetForm.selectedFragments.length; i++) {
         const fragmentId = termSetForm.selectedFragments[i];
-        await addFragmentToSet(termSetId, fragmentId, {}, i + 1);
+        if (fragmentId) {
+          await addFragmentToSet(termSetId, fragmentId, {}, i + 1);
+        }
       }
       setTermSetForm({ name: "", selectedFragments: [] });
       setError(null);
@@ -359,7 +366,7 @@ export default function TestPage() {
                     </div>
 
                     <p className="text-sm text-gray-800 mb-2">
-                      {replaceParameters(fragment.data.content, fragment.data.parameters)}
+                      {replaceParameters(fragment.data.content, fragment.data.templateParams)}
                     </p>
 
                     <div className="flex flex-wrap gap-1 mb-2">
@@ -373,9 +380,9 @@ export default function TestPage() {
                       ))}
                     </div>
 
-                    {fragment.data.parameters.length > 0 && (
+                    {fragment.data.templateParams.length > 0 && (
                       <div className="text-xs text-gray-700">
-                        パラメータ: {fragment.data.parameters.join(", ")}
+                        パラメータ: {fragment.data.templateParams.join(", ")}
                       </div>
                     )}
 
@@ -403,9 +410,11 @@ export default function TestPage() {
                     </div>
                     <div className="text-gray-800 text-xs">
                       理解日時:{" "}
-                      {record.understoodAt instanceof Date
-                        ? record.understoodAt.toLocaleString()
-                        : new Date((record.understoodAt as any).seconds * 1000).toLocaleString()}
+                      {record.createdAt instanceof Date
+                        ? record.createdAt.toLocaleString()
+                        : new Date(
+                            (record.createdAt as { seconds: number }).seconds * 1000
+                          ).toLocaleString()}
                     </div>
                   </div>
                 );

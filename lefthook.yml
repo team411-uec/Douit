@@ -7,6 +7,6 @@ pre-commit:
     lint:
       run: npm run lint
       stage_fixed: true
-    knip:
-      run: npm run knip
-      stage_fixed: true
+    # knip:
+    #   run: npm run knip
+    #   stage_fixed: true

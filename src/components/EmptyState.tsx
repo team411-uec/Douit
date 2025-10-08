@@ -16,7 +16,7 @@ export default function EmptyState({
   description,
   actionText,
   actionHref,
-  size = "medium"
+  size = "medium",
 }: EmptyStateProps) {
   const headingSize = size === "small" ? "3" : size === "large" ? "5" : "4";
 
@@ -32,9 +32,7 @@ export default function EmptyState({
       )}
       {actionText && actionHref && (
         <Link href={actionHref}>
-          <Button className="bg-[#00ADB5] hover:bg-[#009AA2] text-white">
-            {actionText}
-          </Button>
+          <Button className="bg-[#00ADB5] hover:bg-[#009AA2] text-white">{actionText}</Button>
         </Link>
       )}
     </Box>

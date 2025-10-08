@@ -5,28 +5,21 @@ import {
   Flex,
   Heading,
   Text,
-  Select,
   ScrollArea,
   Container,
   SegmentedControl,
-  IconButton,
-  Link,
   Button,
   Dialog,
   TextField,
+  Select,
+  Link,
 } from "@radix-ui/themes";
 import { CheckIcon, Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import Header from "@/components/Header";
-import { useState, useEffect, use } from "react";
-import { getTermFragment } from "@/functions/termFragments";
-import {
-  addUnderstoodRecord,
-  removeUnderstoodRecord,
-  isFragmentUnderstood,
-} from "@/functions/understandingService";
-import { getUserTermSets, addFragmentToSet } from "@/functions/termSetService";
-import { TermFragment } from "@/types";
-import { useAuth } from "@/contexts/AuthContext";
+import { use } from "react";
+import { useUser } from "@/contexts/AuthContext";
+import { useFragmentDetail } from "@/hooks/useFragmentDetail";
+import { useAddToTermSetDialog } from "@/hooks/useAddToTermSetDialog";
 
 export default function FragmentDetailPage({
   params,
@@ -34,151 +27,35 @@ export default function FragmentDetailPage({
   params: Promise<{ fragmentid: string }>;
 }) {
   const resolvedParams = use(params);
-  const [fragmentData, setFragmentData] = useState<TermFragment | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [understanding, setUnderstanding] = useState<string>("unknown");
-  const [showAddDialog, setShowAddDialog] = useState(false);
-  const [userTermSets, setUserTermSets] = useState<any[]>([]);
-  const [selectedTermSet, setSelectedTermSet] = useState<string>("");
-  const [parameterValues, setParameterValues] = useState<Record<string, string>>({});
-  const { user } = useAuth();
+  const user = useUser();
 
-  const handleUnderstandingChange = async (value: string) => {
-    if (!fragmentData || !user) return;
+  const { fragment, isLoading, error, isUnderstood, handleUnderstandingChange } = useFragmentDetail(
+    resolvedParams.fragmentid,
+    user?.uid || null
+  );
 
-    // 既に同じ状態の場合は何もしない
-    if (value === understanding) return;
-
-    // 理解済みに変更しようとする場合、事前チェック
-    if (value === "understood") {
-      try {
-        const alreadyUnderstood = await isFragmentUnderstood(
-          user.uid,
-          resolvedParams.fragmentid,
-          fragmentData.currentVersion
-        );
-
-        if (alreadyUnderstood) {
-          console.log("この規約片は既に理解済みです");
-          setUnderstanding("understood");
-          return;
-        }
-      } catch (error) {
-        console.error("理解状態の事前チェックに失敗しました:", error);
-      }
-    }
-
-    setUnderstanding(value);
-
-    if (!fragmentData || !user) return;
-
-    try {
-      if (value === "understood") {
-        // 理解記録を追加
-        await addUnderstoodRecord(user.uid, resolvedParams.fragmentid, fragmentData.currentVersion);
-        console.log("理解記録を追加しました");
-      } else if (value === "unknown") {
-        // 理解記録を削除
-        await removeUnderstoodRecord(user.uid, resolvedParams.fragmentid);
-        console.log("理解記録を削除しました");
-      }
-    } catch (error) {
-      console.error("理解記録の更新に失敗しました:", error);
-
-      // エラーが発生した場合、状態を元に戻す
-      if (error instanceof Error && error.message.includes("既に理解済み")) {
-        console.log("既に理解済みの規約片です");
-        // 状態を理解済みに戻す
-        setUnderstanding("understood");
-      } else {
-        // その他のエラーの場合、前の状態に戻す
-        setUnderstanding(value === "understood" ? "unknown" : "understood");
-      }
-    }
-  };
+  const {
+    showAddDialog,
+    parameterValues,
+    openDialog,
+    closeDialog,
+    updateParameterValue,
+    confirmAdd,
+  } = useAddToTermSetDialog();
 
   const handleAddToTermSet = () => {
-    setShowAddDialog(true);
-    // パラメータの初期値を設定
-    if (fragmentData?.parameters) {
-      const initialParams: Record<string, string> = {};
-      fragmentData.parameters.forEach(param => {
-        initialParams[param] = "";
-      });
-      setParameterValues(initialParams);
+    if (fragment) {
+      openDialog(fragment);
     }
   };
 
   const handleConfirmAdd = async () => {
-    if (!selectedTermSet || !fragmentData || !user) return;
-
-    try {
-      await addFragmentToSet(selectedTermSet, resolvedParams.fragmentid, parameterValues);
-
-      console.log("規約セットに追加しました");
-      setShowAddDialog(false);
-      setSelectedTermSet("");
-      setParameterValues({});
-    } catch (error) {
-      console.error("規約セットへの追加に失敗しました:", error);
+    if (user) {
+      await confirmAdd(resolvedParams.fragmentid, user.uid);
     }
   };
 
-  useEffect(() => {
-    const fetchFragment = async () => {
-      try {
-        setLoading(true);
-        const fragment = await getTermFragment(resolvedParams.fragmentid);
-        if (fragment) {
-          setFragmentData(fragment);
-        } else {
-          setError("規約片が見つかりませんでした");
-        }
-      } catch (err) {
-        console.error("規約片の取得に失敗しました:", err);
-        setError("規約片の取得に失敗しました");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFragment();
-  }, [resolvedParams.fragmentid]);
-
-  // 理解状態の初期値を取得
-  useEffect(() => {
-    const checkUnderstandingStatus = async () => {
-      if (user && resolvedParams.fragmentid) {
-        try {
-          const isUnderstood = await isFragmentUnderstood(user.uid, resolvedParams.fragmentid);
-          setUnderstanding(isUnderstood ? "understood" : "unknown");
-        } catch (error) {
-          console.error("理解状態の取得に失敗しました:", error);
-        }
-      }
-    };
-
-    checkUnderstandingStatus();
-  }, [user, resolvedParams.fragmentid]);
-
-  // ユーザーの規約セット一覧を取得
-  useEffect(() => {
-    const fetchUserTermSets = async () => {
-      if (user) {
-        try {
-          const termSets = await getUserTermSets(user.uid);
-          setUserTermSets(termSets);
-        } catch (error) {
-          console.error("規約セット一覧の取得に失敗しました:", error);
-        }
-      }
-    };
-
-    fetchUserTermSets();
-  }, [user]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <Box className="min-h-screen">
         <Header showUserIcon={true} />
@@ -193,7 +70,7 @@ export default function FragmentDetailPage({
     );
   }
 
-  if (error || !fragmentData) {
+  if (error || !fragment) {
     return (
       <Box className="min-h-screen">
         <Header showUserIcon={true} />
@@ -215,12 +92,12 @@ export default function FragmentDetailPage({
         {/* Header with title and version */}
         <Flex align="center" justify="between" className="mb-6">
           <Heading size="6" color="gray" className="flex-1">
-            {fragmentData.title}
+            {fragment.title}
           </Heading>
-          <Select.Root defaultValue={`v${fragmentData.currentVersion}`}>
+          <Select.Root defaultValue={`v${fragment.currentVersion}`}>
             <Select.Trigger className="w-20" />
             <Select.Content>
-              {Array.from({ length: fragmentData.currentVersion }, (_, i) => (
+              {Array.from({ length: fragment.currentVersion }, (_, i) => (
                 <Select.Item key={`v${i + 1}`} value={`v${i + 1}`}>
                   v{i + 1}
                 </Select.Item>
@@ -233,7 +110,7 @@ export default function FragmentDetailPage({
         <ScrollArea className="h-96 mb-6">
           <Box className="pr-4">
             <Text size="3" className="leading-relaxed text-gray-900 whitespace-pre-line">
-              {fragmentData.content}
+              {fragment.content}
             </Text>
           </Box>
         </ScrollArea>
@@ -261,8 +138,8 @@ export default function FragmentDetailPage({
           <Flex justify="center" align="center" gap="4" className="mt-8">
             <Cross2Icon width="24" height="24" className="text-red-500" />
             <SegmentedControl.Root
-              value={understanding}
-              onValueChange={handleUnderstandingChange}
+              value={isUnderstood ? "understood" : "unknown"}
+              onValueChange={value => handleUnderstandingChange(value === "understood")}
               size="3"
             >
               <SegmentedControl.Item value="unknown">知らない</SegmentedControl.Item>
@@ -273,7 +150,7 @@ export default function FragmentDetailPage({
         </Flex>
 
         {/* Add to Term Set Dialog */}
-        <Dialog.Root open={showAddDialog} onOpenChange={setShowAddDialog}>
+        <Dialog.Root open={showAddDialog} onOpenChange={open => !open && closeDialog()}>
           <Dialog.Content style={{ maxWidth: 450 }}>
             <Dialog.Title>規約セットに追加</Dialog.Title>
             <Dialog.Description size="2" mb="4">
@@ -286,25 +163,14 @@ export default function FragmentDetailPage({
                 <Text as="div" size="2" mb="1" weight="bold">
                   規約セット
                 </Text>
-                <Select.Root value={selectedTermSet} onValueChange={setSelectedTermSet}>
-                  <Select.Trigger className="w-full" placeholder="規約セットを選択してください" />
-                  <Select.Content>
-                    {userTermSets.map(termSet => (
-                      <Select.Item key={termSet.id} value={termSet.id}>
-                        {termSet.title}
-                      </Select.Item>
-                    ))}
-                  </Select.Content>
-                </Select.Root>
               </label>
 
-              {/* Parameter Values */}
-              {fragmentData?.parameters && fragmentData.parameters.length > 0 && (
+              {fragment?.templateParams && fragment.templateParams.length > 0 && (
                 <>
                   <Text as="div" size="2" weight="bold" mt="2">
                     パラメータ値
                   </Text>
-                  {fragmentData.parameters.map(param => (
+                  {fragment.templateParams.map(param => (
                     <label key={param}>
                       <Text as="div" size="2" mb="1">
                         {param}
@@ -312,12 +178,7 @@ export default function FragmentDetailPage({
                       <TextField.Root
                         placeholder={`${param}の値を入力`}
                         value={parameterValues[param] || ""}
-                        onChange={e =>
-                          setParameterValues(prev => ({
-                            ...prev,
-                            [param]: e.target.value,
-                          }))
-                        }
+                        onChange={e => updateParameterValue(param, e.target.value)}
                       />
                     </label>
                   ))}
@@ -333,7 +194,6 @@ export default function FragmentDetailPage({
               </Dialog.Close>
               <Button
                 onClick={handleConfirmAdd}
-                disabled={!selectedTermSet}
                 className="bg-[#00ADB5] hover:bg-[#009AA2] text-white"
               >
                 追加

@@ -1,60 +1,64 @@
-// 規約片（Term Fragment）の型定義
-export interface TermFragment {
-  title: string; // タイトル
-  content: string; // 本文（[__]プレースホルダー含む）
-  parameters: string[]; // プレースホルダーに対応するパラメータ名の配列
-  tags: string[]; // タグの配列
-  createdAt: Date; // 作成日時
-  updatedAt: Date; // 更新日時
-  currentVersion: number; // 現在のバージョン番号
+export interface BaseEntity {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-// 規約片のバージョン履歴の型定義
-interface TermFragmentVersion {
+export interface ApiResult<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
+export interface LoadingState {
+  isLoading: boolean;
+  error?: string;
+}
+
+export interface TermFragment extends BaseEntity {
   title: string;
   content: string;
-  parameters: string[];
+  category: string;
   tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  isTemplate: boolean;
+  templateParams: string[];
+  currentVersion: number;
+  createdBy: string;
 }
 
-// 規約セット（Term Set）の型定義
-export interface TermSet {
-  createdAt: Date;
-  updatedAt: Date;
+export interface FragmentRef {
+  fragmentId: string;
+  order: number;
+  parameterValues: Record<string, string>;
+}
+
+export interface TermSet extends BaseEntity {
+  title: string;
+  description?: string;
+  userId: string;
   currentVersion: number;
 }
 
-// 規約セット内のフラグメント参照の型定義
-export interface FragmentRef {
-  fragmentId: string; // 参照する規約片のID
-  order: number; // 表示順序
-  parameterValues: Record<string, string>; // プレースホルダーの置換値
-}
-
-// 規約セットのバージョン履歴の型定義
-export interface TermSetVersion {
+export interface User {
+  name: string;
+  email: string;
+  icon?: string;
+  role: string;
+  team?: string;
   createdAt: Date;
 }
 
-// ユーザーの型定義
-export interface User {
-  name: string; // ユーザー名
-  email: string; // メールアドレス
-  createdAt: Date; // アカウント作成日時
+export interface UnderstoodRecord extends BaseEntity {
+  userId: string;
+  fragmentId: string;
+  acceptanceLevel: number;
 }
 
-// 理解記録の型定義
-export interface UnderstoodRecord {
-  fragmentId: string; // 理解した規約片のID
-  version: number; // 理解した時点でのバージョン
-  understoodAt: Date; // 理解した日時
-}
-
-// APIキーの型定義
-export interface ApiKey {
-  key: string; // APIキー文字列
-  issuedBy: string; // 発行者のユーザーID
-  createdAt: Date; // 発行日時
+export interface UseFragmentDetailResult {
+  fragment: TermFragment | null;
+  isLoading: boolean;
+  isUnderstood: boolean;
+  error: string | null;
+  handleUnderstandingChange: (understood: boolean) => Promise<void>;
+  refreshData: () => Promise<void>;
 }

@@ -2,11 +2,11 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 
-const _filename = fileURLToPath(import.meta.url);
-const _dirname = dirname(_filename);
+const currentFilename = fileURLToPath(import.meta.url);
+const currentDirname = dirname(currentFilename);
 
 const compat = new FlatCompat({
-  baseDirectory: _dirname,
+  baseDirectory: currentDirname,
 });
 
 const eslintConfig = [

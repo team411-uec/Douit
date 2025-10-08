@@ -3,7 +3,7 @@
 import { Box, Flex, Heading, Avatar, Button } from "@radix-ui/themes";
 import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "@/contexts/AuthContext";
+import { useUser } from "@/contexts/AuthContext";
 
 type HeaderProps = {
   showNumber?: boolean;
@@ -16,7 +16,7 @@ export default function Header({
   number = "4",
   showUserIcon = false,
 }: HeaderProps) {
-  const { user } = useAuth();
+  const user = useUser();
 
   return (
     <Box asChild className="border-b px-4 py-3">

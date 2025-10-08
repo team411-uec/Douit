@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { User } from "@/types";
 
 /**
@@ -9,6 +9,7 @@ export async function createUser(userId: string, name: string, email?: string): 
   const userData: Omit<User, "id"> = {
     name,
     email: email || "",
+    role: "user",
     createdAt: new Date(),
   };
 
@@ -34,21 +35,6 @@ export async function getUser(userId: string): Promise<User | null> {
 /**
  * ユーザー情報の更新
  */
-export async function updateUser(userId: string, name?: string, email?: string): Promise<void> {
-  const userRef = doc(db, "users", userId);
-  const updateData: any = {};
-
-  if (name !== undefined) {
-    updateData.name = name;
-  }
-  if (email !== undefined) {
-    updateData.email = email;
-  }
-
-  if (Object.keys(updateData).length > 0) {
-    await updateDoc(userRef, updateData);
-  }
-}
 
 /**
  * ユーザーが存在しない場合は作成する
