@@ -32,6 +32,7 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
       }, 2000);
     } catch (error) {
       console.error("リンクのコピーに失敗しました:", error);
+      setCopySuccess(false);
     }
   };
 
