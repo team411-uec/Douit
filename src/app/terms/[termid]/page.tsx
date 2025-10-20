@@ -32,21 +32,7 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
       }, 2000);
     } catch (error) {
       console.error("リンクのコピーに失敗しました:", error);
-      // フォールバック: 古いブラウザ対応
-      const textArea = document.createElement("textarea");
-      textArea.value = `${window.location.origin}/accept-check/${resolvedParams.termid}`;
-      document.body.appendChild(textArea);
-      textArea.select();
-      try {
-        document.execCommand("copy");
-        setCopySuccess(true);
-        setTimeout(() => {
-          setCopySuccess(false);
-        }, 2000);
-      } catch (fallbackError) {
-        console.error("フォールバックコピーも失敗しました:", fallbackError);
-      }
-      document.body.removeChild(textArea);
+      setCopySuccess(false);
     }
   };
 
