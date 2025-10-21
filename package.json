@@ -6,18 +6,19 @@
     "dev": "next dev",
     "dev:turbo": "next dev --turbopack",
     "build": "next build",
-    "deploy": "npx @cloudflare/next-on-pages",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "knip": "knip",
-    "postinstall": "lefthook install"
+    "postinstall": "lefthook install",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
+    "@opennextjs/cloudflare": "^1.11.0",
     "@radix-ui/react-icons": "^1.3.2",
     "@radix-ui/themes": "^3.2.1",
     "firebase": "^12.1.0",
@@ -27,7 +28,6 @@
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.16",
     "@eslint/css": "^0.10.0",
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9.33.0",
@@ -42,13 +42,12 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.3.0",
-    "jest": "^30.0.5",
     "knip": "^5.63.1",
     "lefthook": "^1.11.5",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
-    "ts-jest": "^29.4.1",
     "typescript": "^5",
-    "typescript-eslint": "^8.40.0"
+    "typescript-eslint": "^8.40.0",
+    "wrangler": "^4.43.0"
   }
 }
