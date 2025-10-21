@@ -16,17 +16,17 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import { CheckIcon, Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
-import Header from "../../components/Header";
+import Header from "../../../components/Header";
 import { useState, useEffect, use } from "react";
-import { getTermFragment } from "../../functions/termFragments";
+import { getTermFragment } from "../../../functions/termFragments";
 import {
   addUnderstoodRecord,
   removeUnderstoodRecord,
   isFragmentUnderstood,
-} from "../../functions/understandingService";
-import { getUserTermSets, addFragmentToSet } from "../../functions/termSetService";
+} from "../../../functions/understandingService";
+import { getUserTermSets, addFragmentToSet } from "../../../functions/termSetService";
 import { TermFragment } from "../../../types";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 
 export default function FragmentDetailPage({
   params,

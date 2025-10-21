@@ -2,10 +2,10 @@
 
 import { Box, Flex, Heading, Button, Container, Card, TextField, Badge } from "@radix-ui/themes";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import Header from "../../components/Header";
+import Header from "../../../components/Header";
 import Link from "next/link";
 import { Suspense, useState, useEffect, use } from "react";
-import { searchTermFragments } from "../../functions/tagSearch";
+import { searchTermFragments } from "../../../functions/tagSearch";
 import { TermFragment } from "../../../types";
 
 type FragmentCard = {

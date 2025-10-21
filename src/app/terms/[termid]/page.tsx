@@ -2,13 +2,13 @@
 
 import { Box, Flex, Heading, Button, Text, Container, Card, Separator } from "@radix-ui/themes";
 import { CopyIcon, CheckIcon, Cross2Icon, QuestionMarkIcon } from "@radix-ui/react-icons";
-import Header from "../../components/Header";
-import { useAuth } from "../../contexts/AuthContext";
+import Header from "../../../components/Header";
+import { useAuth } from "../../../contexts/AuthContext";
 import Link from "next/link";
 import { useState, useEffect, use } from "react";
-import { getUserTermSetWithFragments } from "../../functions/termSetService";
-import { getUnderstandingStatusForSet } from "../../functions/understandingService";
-import { getTermFragment } from "../../functions/termFragments";
+import { getUserTermSetWithFragments } from "../../../functions/termSetService";
+import { getUnderstandingStatusForSet } from "../../../functions/understandingService";
+import { getTermFragment } from "../../../functions/termFragments";
 import { User } from "firebase/auth";
 
 export default function TermDetailPage({ params }: { params: Promise<{ termid: string }> }) {

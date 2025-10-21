@@ -10,11 +10,11 @@ import {
   Container,
   TextArea,
 } from "@radix-ui/themes";
-import Header from "../../../components/Header";
+import Header from "../../../../components/Header";
 import { useState, useEffect, use } from "react";
-import { getTermFragment, updateTermFragment } from "../../../functions/termFragments";
+import { getTermFragment, updateTermFragment } from "../../../../functions/termFragments";
 import { TermFragment } from "../../../../types";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 export default function EditFragmentPage({ params }: { params: Promise<{ fragmentid: string }> }) {
   const { user } = useAuth();

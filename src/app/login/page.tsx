@@ -1,8 +1,8 @@
 "use client";
 
 import { Box, Flex, Heading, Button, Container, Avatar, TextField, Text } from "@radix-ui/themes";
-import Header from "../components/Header";
-import { useAuth } from "../contexts/AuthContext";
+import Header from "../../components/Header";
+import { useAuth } from "../../contexts/AuthContext";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 

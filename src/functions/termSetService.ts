@@ -13,7 +13,7 @@ import {
   writeBatch,
   runTransaction,
 } from "firebase/firestore";
-import { TermSet, FragmentRef, TermSetVersion } from "../../types";
+import { TermSet, FragmentRef, TermSetVersion } from "../types";
 
 // 機能4: 利用規約セットの作成・管理機能
 
