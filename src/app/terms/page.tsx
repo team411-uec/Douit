@@ -12,11 +12,11 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import { PlusIcon } from "@radix-ui/react-icons";
-import Header from "../../components/Header";
+import Header from "@/components/Header";
 import Link from "next/link";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
-import { createUserTermSet, getUserTermSets } from "../../functions/termSetService";
+import { createUserTermSet, getUserTermSets } from "@/functions/termSetService";
 
 type TermsItem = {
   id: string;

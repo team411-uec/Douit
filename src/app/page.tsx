@@ -14,13 +14,13 @@ import {
   Text,
 } from "@radix-ui/themes";
 import { MagnifyingGlassIcon, PlusIcon } from "@radix-ui/react-icons";
-import Header from "../components/Header";
+import Header from "@/components/Header";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { getAllTermFragments } from "../functions/tagSearch";
-import { createTermFragment } from "../functions/termFragments";
-import { TermFragment } from "../types";
-import { useAuth } from "../contexts/AuthContext";
+import { getAllTermFragments } from "@/functions/tagSearch";
+import { createTermFragment } from "@/functions/termFragments";
+import { TermFragment } from "@/types";
+import { useAuth } from "@/contexts/AuthContext";
 
 type FragmentCard = {
   id: string;

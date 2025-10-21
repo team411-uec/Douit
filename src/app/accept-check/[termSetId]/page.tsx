@@ -2,13 +2,13 @@
 
 import { Box, Flex, Heading, Text, Container, Button, Card, Link } from "@radix-ui/themes";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
-import Header from "../../../components/Header";
+import Header from "@/components/Header";
 import { useState, useEffect, use } from "react";
-import { getUserTermSetWithFragments } from "../../../functions/termSetService";
-import { getTermFragment } from "../../../functions/termFragments";
-import { isFragmentUnderstood } from "../../../functions/understandingService";
-import { TermFragment, FragmentRef } from "../../../types";
-import { useAuth } from "../../../contexts/AuthContext";
+import { getUserTermSetWithFragments } from "@/functions/termSetService";
+import { getTermFragment } from "@/functions/termFragments";
+import { isFragmentUnderstood } from "@/functions/understandingService";
+import { TermFragment, FragmentRef } from "@/types";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface FragmentWithData {
   ref: FragmentRef;
