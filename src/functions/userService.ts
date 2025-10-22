@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { User } from "../types";
 
 /**
