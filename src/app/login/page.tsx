@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { GoogleIcon } from "@/components/atoms/GoogleIcon";
+import { GoogleIcon } from "@/components/Atoms/GoogleIcon";
 
 export default function LoginPage() {
   const { user, signIn, signUp, signInWithGoogle, logout } = useAuth();
