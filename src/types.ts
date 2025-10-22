@@ -9,16 +9,6 @@ export interface TermFragment {
   currentVersion: number; // 現在のバージョン番号
 }
 
-// 規約片のバージョン履歴の型定義
-interface TermFragmentVersion {
-  title: string;
-  content: string;
-  parameters: string[];
-  tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 // 規約セット（Term Set）の型定義
 export interface TermSet {
   createdAt: Date;
