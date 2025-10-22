@@ -23,11 +23,6 @@ export interface FragmentRef {
   parameterValues: Record<string, string>; // プレースホルダーの置換値
 }
 
-// 規約セットのバージョン履歴の型定義
-export interface TermSetVersion {
-  createdAt: Date;
-}
-
 // ユーザーの型定義
 export interface User {
   name: string; // ユーザー名
