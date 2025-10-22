@@ -4,7 +4,7 @@ import { Suspense, use, useState } from "react";
 import Header from "@/components/Header";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { Box, Container, Flex, TextField, Button, Heading } from "@radix-ui/themes";
-import FragmentSearchCard from "@/components/Organisism/FragmentSearchCard";
+import FragmentSearchCard from "@/components/Organisims/FragmentSearchCard";
 import { useFragments } from "@/hooks/useFragments";
 
 export default function SearchPage({ params }: { params: Promise<{ tag: string }> }) {
