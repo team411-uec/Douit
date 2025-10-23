@@ -4,7 +4,7 @@ import { Dialog, Box, Button, Flex, TextField, TextArea, Text } from "@radix-ui/
 import { useState } from "react";
 
 export default function NewFragmentDialog() {
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -14,19 +14,19 @@ export default function NewFragmentDialog() {
     setTitle("");
     setContent("");
     setTags("");
-    setIsCreateDialogOpen(false);
+    setIsOpen(false);
   };
 
   const handleCreateFragment = async () => {
     if (!title.trim() || !content.trim()) return;
 
     setIsCreating(true);
-    try {
-      const tagList = tags
-        .split(",")
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0);
+    const tagList = tags
+      .split(",")
+      .map(tag => tag.trim())
+      .filter(tag => tag.length > 0);
 
+    try {
       await createTermFragment(
         title.trim(),
         content.trim(),
@@ -43,7 +43,7 @@ export default function NewFragmentDialog() {
   };
 
   return (
-    <Dialog.Root open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+    <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Trigger>
         <Box className="fixed bottom-6 right-6">
           <Button
