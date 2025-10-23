@@ -91,9 +91,7 @@ export default function TermsPage() {
               ログインが必要です
             </Heading>
             <Link href="/login">
-              <Button className="mt-4 bg-[#00ADB5] hover:bg-[#009AA2] text-white">
-                ログインページへ
-              </Button>
+              <Button className="mt-4 text-white">ログインページへ</Button>
             </Link>
           </Box>
         </Container>
@@ -109,7 +107,6 @@ export default function TermsPage() {
           作成した利用規約
         </Heading>
 
-        {/* Terms List */}
         {loading ? (
           <Box className="text-center py-8">
             <Text size="4" color="gray">
@@ -130,14 +127,10 @@ export default function TermsPage() {
           </Flex>
         )}
 
-        {/* Add Button with Dialog - Fixed position */}
         <Dialog.Root open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <Dialog.Trigger>
             <Box className="fixed bottom-6 right-6">
-              <Button
-                size="4"
-                className="w-14 h-14 rounded-full bg-[#00ADB5] hover:bg-[#009AA2] text-white shadow-lg"
-              >
+              <Button size="4" className="w-14 h-14 rounded-full text-white shadow-lg">
                 <PlusIcon width="24" height="24" />
               </Button>
             </Box>
@@ -181,7 +174,7 @@ export default function TermsPage() {
               <Button
                 onClick={handleCreateTerm}
                 disabled={!newTermTitle.trim() || isCreating}
-                className="bg-[#00ADB5] hover:bg-[#009AA2] text-white"
+                className="text-white"
               >
                 {isCreating ? "作成中..." : "作成"}
               </Button>

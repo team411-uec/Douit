@@ -94,7 +94,6 @@ export default function LoginPage() {
             </Text>
           )}
 
-          {/* Email/Password Form */}
           <form onSubmit={handleEmailSignIn} className="w-full space-y-4">
             <TextField.Root
               type="email"
@@ -112,12 +111,7 @@ export default function LoginPage() {
               required
               className="w-full"
             />
-            <Button
-              type="submit"
-              size="3"
-              className="w-full bg-[#00ADB5] hover:bg-[#009AA2] text-white"
-              disabled={isLoading}
-            >
+            <Button type="submit" size="3" className="w-full text-white" disabled={isLoading}>
               {isLoading
                 ? `${isSignUp ? "作成中" : "ログイン中"}...`
                 : isSignUp
@@ -127,12 +121,7 @@ export default function LoginPage() {
           </form>
 
           {/* Toggle Sign Up / Sign In */}
-          <Button
-            variant="ghost"
-            size="2"
-            onClick={() => setIsSignUp(!isSignUp)}
-            className="text-[#00ADB5] hover:bg-[#00ADB5]/10"
-          >
+          <Button variant="ghost" size="2" onClick={() => setIsSignUp(!isSignUp)}>
             {isSignUp ? "既にアカウントをお持ちの方はこちら" : "新規アカウント作成"}
           </Button>
 

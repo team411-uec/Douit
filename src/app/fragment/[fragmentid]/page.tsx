@@ -211,7 +211,6 @@ export default function FragmentDetailPage({
       <Header showUserIcon={true} />
 
       <Container size="1" px="4" py="6">
-        {/* Header with title and version */}
         <Flex align="center" justify="between" className="mb-6">
           <Heading size="6" color="gray" className="flex-1">
             {fragmentData.title}
@@ -228,7 +227,6 @@ export default function FragmentDetailPage({
           </Select.Root>
         </Flex>
 
-        {/* Content */}
         <ScrollArea className="h-96 mb-6">
           <Box className="pr-4">
             <Text size="3" className="leading-relaxed text-gray-900 whitespace-pre-line">
@@ -237,26 +235,20 @@ export default function FragmentDetailPage({
           </Box>
         </ScrollArea>
 
-        {/* Action Buttons */}
         <Flex direction="column" gap="3">
           <Flex gap="3">
-            <Button
-              size="3"
-              className="flex-1 bg-[#00ADB5] hover:bg-[#009AA2] text-white"
-              onClick={handleAddToTermSet}
-            >
+            <Button size="3" className="flex-1  text-white" onClick={handleAddToTermSet}>
               <PlusIcon width="18" height="18" />
               利用規約に追加
             </Button>
             <Link href={`/fragment/${resolvedParams.fragmentid}/edit`} className="flex-1">
-              <Button size="3" className="flex-1 bg-[#00ADB5] hover:bg-[#009AA2] text-white">
+              <Button size="3" className="flex-1 text-white">
                 <Pencil2Icon width="18" height="18" />
                 編集する
               </Button>
             </Link>
           </Flex>
 
-          {/* Bottom Action Buttons */}
           <Flex justify="center" align="center" gap="4" className="mt-8">
             <Cross2Icon width="24" height="24" className="text-red-500" />
             <SegmentedControl.Root
@@ -271,7 +263,6 @@ export default function FragmentDetailPage({
           </Flex>
         </Flex>
 
-        {/* Add to Term Set Dialog */}
         <Dialog.Root open={showAddDialog} onOpenChange={setShowAddDialog}>
           <Dialog.Content style={{ maxWidth: 450 }}>
             <Dialog.Title>規約セットに追加</Dialog.Title>
@@ -280,7 +271,6 @@ export default function FragmentDetailPage({
             </Dialog.Description>
 
             <Flex direction="column" gap="3">
-              {/* Term Set Selection */}
               <label>
                 <Text as="div" size="2" mb="1" weight="bold">
                   規約セット
@@ -297,7 +287,6 @@ export default function FragmentDetailPage({
                 </Select.Root>
               </label>
 
-              {/* Parameter Values */}
               {fragmentData?.parameters && fragmentData.parameters.length > 0 && (
                 <>
                   <Text as="div" size="2" weight="bold" mt="2">
@@ -333,7 +322,7 @@ export default function FragmentDetailPage({
               <Button
                 onClick={handleConfirmAdd}
                 disabled={!selectedTermSet}
-                className="bg-[#00ADB5] hover:bg-[#009AA2] text-white"
+                className=" text-white"
               >
                 追加
               </Button>

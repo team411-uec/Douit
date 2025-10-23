@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Flex, Heading, Button, Text, Container, Card, Separator } from "@radix-ui/themes";
-import { CopyIcon, CheckIcon, Cross2Icon, QuestionMarkIcon } from "@radix-ui/react-icons";
+import { CopyIcon, CheckIcon, QuestionMarkIcon } from "@radix-ui/react-icons";
 import Header from "@/components/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
@@ -81,9 +81,7 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
               ログインが必要です
             </Heading>
             <Link href="/login">
-              <Button className="mt-4 bg-[#00ADB5] hover:bg-[#009AA2] text-white">
-                ログインページへ
-              </Button>
+              <Button className="mt-4 text-white">ログインページへ</Button>
             </Link>
           </Box>
         </Container>
@@ -161,7 +159,6 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
           </Card>
         </Box>
 
-        {/* Fragments */}
         <Flex direction="column" gap="4" mb="6">
           {termSetData.fragments.map((fragment: any) => {
             const fragmentUnderstanding = understandingStatus.find(
@@ -178,7 +175,6 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
           })}
         </Flex>
 
-        {/* Share Button */}
         <Button
           size="3"
           className={`w-full ${
@@ -253,13 +249,12 @@ function FragmentCard({ fragment, user, isUnderstood }: FragmentCardProps) {
           </Heading>
         </Flex>
         <Link href={`/fragment/${fragment.fragmentId}`}>
-          <Button size="2" className="bg-[#00ADB5] hover:bg-[#009AA2] text-white">
+          <Button size="2" className="text-white">
             読む
           </Button>
         </Link>
       </Flex>
 
-      {/* Parameters */}
       {fragment.parameterValues &&
         Object.entries(fragment.parameterValues).map(([key, value], index) => (
           <Box key={key}>
@@ -275,7 +270,6 @@ function FragmentCard({ fragment, user, isUnderstood }: FragmentCardProps) {
           </Box>
         ))}
 
-      {/* Contact */}
       <Box>
         <Separator my="1" />
         <Flex justify="between">

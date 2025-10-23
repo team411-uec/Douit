@@ -40,9 +40,7 @@ export default function UnderstoodPage() {
               ログインが必要です
             </Heading>
             <Link href="/login">
-              <Button className="mt-4 bg-[#00ADB5] hover:bg-[#009AA2] text-white">
-                ログインページへ
-              </Button>
+              <Button className="mt-4 text-white">ログインページへ</Button>
             </Link>
           </Box>
         </Container>

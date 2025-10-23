@@ -29,9 +29,7 @@ export default function UserPage() {
               ログインが必要です
             </Heading>
             <Link href="/login">
-              <Button className="mt-4 bg-[#00ADB5] hover:bg-[#009AA2] text-white">
-                ログインページへ
-              </Button>
+              <Button className="mt-4 text-white">ログインページへ</Button>
             </Link>
           </Box>
         </Container>
@@ -43,7 +41,6 @@ export default function UserPage() {
       <Header />
 
       <Container size="1" className="px-6 py-8">
-        {/* Profile Section */}
         <Flex direction="column" align="center" gap="4" className="mb-8">
           <Avatar
             size="7"
@@ -59,22 +56,15 @@ export default function UserPage() {
           </Text>
         </Flex>
 
-        {/* Menu Buttons */}
         <Flex direction="column" gap="4">
           <Link href="/understood" className="no-underline">
-            <Button
-              size="4"
-              className="w-full bg-[#00ADB5] hover:bg-[#009AA2] text-white rounded-lg py-4"
-            >
+            <Button size="4" className="w-full text-white rounded-lg py-4">
               理解した規約片
             </Button>
           </Link>
 
           <Link href="/terms" className="no-underline">
-            <Button
-              size="4"
-              className="w-full bg-[#00ADB5] hover:bg-[#009AA2] text-white rounded-lg py-4"
-            >
+            <Button size="4" className="w-full text-white rounded-lg py-4">
               作成した利用規約
             </Button>
           </Link>
