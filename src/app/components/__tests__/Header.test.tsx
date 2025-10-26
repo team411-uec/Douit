@@ -1,10 +1,3 @@
-// Node (Jest) 環境では global.fetch が存在しないため、一部ライブラリ（firebase 等）が
-// 問題を起こすことがあります。ここで簡易に polyfill しておきます。
-if (typeof (global as any).fetch === "undefined") {
-  (global as any).fetch = (..._args: any[]) =>
-    Promise.resolve({ ok: true, json: async () => ({}) });
-}
-
 import React from "react";
 import { render, screen } from "@testing-library/react";
 
