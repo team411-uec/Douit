@@ -44,9 +44,6 @@ npm install
 # すべてのテストを実行
 npm test
 
-# 変更を監視して再実行（開発中に便利）
-[検証環境](https://douit-electr2s-projects.vercel.app)
-
 # カバレッジを出力する場合
 npm run test:coverage
 ```
