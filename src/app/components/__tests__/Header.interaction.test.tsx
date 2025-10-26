@@ -11,7 +11,14 @@ describe("Header interactions", () => {
   afterEach(() => mockUseAuth.mockReset());
 
   test("未ログイン時に /login へのリンクが表示される", () => {
-    mockUseAuth.mockReturnValue({ user: null, loading: false } as any);
+    mockUseAuth.mockReturnValue({
+      user: null,
+      loading: false,
+      signIn: jest.fn(),
+      signUp: jest.fn(),
+      signInWithGoogle: jest.fn(),
+      logout: jest.fn(),
+    } as any);
     const { container } = render(<Header />);
 
     const loginLink = container.querySelector('a[href="/login"]');
@@ -19,7 +26,14 @@ describe("Header interactions", () => {
   });
 
   test("ログイン済みなら /user へのリンクが表示される", () => {
-    mockUseAuth.mockReturnValue({ user: { uid: "1", displayName: "U" }, loading: false } as any);
+    mockUseAuth.mockReturnValue({
+      user: { uid: "1", displayName: "U" },
+      loading: false,
+      signIn: jest.fn(),
+      signUp: jest.fn(),
+      signInWithGoogle: jest.fn(),
+      logout: jest.fn(),
+    } as any);
     const { container } = render(<Header />);
 
     const userLink = container.querySelector('a[href="/user"]');

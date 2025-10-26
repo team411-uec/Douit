@@ -23,13 +23,21 @@ describe("HomePage", () => {
   });
 
   test("renders search input and 検索 button", async () => {
-    mockUseAuth.mockReturnValue({ user: null, loading: false } as any);
+    mockUseAuth.mockReturnValue({
+      user: null,
+      loading: false,
+      signIn: jest.fn(),
+      signUp: jest.fn(),
+      signInWithGoogle: jest.fn(),
+      logout: jest.fn(),
+    } as any);
     render(<HomePage />);
 
     expect(screen.getByPlaceholderText(/規約片をタグで検索/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /検索/ })).toBeInTheDocument();
 
     // wait for any async effects to settle
+    // eslint-disable-next-line no-empty-function
     await waitFor(() => {});
   });
 });

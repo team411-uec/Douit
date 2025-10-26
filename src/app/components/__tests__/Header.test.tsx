@@ -34,10 +34,10 @@ describe("Header", () => {
     mockUseAuth.mockReturnValue({
       user: null,
       loading: false,
-      signIn: async () => {},
-      signUp: async () => {},
-      signInWithGoogle: async () => {},
-      logout: async () => {},
+      signIn: jest.fn(),
+      signUp: jest.fn(),
+      signInWithGoogle: jest.fn(),
+      logout: jest.fn(),
     } as any);
 
     render(<Header />);
@@ -51,10 +51,10 @@ describe("Header", () => {
     mockUseAuth.mockReturnValue({
       user: mockUser,
       loading: false,
-      signIn: async () => {},
-      signUp: async () => {},
-      signInWithGoogle: async () => {},
-      logout: async () => {},
+      signIn: jest.fn(),
+      signUp: jest.fn(),
+      signInWithGoogle: jest.fn(),
+      logout: jest.fn(),
     } as any);
 
     const { container } = render(<Header />);
@@ -68,10 +68,10 @@ describe("Header", () => {
     mockUseAuth.mockReturnValue({
       user: mockUser,
       loading: false,
-      signIn: async () => {},
-      signUp: async () => {},
-      signInWithGoogle: async () => {},
-      logout: async () => {},
+      signIn: jest.fn(),
+      signUp: jest.fn(),
+      signInWithGoogle: jest.fn(),
+      logout: jest.fn(),
     } as any);
 
     const { container } = render(<Header showUserIcon />);
