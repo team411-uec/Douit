@@ -2,8 +2,8 @@ import { searchTermFragments } from "@/functions/tagSearch";
 import { TermFragment } from "@/types";
 import { useEffect, useState } from "react";
 
-export function useFragments(searchTag: string): [{ id: string; data: TermFragment }[], boolean] {
-  const [fragments, setFragments] = useState<{ id: string; data: TermFragment }[]>([]);
+export function useFragments(searchTag: string): [TermFragment[], boolean] {
+  const [fragments, setFragments] = useState<TermFragment[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchFragments = async () => {

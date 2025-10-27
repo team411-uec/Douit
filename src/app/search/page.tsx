@@ -13,7 +13,7 @@ import NewFragmentDialog from "@/components/Organisims/NewFragmentDialog";
 export default function HomePage() {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
-  const [fragments, setFragments] = useState<{ id: string; data: TermFragment }[]>([]);
+  const [fragments, setFragments] = useState<TermFragment[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -84,8 +84,8 @@ export default function HomePage() {
                 key={fragmentItem.id}
                 fragment={{
                   id: fragmentItem.id,
-                  title: fragmentItem.data.title,
-                  tags: fragmentItem.data.tags,
+                  title: fragmentItem.title,
+                  tags: fragmentItem.tags,
                 }}
               />
             ))}

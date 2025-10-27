@@ -50,7 +50,7 @@ export async function updateTermFragment(
     throw new Error("規約片が見つかりません");
   }
 
-  const currentData = fragmentDoc.data() as TermFragment;
+  const currentData = fragmentDoc.data();
 
   // 現在のバージョンを履歴に保存
   await addDoc(collection(db, "termFragments", fragmentId, "versions"), {
@@ -136,5 +136,5 @@ export async function getTermFragment(fragmentId: string): Promise<TermFragment 
     return null;
   }
 
-  return fragmentDoc.data() as TermFragment;
+  return { id: fragmentId, ...fragmentDoc.data() } as TermFragment;
 }
