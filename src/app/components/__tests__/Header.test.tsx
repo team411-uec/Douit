@@ -23,54 +23,83 @@ describe("Header", () => {
     mockUseAuth.mockReset();
   });
 
-  test("表示: 未ログイン時にログインリンクが表示される", () => {
-    mockUseAuth.mockReturnValue({
-      user: null,
-      loading: false,
-      signIn: jest.fn(),
-      signUp: jest.fn(),
-      signInWithGoogle: jest.fn(),
-      logout: jest.fn(),
-    } as any);
+  describe("未ログイン時の表示", () => {
+    beforeEach(() => {
+      mockUseAuth.mockReturnValue({
+        user: null,
+        loading: false,
+        signIn: jest.fn(),
+        signUp: jest.fn(),
+        signInWithGoogle: jest.fn(),
+        logout: jest.fn(),
+      } as any);
+    });
 
-    render(<Header />);
+    test("ログインリンク (/login) が表示される", () => {
+      const { container } = render(<Header />);
+      const loginLink = container.querySelector('a[href="/login"]');
+      expect(loginLink).toBeInTheDocument();
+    });
 
-    // ログインボタン（リンク）が存在することを確認
-    expect(screen.getByRole("link", { name: /ログイン/ })).toBeInTheDocument();
+    test("ログインボタン（テキスト）が表示される", () => {
+      render(<Header />);
+      expect(screen.getByRole("link", { name: /ログイン/ })).toBeInTheDocument();
+    });
   });
 
-  test("表示: ログイン済みなら /user へのリンクが表示される", () => {
+  describe("ログイン済み時の表示", () => {
     const mockUser = { uid: "1", displayName: "Test User", email: "a@b.com", photoURL: null };
-    mockUseAuth.mockReturnValue({
-      user: mockUser,
-      loading: false,
-      signIn: jest.fn(),
-      signUp: jest.fn(),
-      signInWithGoogle: jest.fn(),
-      logout: jest.fn(),
-    } as any);
 
-    const { container } = render(<Header />);
+    beforeEach(() => {
+      mockUseAuth.mockReturnValue({
+        user: mockUser,
+        loading: false,
+        signIn: jest.fn(),
+        signUp: jest.fn(),
+        signInWithGoogle: jest.fn(),
+        logout: jest.fn(),
+      } as any);
+    });
 
-    // /user へのリンクが存在すること
-    expect(container.querySelector('a[href="/user"]')).toBeInTheDocument();
+    test("/user へのリンクが表示される", () => {
+      const { container } = render(<Header />);
+      expect(container.querySelector('a[href="/user"]')).toBeInTheDocument();
+    });
+
+    test("ログインリンク (/login) は表示されない", () => {
+      const { container } = render(<Header />);
+      const loginLink = container.querySelector('a[href="/login"]');
+      expect(loginLink).not.toBeInTheDocument();
+    });
   });
 
-  test("表示: showUserIcon=true のときユーザーの photoURL が img として表示される", () => {
+  describe("showUserIcon プロップによる表示制御", () => {
     const mockUser = { uid: "1", displayName: "U", email: "a@b.com", photoURL: "/me.png" };
-    mockUseAuth.mockReturnValue({
-      user: mockUser,
-      loading: false,
-      signIn: jest.fn(),
-      signUp: jest.fn(),
-      signInWithGoogle: jest.fn(),
-      logout: jest.fn(),
-    } as any);
 
-    const { container } = render(<Header showUserIcon />);
+    beforeEach(() => {
+      mockUseAuth.mockReturnValue({
+        user: mockUser,
+        loading: false,
+        signIn: jest.fn(),
+        signUp: jest.fn(),
+        signInWithGoogle: jest.fn(),
+        logout: jest.fn(),
+      } as any);
+    });
 
-    // ログインボタンは表示されず、/user へのリンクがあることを確認
-    expect(screen.queryByRole("link", { name: /ログイン/ })).toBeNull();
-    expect(container.querySelector('a[href="/user"]')).toBeInTheDocument();
+    test("showUserIcon=true のときユーザーアイコン (img) が表示される", () => {
+      const { container } = render(<Header showUserIcon />);
+      expect(container.querySelector("img")).toBeInTheDocument();
+    });
+
+    test("showUserIcon=true のときログインボタンは表示されない", () => {
+      render(<Header showUserIcon />);
+      expect(screen.queryByRole("link", { name: /ログイン/ })).toBeNull();
+    });
+
+    test("showUserIcon=true のとき /user へのリンクが表示される", () => {
+      const { container } = render(<Header showUserIcon />);
+      expect(container.querySelector('a[href="/user"]')).toBeInTheDocument();
+    });
   });
 });
