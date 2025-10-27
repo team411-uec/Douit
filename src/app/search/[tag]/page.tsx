@@ -79,8 +79,8 @@ export function SearchContent({ params }: { params: Promise<{ tag: string }> }) 
                 key={fragment.id}
                 fragment={{
                   id: fragment.id,
-                  title: fragment.data.title,
-                  tags: fragment.data.tags,
+                  title: fragment.title,
+                  tags: fragment.tags,
                 }}
               />
             ))}
