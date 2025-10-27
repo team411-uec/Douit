@@ -96,7 +96,7 @@ function UnderstoodTermCard({ record }: UnderstoodTermCardProps) {
             {record.fragment?.title || "規約片"}
           </Heading>
           <Flex align="center" gap="2">
-            <Box className="text-sm text-gray-500">v{record.version}</Box>
+            <Box className="text-sm text-gray-500">{record.version}</Box>
             <Box className="text-sm text-gray-500">
               {record.understoodAt
                 ? new Date(record.understoodAt.seconds * 1000).toLocaleDateString()
