@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     },
   },
   // Firebase関連のモジュール設定
-  webpack: (config: any) => {
+  webpack: (config: NextConfig) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
