@@ -138,7 +138,7 @@ export default function AcceptCheckPage({ params }: { params: Promise<{ termSetI
           {termSetData.title}
         </Heading>
         <Text size="2" color="gray" className="mb-6">
-          {termSetData.description || "team411"}
+          {termSetData.description}
         </Text>
 
         {/* Common Parameters */}
@@ -162,7 +162,6 @@ export default function AcceptCheckPage({ params }: { params: Promise<{ termSetI
           </Box>
         )}
 
-        {/* Fragments List */}
         <Box>
           {fragments.map((fragment, index) => (
             <Card
