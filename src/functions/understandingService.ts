@@ -69,17 +69,14 @@ export async function removeUnderstoodRecord(userId: string, fragmentId: string)
 /**
  * ユーザーの理解記録を取得
  */
-export async function getUserUnderstoodRecords(
-  userId: string
-): Promise<(UnderstoodRecord & { id: string })[]> {
+export async function getUserUnderstoodRecords(userId: string): Promise<UnderstoodRecord[]> {
   const querySnapshot = await getDocs(
     query(collection(db, "users", userId, "understood"), orderBy("understoodAt", "desc"))
   );
 
   return querySnapshot.docs.map(doc => ({
-    id: doc.id,
     ...doc.data(),
-  })) as (UnderstoodRecord & { id: string })[];
+  })) as UnderstoodRecord[];
 }
 
 /**
@@ -101,31 +98,6 @@ export async function isFragmentUnderstood(
 
   const querySnapshot = await getDocs(q);
   return !querySnapshot.empty;
-}
-
-/**
- * 理解記録一覧（フラグメント情報付き）を取得
- */
-export async function getUnderstoodRecordsWithFragments(userId: string): Promise<
-  {
-    record: UnderstoodRecord & { id: string };
-    fragment: TermFragment | null;
-  }[]
-> {
-  const records = await getUserUnderstoodRecords(userId);
-  const { getTermFragment } = await import("./termFragments");
-
-  const recordsWithFragments = [];
-
-  for (const record of records) {
-    const fragment = await getTermFragment(record.fragmentId);
-    recordsWithFragments.push({
-      record,
-      fragment,
-    });
-  }
-
-  return recordsWithFragments;
 }
 
 /**
