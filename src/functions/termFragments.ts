@@ -1,17 +1,5 @@
 import { db } from "./firebase";
-import {
-  collection,
-  doc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-  collectionGroup,
-  serverTimestamp,
-} from "firebase/firestore";
+import { collection, doc, addDoc, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { TermFragment } from "../domains/types";
 
 // 規約片の作成
@@ -71,60 +59,6 @@ export async function updateTermFragment(
     currentVersion: currentData.currentVersion + 1,
     updatedAt: serverTimestamp(),
   });
-}
-
-// 規約片を参照している規約セットを検索
-export async function findReferencingSets(fragmentId: string): Promise<
-  {
-    setId: string;
-    setTitle?: string;
-  }[]
-> {
-  const q = query(collectionGroup(db, "fragments"), where("fragmentId", "==", fragmentId));
-
-  const querySnapshot = await getDocs(q);
-  const referencingSets: { setId: string; setTitle?: string }[] = [];
-
-  querySnapshot.forEach(doc => {
-    const pathParts = doc.ref.path.split("/");
-    const setId = pathParts[1];
-    referencingSets.push({ setId });
-  });
-
-  return referencingSets;
-}
-
-// 安全な削除関数（警告付き）
-async function safeDeleteTermFragment(
-  fragmentId: string,
-  forceDelete: boolean = false
-): Promise<{
-  success: boolean;
-  referencingSets?: { setId: string; setTitle?: string }[];
-  message: string;
-}> {
-  const referencingSets = await findReferencingSets(fragmentId);
-
-  if (referencingSets.length > 0 && !forceDelete) {
-    return {
-      success: false,
-      referencingSets,
-      message: `この規約片は${referencingSets.length}個の規約セットで使用されています。削除を続行しますか？`,
-    };
-  }
-
-  await deleteTermFragment(fragmentId);
-
-  return {
-    success: true,
-    message: "規約片を削除しました",
-  };
-}
-
-// 基本的な削除関数
-export async function deleteTermFragment(fragmentId: string): Promise<void> {
-  const fragmentRef = doc(db, "termFragments", fragmentId);
-  await deleteDoc(fragmentRef);
 }
 
 // 規約片の取得
