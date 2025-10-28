@@ -1,4 +1,4 @@
-import { searchTermFragments } from "@/functions/tagSearch";
+import { searchTermFragments } from "@/repositories/tagSearch";
 import { TermFragment } from "@/domains/types";
 import { useEffect, useState } from "react";
 

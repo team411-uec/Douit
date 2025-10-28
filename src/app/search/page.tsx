@@ -4,7 +4,7 @@ import { Box, Flex, Heading, Button, Container, TextField } from "@radix-ui/them
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import Header from "@/components/Organisims/Header";
 import { useState, useEffect } from "react";
-import { getAllTermFragments } from "@/functions/tagSearch";
+import { getAllTermFragments } from "@/repositories/tagSearch";
 import { TermFragment } from "@/domains/types";
 import { useAuth } from "@/contexts/AuthContext";
 import FragmentSearchCard from "@/components/Organisims/FragmentSearchCard";

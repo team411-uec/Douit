@@ -17,13 +17,13 @@ import {
 import { CheckIcon, Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import Header from "@/components/Organisims/Header";
 import { useState, useEffect, use } from "react";
-import { getTermFragment } from "@/functions/termFragments";
+import { getTermFragment } from "@/repositories/termFragments";
 import {
   addUnderstoodRecord,
   removeUnderstoodRecord,
   isFragmentUnderstood,
-} from "@/functions/understandingService";
-import { getUserTermSets, addFragmentToSet } from "@/functions/termSetService";
+} from "@/repositories/understandingService";
+import { getUserTermSets, addFragmentToSet } from "@/repositories/termSetService";
 import { TermFragment } from "@/domains/types";
 import { useAuth } from "@/contexts/AuthContext";
 

@@ -4,9 +4,9 @@ import { Box, Flex, Heading, Text, Container, Button, Card, Link } from "@radix-
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import Header from "@/components/Organisims/Header";
 import { useState, useEffect, use } from "react";
-import { getUserTermSetWithFragments } from "@/functions/termSetService";
-import { getTermFragment } from "@/functions/termFragments";
-import { isFragmentUnderstood } from "@/functions/understandingService";
+import { getUserTermSetWithFragments } from "@/repositories/termSetService";
+import { getTermFragment } from "@/repositories/termFragments";
+import { isFragmentUnderstood } from "@/repositories/understandingService";
 import { TermFragment, FragmentRef } from "@/domains/types";
 import { useAuth } from "@/contexts/AuthContext";
 

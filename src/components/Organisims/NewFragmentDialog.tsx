@@ -1,4 +1,4 @@
-import { createTermFragment } from "@/functions/termFragments";
+import { createTermFragment } from "@/repositories/termFragments";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { Dialog, Box, Button, Flex, TextField, TextArea, Text } from "@radix-ui/themes";
 import { useState } from "react";

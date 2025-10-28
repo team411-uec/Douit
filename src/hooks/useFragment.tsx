@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, version } from "react";
 import { TermFragment } from "@/domains/types";
-import { getTermFragment } from "@/functions/termFragments";
+import { getTermFragment } from "@/repositories/termFragments";
 
 export default function useFragment(id: string): TermFragment | null {
   const [fragment, setFragment] = useState<TermFragment | null>(null);

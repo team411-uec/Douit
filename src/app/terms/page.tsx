@@ -16,7 +16,7 @@ import Header from "@/components/Organisims/Header";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
-import { createUserTermSet, getUserTermSets } from "@/functions/termSetService";
+import { createUserTermSet, getUserTermSets } from "@/repositories/termSetService";
 
 type TermsItem = {
   id: string;

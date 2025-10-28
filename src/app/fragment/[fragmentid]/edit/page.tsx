@@ -12,7 +12,7 @@ import {
 } from "@radix-ui/themes";
 import Header from "@/components/Organisims/Header";
 import { useState, useEffect, use } from "react";
-import { getTermFragment, updateTermFragment } from "@/functions/termFragments";
+import { getTermFragment, updateTermFragment } from "@/repositories/termFragments";
 import { TermFragment } from "@/domains/types";
 import { useAuth } from "@/contexts/AuthContext";
 

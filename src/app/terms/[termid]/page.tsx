@@ -6,9 +6,9 @@ import Header from "@/components/Organisims/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useState, useEffect, use } from "react";
-import { getUserTermSetWithFragments } from "@/functions/termSetService";
-import { getUnderstandingStatusForSet } from "@/functions/understandingService";
-import { getTermFragment } from "@/functions/termFragments";
+import { getUserTermSetWithFragments } from "@/repositories/termSetService";
+import { getUnderstandingStatusForSet } from "@/repositories/understandingService";
+import { getTermFragment } from "@/repositories/termFragments";
 import { User } from "firebase/auth";
 
 export default function TermDetailPage({ params }: { params: Promise<{ termid: string }> }) {

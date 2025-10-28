@@ -4,7 +4,7 @@ import { Box, Flex, Heading, Button, Container, Card } from "@radix-ui/themes";
 import Header from "@/components/Organisims/Header";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { getUserUnderstoodRecords } from "@/functions/understandingService";
+import { getUserUnderstoodRecords } from "@/repositories/understandingService";
 import { useAuth } from "@/contexts/AuthContext";
 import { UnderstoodRecord } from "@/domains/types";
 import useFragment from "@/hooks/useFragment";
