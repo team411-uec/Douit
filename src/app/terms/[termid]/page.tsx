@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Flex, Heading, Button, Text, Container, Card, Separator } from "@radix-ui/themes";
-import { CopyIcon, CheckIcon, QuestionMarkIcon } from "@radix-ui/react-icons";
+import { CopyIcon, CheckIcon } from "@radix-ui/react-icons";
 import Header from "@/components/Organisims/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import { User } from "firebase/auth";
 import useTermSet from "@/hooks/useTermSet";
 import { useTermSetFragments } from "@/hooks/useTermSetFragments";
 import { useUnderstandingStatusForSet } from "@/hooks/useUnderstandingStatusForSet";
-import useFragment from "@/hooks/useFragment";
+import TermSetFragmentCard from "@/components/Organisims/TermSetFragmentCard";
 
 export default function TermDetailPage({ params }: { params: Promise<{ termid: string }> }) {
   const { user } = useAuth();
@@ -137,7 +137,7 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
               status => status.fragmentId === fragment.fragmentId
             );
             return (
-              <FragmentCard
+              <TermSetFragmentCard
                 key={fragment.id}
                 fragment={fragment}
                 user={user}
@@ -148,7 +148,9 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
         </Flex>
         <Button
           size="3"
-          className={`w-full ${copySuccess ? "bg-green-600 hover:bg-green-700" : "bg-[#00ADB5] hover:bg-[#009AA2]"} text-white`}
+          className={`w-full ${
+            copySuccess ? "bg-green-600 hover:bg-green-700" : "bg-[#00ADB5] hover:bg-[#009AA2]"
+          } text-white`}
           onClick={handleShareButtonClick}
         >
           {copySuccess ? (
@@ -165,84 +167,5 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
         </Button>
       </Container>
     </Box>
-  );
-}
-
-type FragmentCardProps = {
-  fragment: any;
-  user: User;
-  isUnderstood: boolean;
-};
-
-function FragmentCard({ fragment, user, isUnderstood }: FragmentCardProps) {
-  const { data: fragmentDetails, loading, error } = useFragment(fragment.fragmentId);
-
-  if (loading) {
-    return (
-      <Card size="2">
-        <Text size="3" color="gray">
-          読み込み中...
-        </Text>
-      </Card>
-    );
-  }
-
-  if (error || !fragmentDetails) {
-    return (
-      <Card size="2">
-        <Text size="3" color="red">
-          {error || "フラグメント詳細の取得に失敗しました"}
-        </Text>
-      </Card>
-    );
-  }
-
-  return (
-    <Card size="2">
-      <Flex align="center" justify="between" className="mb-3">
-        <Flex align="center" gap="2">
-          <Box className={isUnderstood ? "text-green-600" : "text-gray-500"}>
-            {isUnderstood ? (
-              <CheckIcon width="16" height="16" />
-            ) : (
-              <QuestionMarkIcon width="16" height="16" />
-            )}
-          </Box>
-          <Heading size="4" className={isUnderstood ? "text-green-600" : "text-gray-500"}>
-            {fragmentDetails.title}
-          </Heading>
-        </Flex>
-        <Link href={`/fragment/${fragment.fragmentId}`}>
-          <Button size="2" className="text-white">
-            読む
-          </Button>
-        </Link>
-      </Flex>
-      {fragment.parameterValues &&
-        Object.entries(fragment.parameterValues).map(([key, value], index) => (
-          <Box key={key}>
-            {index > 0 && <Separator my="1" />}
-            <Flex justify="between">
-              <Text size="2" color="gray">
-                {key}
-              </Text>
-              <Text size="2" color="gray">
-                {String(value)}
-              </Text>
-            </Flex>
-          </Box>
-        ))}
-      <Box>
-        <Separator my="1" />
-        <Flex justify="between">
-          <Text size="2" color="gray">
-            CONTACT
-          </Text>
-          <Text size="2" color="gray">
-            {user.email}
-          </Text>
-        </Flex>
-      </Box>
-    </Card>
   );
 }
