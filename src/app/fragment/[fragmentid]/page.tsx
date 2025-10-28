@@ -16,16 +16,17 @@ import {
 } from "@radix-ui/themes";
 import { CheckIcon, Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import Header from "@/components/Organisims/Header";
-import { useState, useEffect, use } from "react";
-import { getTermFragment } from "@/repositories/termFragments";
+import { useState, use } from "react";
 import {
   addUnderstoodRecord,
   removeUnderstoodRecord,
   isFragmentUnderstood,
 } from "@/repositories/understandingService";
-import { getUserTermSets, addFragmentToSet } from "@/repositories/termSetService";
-import { TermFragment } from "@/domains/types";
+import { addFragmentToSet } from "@/repositories/termSetService";
 import { useAuth } from "@/contexts/AuthContext";
+import useFragment from "@/hooks/useFragment";
+import { useUnderstandingStatus } from "@/hooks/useUnderstandingStatus";
+import { useUserTermSets } from "@/hooks/useUserTermSets";
 
 export default function FragmentDetailPage({
   params,
@@ -33,12 +34,11 @@ export default function FragmentDetailPage({
   params: Promise<{ fragmentid: string }>;
 }) {
   const resolvedParams = use(params);
-  const [fragmentData, setFragmentData] = useState<TermFragment | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [understanding, setUnderstanding] = useState<string>("unknown");
+  const { data: fragmentData, loading, error } = useFragment(resolvedParams.fragmentid);
+  const { understanding, setUnderstanding } = useUnderstandingStatus(resolvedParams.fragmentid);
+  const { data: userTermSets } = useUserTermSets();
+
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [userTermSets, setUserTermSets] = useState<any[]>([]);
   const [selectedTermSet, setSelectedTermSet] = useState<string>("");
   const [parameterValues, setParameterValues] = useState<Record<string, string>>({});
   const { user } = useAuth();
@@ -46,10 +46,8 @@ export default function FragmentDetailPage({
   const handleUnderstandingChange = async (value: string) => {
     if (!fragmentData || !user) return;
 
-    // 既に同じ状態の場合は何もしない
     if (value === understanding) return;
 
-    // 理解済みに変更しようとする場合、事前チェック
     if (value === "understood") {
       try {
         const alreadyUnderstood = await isFragmentUnderstood(
@@ -68,30 +66,25 @@ export default function FragmentDetailPage({
       }
     }
 
-    setUnderstanding(value);
+    setUnderstanding(value as "understood" | "unknown");
 
     if (!fragmentData || !user) return;
 
     try {
       if (value === "understood") {
-        // 理解記録を追加
         await addUnderstoodRecord(user.uid, resolvedParams.fragmentid, fragmentData.currentVersion);
         console.log("理解記録を追加しました");
       } else if (value === "unknown") {
-        // 理解記録を削除
         await removeUnderstoodRecord(user.uid, resolvedParams.fragmentid);
         console.log("理解記録を削除しました");
       }
     } catch (error) {
       console.error("理解記録の更新に失敗しました:", error);
 
-      // エラーが発生した場合、状態を元に戻す
       if (error instanceof Error && error.message.includes("既に理解済み")) {
         console.log("既に理解済みの規約片です");
-        // 状態を理解済みに戻す
         setUnderstanding("understood");
       } else {
-        // その他のエラーの場合、前の状態に戻す
         setUnderstanding(value === "understood" ? "unknown" : "understood");
       }
     }
@@ -99,7 +92,6 @@ export default function FragmentDetailPage({
 
   const handleAddToTermSet = () => {
     setShowAddDialog(true);
-    // パラメータの初期値を設定
     if (fragmentData?.parameters) {
       const initialParams: Record<string, string> = {};
       fragmentData.parameters.forEach(param => {
@@ -123,59 +115,6 @@ export default function FragmentDetailPage({
       console.error("規約セットへの追加に失敗しました:", error);
     }
   };
-
-  useEffect(() => {
-    const fetchFragment = async () => {
-      try {
-        setLoading(true);
-        const fragment = await getTermFragment(resolvedParams.fragmentid);
-        if (fragment) {
-          setFragmentData(fragment);
-        } else {
-          setError("規約片が見つかりませんでした");
-        }
-      } catch (err) {
-        console.error("規約片の取得に失敗しました:", err);
-        setError("規約片の取得に失敗しました");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFragment();
-  }, [resolvedParams.fragmentid]);
-
-  // 理解状態の初期値を取得
-  useEffect(() => {
-    const checkUnderstandingStatus = async () => {
-      if (user && resolvedParams.fragmentid) {
-        try {
-          const isUnderstood = await isFragmentUnderstood(user.uid, resolvedParams.fragmentid);
-          setUnderstanding(isUnderstood ? "understood" : "unknown");
-        } catch (error) {
-          console.error("理解状態の取得に失敗しました:", error);
-        }
-      }
-    };
-
-    checkUnderstandingStatus();
-  }, [user, resolvedParams.fragmentid]);
-
-  // ユーザーの規約セット一覧を取得
-  useEffect(() => {
-    const fetchUserTermSets = async () => {
-      if (user) {
-        try {
-          const termSets = await getUserTermSets(user.uid);
-          setUserTermSets(termSets);
-        } catch (error) {
-          console.error("規約セット一覧の取得に失敗しました:", error);
-        }
-      }
-    };
-
-    fetchUserTermSets();
-  }, [user]);
 
   if (loading) {
     return (
@@ -278,11 +217,12 @@ export default function FragmentDetailPage({
                 <Select.Root value={selectedTermSet} onValueChange={setSelectedTermSet}>
                   <Select.Trigger className="w-full" placeholder="規約セットを選択してください" />
                   <Select.Content>
-                    {userTermSets.map(termSet => (
-                      <Select.Item key={termSet.id} value={termSet.id}>
-                        {termSet.title}
-                      </Select.Item>
-                    ))}
+                    {userTermSets &&
+                      userTermSets.map(termSet => (
+                        <Select.Item key={termSet.id} value={termSet.id}>
+                          {termSet.title}
+                        </Select.Item>
+                      ))}
                   </Select.Content>
                 </Select.Root>
               </label>

@@ -12,40 +12,22 @@ import {
 } from "@radix-ui/themes";
 import Header from "@/components/Organisims/Header";
 import { useState, useEffect, use } from "react";
-import { getTermFragment, updateTermFragment } from "@/repositories/termFragments";
-import { TermFragment } from "@/domains/types";
+import { updateTermFragment } from "@/repositories/termFragments";
 import { useAuth } from "@/contexts/AuthContext";
+import useFragment from "@/hooks/useFragment";
 
 export default function EditFragmentPage({ params }: { params: Promise<{ fragmentid: string }> }) {
   const { user } = useAuth();
   const resolvedParams = use(params);
-  const [fragmentData, setFragmentData] = useState<TermFragment | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: fragmentData, loading, error, refetch } = useFragment(resolvedParams.fragmentid);
   const [editedContent, setEditedContent] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    const fetchFragment = async () => {
-      try {
-        setLoading(true);
-        const fragment = await getTermFragment(resolvedParams.fragmentid);
-        if (fragment) {
-          setFragmentData(fragment);
-          setEditedContent(fragment.content);
-        } else {
-          setError("規約片が見つかりませんでした");
-        }
-      } catch (err) {
-        console.error("規約片の取得に失敗しました:", err);
-        setError("規約片の取得に失敗しました");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFragment();
-  }, [resolvedParams.fragmentid]);
+    if (fragmentData) {
+      setEditedContent(fragmentData.content);
+    }
+  }, [fragmentData]);
 
   const handleSaveEdit = async () => {
     if (!user || !fragmentData || !editedContent.trim()) return;
@@ -60,11 +42,7 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
         fragmentData.parameters || []
       );
 
-      // 更新後のデータを取得
-      const updatedFragment = await getTermFragment(resolvedParams.fragmentid);
-      if (updatedFragment) {
-        setFragmentData(updatedFragment);
-      }
+      await refetch();
 
       console.log("規約片の更新が完了しました");
     } catch (error) {
@@ -116,7 +94,6 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
       <Header showUserIcon={true} />
 
       <Container size="1" px="4" py="6">
-        {/* Header with title and version */}
         <Flex align="center" justify="between" className="mb-6">
           <Heading size="6" color="gray" className="flex-1">
             {fragmentData.title}
@@ -133,7 +110,6 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
           </Select.Root>
         </Flex>
 
-        {/* Content with editable text area */}
         <ScrollArea className="h-96 mb-6">
           <Box className="pr-4">
             <TextArea
@@ -146,7 +122,6 @@ export default function EditFragmentPage({ params }: { params: Promise<{ fragmen
           </Box>
         </ScrollArea>
 
-        {/* Save Button */}
         <Button
           size="3"
           variant="solid"

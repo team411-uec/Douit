@@ -3,9 +3,9 @@
 import { Box, Flex, Heading, Button, Container, Avatar, TextField, Text } from "@radix-ui/themes";
 import Header from "@/components/Organisims/Header";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { GoogleIcon } from "@/components/Atoms/GoogleIcon";
+import { useRedirectIfLoggedIn } from "@/hooks/useRedirectIfLoggedIn";
 
 export default function LoginPage() {
   const { user, signIn, signUp, signInWithGoogle, logout } = useAuth();
@@ -14,13 +14,8 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSignUp, setIsSignUp] = useState(false);
-  const router = useRouter();
 
-  useEffect(() => {
-    if (user) {
-      router.push("/");
-    }
-  }, [user, router]);
+  useRedirectIfLoggedIn("/");
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();

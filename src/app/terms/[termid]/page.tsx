@@ -5,19 +5,32 @@ import { CopyIcon, CheckIcon, QuestionMarkIcon } from "@radix-ui/react-icons";
 import Header from "@/components/Organisims/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { useState, useEffect, use } from "react";
-import { getUserTermSetWithFragments } from "@/repositories/termSetService";
-import { getUnderstandingStatusForSet } from "@/repositories/understandingService";
-import { getTermFragment } from "@/repositories/termFragments";
+import { useState, use } from "react";
 import { User } from "firebase/auth";
+import useTermSet from "@/hooks/useTermSet";
+import { useTermSetFragments } from "@/hooks/useTermSetFragments";
+import { useUnderstandingStatusForSet } from "@/hooks/useUnderstandingStatusForSet";
+import useFragment from "@/hooks/useFragment";
 
 export default function TermDetailPage({ params }: { params: Promise<{ termid: string }> }) {
   const { user } = useAuth();
   const resolvedParams = use(params);
-  const [termSetData, setTermSetData] = useState<any>(null);
-  const [understandingStatus, setUnderstandingStatus] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: termSetData,
+    loading: termSetLoading,
+    error: termSetError,
+  } = useTermSet(resolvedParams.termid);
+  const {
+    data: fragments,
+    loading: fragmentsLoading,
+    error: fragmentsError,
+  } = useTermSetFragments(resolvedParams.termid);
+  const {
+    data: understandingStatus,
+    loading: understandingLoading,
+    error: understandingError,
+  } = useUnderstandingStatusForSet(resolvedParams.termid);
+
   const [copySuccess, setCopySuccess] = useState(false);
 
   const handleShareButtonClick = async () => {
@@ -25,51 +38,15 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
       const shareUrl = `${window.location.origin}/accept-check/${resolvedParams.termid}`;
       await navigator.clipboard.writeText(shareUrl);
       setCopySuccess(true);
-
-      // 2秒後にコピー成功状態をリセット
-      setTimeout(() => {
-        setCopySuccess(false);
-      }, 2000);
+      setTimeout(() => setCopySuccess(false), 2000);
     } catch (error) {
       console.error("リンクのコピーに失敗しました:", error);
       setCopySuccess(false);
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user) return;
-
-      try {
-        setLoading(true);
-
-        // 規約セットの詳細を取得
-        const termSetWithFragments = await getUserTermSetWithFragments(resolvedParams.termid);
-
-        if (!termSetWithFragments) {
-          setError("規約セットが見つかりませんでした");
-          return;
-        }
-
-        setTermSetData(termSetWithFragments);
-
-        // 理解状況を取得
-        const understandingStatusData = await getUnderstandingStatusForSet(
-          user.uid,
-          resolvedParams.termid
-        );
-
-        setUnderstandingStatus(understandingStatusData);
-      } catch (err) {
-        console.error("データの取得に失敗しました:", err);
-        setError("データの取得に失敗しました");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [user, resolvedParams.termid]);
+  const loading = termSetLoading || fragmentsLoading || understandingLoading;
+  const error = termSetError || fragmentsError || understandingError;
 
   if (!user) {
     return (
@@ -104,14 +81,14 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
     );
   }
 
-  if (error || !termSetData) {
+  if (error || !termSetData || !fragments) {
     return (
       <Box className="min-h-screen">
         <Header />
         <Container size="1" className="px-6 py-6">
           <Box className="text-center py-8">
             <Heading size="4" color="red">
-              {error || "規約セットが見つかりませんでした"}
+              {error || "データの取得に失敗しました"}
             </Heading>
           </Box>
         </Container>
@@ -122,17 +99,13 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
   return (
     <Box className="min-h-screen">
       <Header />
-
       <Container size="1" px="4" py="6">
-        {/* Title */}
         <Heading size="6" color="gray" mb="2">
-          {termSetData.set.title}
+          {termSetData.title}
         </Heading>
         <Text size="3" color="gray" mb="6">
           作成者: {user.displayName || user.email}
         </Text>
-
-        {/* Common Parameters */}
         <Box mb="6">
           <Heading size="5" color="gray" mb="4">
             共通パラメータ
@@ -158,10 +131,9 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
             </Flex>
           </Card>
         </Box>
-
         <Flex direction="column" gap="4" mb="6">
-          {termSetData.fragments.map((fragment: any) => {
-            const fragmentUnderstanding = understandingStatus.find(
+          {fragments.map(fragment => {
+            const fragmentUnderstanding = understandingStatus?.find(
               status => status.fragmentId === fragment.fragmentId
             );
             return (
@@ -174,12 +146,9 @@ export default function TermDetailPage({ params }: { params: Promise<{ termid: s
             );
           })}
         </Flex>
-
         <Button
           size="3"
-          className={`w-full ${
-            copySuccess ? "bg-green-600 hover:bg-green-700" : "bg-[#00ADB5] hover:bg-[#009AA2]"
-          } text-white`}
+          className={`w-full ${copySuccess ? "bg-green-600 hover:bg-green-700" : "bg-[#00ADB5] hover:bg-[#009AA2]"} text-white`}
           onClick={handleShareButtonClick}
         >
           {copySuccess ? (
@@ -206,28 +175,23 @@ type FragmentCardProps = {
 };
 
 function FragmentCard({ fragment, user, isUnderstood }: FragmentCardProps) {
-  const [fragmentDetails, setFragmentDetails] = useState<any>(null);
+  const { data: fragmentDetails, loading, error } = useFragment(fragment.fragmentId);
 
-  useEffect(() => {
-    const fetchFragmentDetails = async () => {
-      try {
-        const details = await getTermFragment(fragment.fragmentId);
-        setFragmentDetails(details);
-      } catch (error) {
-        console.error("フラグメント詳細の取得に失敗しました:", error);
-      }
-    };
-
-    if (fragment.fragmentId) {
-      fetchFragmentDetails();
-    }
-  }, [fragment.fragmentId]);
-
-  if (!fragmentDetails) {
+  if (loading) {
     return (
       <Card size="2">
         <Text size="3" color="gray">
           読み込み中...
+        </Text>
+      </Card>
+    );
+  }
+
+  if (error || !fragmentDetails) {
+    return (
+      <Card size="2">
+        <Text size="3" color="red">
+          {error || "フラグメント詳細の取得に失敗しました"}
         </Text>
       </Card>
     );
@@ -254,7 +218,6 @@ function FragmentCard({ fragment, user, isUnderstood }: FragmentCardProps) {
           </Button>
         </Link>
       </Flex>
-
       {fragment.parameterValues &&
         Object.entries(fragment.parameterValues).map(([key, value], index) => (
           <Box key={key}>
@@ -269,7 +232,6 @@ function FragmentCard({ fragment, user, isUnderstood }: FragmentCardProps) {
             </Flex>
           </Box>
         ))}
-
       <Box>
         <Separator my="1" />
         <Flex justify="between">

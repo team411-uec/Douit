@@ -3,34 +3,14 @@
 import { Box, Flex, Heading, Button, Container, Card } from "@radix-ui/themes";
 import Header from "@/components/Organisims/Header";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { getUserUnderstoodRecords } from "@/repositories/understandingService";
 import { useAuth } from "@/contexts/AuthContext";
 import { UnderstoodRecord } from "@/domains/types";
 import useFragment from "@/hooks/useFragment";
+import { useUnderstoodRecords } from "@/hooks/useUnderstoodRecords";
 
 export default function UnderstoodPage() {
-  const [understoodRecords, setUnderstoodRecords] = useState<UnderstoodRecord[]>([]);
-  const [loading, setLoading] = useState(true);
   const { user } = useAuth();
-
-  useEffect(() => {
-    const fetchUnderstoodRecords = async () => {
-      if (!user) return;
-
-      try {
-        setLoading(true);
-        const records = await getUserUnderstoodRecords(user.uid);
-        setUnderstoodRecords(records);
-      } catch (error) {
-        console.error("理解記録の取得に失敗しました:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUnderstoodRecords();
-  }, [user]);
+  const { data: understoodRecords, loading, error } = useUnderstoodRecords();
 
   if (!user) {
     return (
@@ -59,13 +39,21 @@ export default function UnderstoodPage() {
           理解済み規約片
         </Heading>
 
-        {loading ? (
+        {loading && (
           <Box className="text-center py-8">
             <Heading size="4" color="gray">
               読み込み中...
             </Heading>
           </Box>
-        ) : (
+        )}
+        {error && (
+          <Box className="text-center py-8">
+            <Heading size="4" color="red">
+              {error}
+            </Heading>
+          </Box>
+        )}
+        {understoodRecords && (
           <Flex direction="column" gap="4">
             {understoodRecords.length === 0 ? (
               <Box className="text-center py-8">
@@ -90,9 +78,11 @@ type UnderstoodTermCardProps = {
 };
 
 function UnderstoodTermCard({ record }: UnderstoodTermCardProps) {
-  console.log(record.fragmentId);
-  const fragment = useFragment(record.fragmentId);
-  if (!fragment) return null;
+  const { data: fragment, loading, error } = useFragment(record.fragmentId);
+
+  if (loading || !fragment) return null;
+  if (error) return null; // or show error state
+
   return (
     <Link href={`/fragment/${record.fragmentId}`} className="no-underline">
       <Card size="2" className="hover:shadow-md transition-shadow cursor-pointer">

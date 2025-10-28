@@ -15,62 +15,26 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import Header from "@/components/Organisims/Header";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState, useEffect } from "react";
-import { createUserTermSet, getUserTermSets } from "@/repositories/termSetService";
-
-type TermsItem = {
-  id: string;
-  title: string;
-  description: string;
-  createdAt: Date;
-};
+import { useState } from "react";
+import { createTermSet } from "@/repositories/termSetService";
+import { useUserTermSets } from "@/hooks/useUserTermSets";
+import { TermSet } from "@/domains/types";
 
 export default function TermsPage() {
   const { user } = useAuth();
-  const [termsData, setTermsData] = useState<TermsItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: termsData, loading, error, refetch } = useUserTermSets();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newTermTitle, setNewTermTitle] = useState("");
   const [newTermDescription, setNewTermDescription] = useState("");
   const [isCreating, setIsCreating] = useState(false);
-
-  useEffect(() => {
-    const fetchUserTerms = async () => {
-      if (!user) return;
-      try {
-        setLoading(true);
-        const terms = await getUserTermSets(user.uid);
-        setTermsData(terms);
-      } catch (error) {
-        console.error("利用規約の取得に失敗しました:", error);
-        // フォールバック用のテストデータ
-        setTermsData([
-          {
-            id: "1",
-            title: "サークル会則",
-            description: "テスト用の利用規約です",
-            createdAt: new Date(),
-          },
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUserTerms();
-  }, [user]);
 
   const handleCreateTerm = async () => {
     if (!user || !newTermTitle.trim()) return;
 
     setIsCreating(true);
     try {
-      await createUserTermSet(user.uid, newTermTitle.trim(), newTermDescription.trim());
-
-      // リストを再取得
-      const terms = await getUserTermSets(user.uid);
-      setTermsData(terms);
-
-      // フォームをリセット
+      await createTermSet(user.uid, newTermTitle.trim(), newTermDescription.trim());
+      await refetch();
       setNewTermTitle("");
       setNewTermDescription("");
       setIsDialogOpen(false);
@@ -107,13 +71,21 @@ export default function TermsPage() {
           作成した利用規約
         </Heading>
 
-        {loading ? (
+        {loading && (
           <Box className="text-center py-8">
             <Text size="4" color="gray">
               読み込み中...
             </Text>
           </Box>
-        ) : (
+        )}
+        {error && (
+          <Box className="text-center py-8">
+            <Text size="4" color="red">
+              {error}
+            </Text>
+          </Box>
+        )}
+        {termsData && (
           <Flex direction="column" gap="3" className="mb-6">
             {termsData.length === 0 ? (
               <Box className="text-center py-8">
@@ -187,7 +159,7 @@ export default function TermsPage() {
 }
 
 type TermsCardProps = {
-  term: TermsItem;
+  term: TermSet;
 };
 
 function TermsCard({ term }: TermsCardProps) {
@@ -204,7 +176,7 @@ function TermsCard({ term }: TermsCardProps) {
             </Text>
           )}
           <Text size="1" color="gray">
-            作成日: {term.createdAt.toLocaleDateString()}
+            作成日: {new Date(term.createdAt).toLocaleDateString()}
           </Text>
         </Flex>
       </Card>
