@@ -2,7 +2,7 @@
 
 import { Box, Flex, Heading, Button, Text, Container, Card, Separator } from "@radix-ui/themes";
 import { CopyIcon, CheckIcon, QuestionMarkIcon } from "@radix-ui/react-icons";
-import Header from "@/components/Header";
+import Header from "@/components/Organisims/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useState, useEffect, use } from "react";

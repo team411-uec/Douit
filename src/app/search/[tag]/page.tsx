@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, use, useState } from "react";
-import Header from "@/components/Header";
+import Header from "@/components/Organisims/Header";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { Box, Container, Flex, TextField, Button, Heading } from "@radix-ui/themes";
 import FragmentSearchCard from "@/components/Organisims/FragmentSearchCard";

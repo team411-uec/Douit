@@ -15,7 +15,7 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import { CheckIcon, Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
-import Header from "@/components/Header";
+import Header from "@/components/Organisims/Header";
 import { useState, useEffect, use } from "react";
 import { getTermFragment } from "@/functions/termFragments";
 import {

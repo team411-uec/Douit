@@ -3,7 +3,7 @@
 import { Box, Flex, Heading, Avatar, Button } from "@radix-ui/themes";
 import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 type HeaderProps = {
   showNumber?: boolean;

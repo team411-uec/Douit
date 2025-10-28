@@ -2,7 +2,7 @@
 
 import { Box, Flex, Heading, Text, Container, Button, Card, Link } from "@radix-ui/themes";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
-import Header from "@/components/Header";
+import Header from "@/components/Organisims/Header";
 import { useState, useEffect, use } from "react";
 import { getUserTermSetWithFragments } from "@/functions/termSetService";
 import { getTermFragment } from "@/functions/termFragments";

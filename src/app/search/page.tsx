@@ -2,7 +2,7 @@
 
 import { Box, Flex, Heading, Button, Container, TextField } from "@radix-ui/themes";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import Header from "@/components/Header";
+import Header from "@/components/Organisims/Header";
 import { useState, useEffect } from "react";
 import { getAllTermFragments } from "@/functions/tagSearch";
 import { TermFragment } from "@/types";

@@ -12,7 +12,7 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import { PlusIcon } from "@radix-ui/react-icons";
-import Header from "@/components/Header";
+import Header from "@/components/Organisims/Header";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
