@@ -28,8 +28,8 @@ export function useFragmentsWithStatus(
           setState(s => ({ ...s, loading: true, error: null }));
           const fragmentsWithData = await Promise.all(
             fragmentRefs.map(async ref => {
-              // eslint-disable-next-line array-element-newline
               const [fragmentData, understood] = await Promise.all([
+                // eslint-disable-next-line array-element-newline
                 getTermFragment(ref.fragmentId),
                 isFragmentUnderstood(user.uid, ref.fragmentId),
               ]);
