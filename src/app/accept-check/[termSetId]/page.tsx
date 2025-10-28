@@ -7,7 +7,7 @@ import { useState, useEffect, use } from "react";
 import { getUserTermSetWithFragments } from "@/functions/termSetService";
 import { getTermFragment } from "@/functions/termFragments";
 import { isFragmentUnderstood } from "@/functions/understandingService";
-import { TermFragment, FragmentRef } from "@/types";
+import { TermFragment, FragmentRef } from "@/domains/types";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface FragmentWithData {

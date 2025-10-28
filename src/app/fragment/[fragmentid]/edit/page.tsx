@@ -13,7 +13,7 @@ import {
 import Header from "@/components/Organisims/Header";
 import { useState, useEffect, use } from "react";
 import { getTermFragment, updateTermFragment } from "@/functions/termFragments";
-import { TermFragment } from "@/types";
+import { TermFragment } from "@/domains/types";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function EditFragmentPage({ params }: { params: Promise<{ fragmentid: string }> }) {

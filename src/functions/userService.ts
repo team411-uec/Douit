@@ -1,6 +1,6 @@
 import { db } from "./firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { User } from "../types";
+import { User } from "../domains/types";
 
 /**
  * ユーザーの作成

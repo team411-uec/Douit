@@ -5,7 +5,7 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import Header from "@/components/Organisims/Header";
 import { useState, useEffect } from "react";
 import { getAllTermFragments } from "@/functions/tagSearch";
-import { TermFragment } from "@/types";
+import { TermFragment } from "@/domains/types";
 import { useAuth } from "@/contexts/AuthContext";
 import FragmentSearchCard from "@/components/Organisims/FragmentSearchCard";
 import NewFragmentDialog from "@/components/Organisims/NewFragmentDialog";

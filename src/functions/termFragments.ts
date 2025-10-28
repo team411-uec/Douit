@@ -12,7 +12,7 @@ import {
   collectionGroup,
   serverTimestamp,
 } from "firebase/firestore";
-import { TermFragment } from "../types";
+import { TermFragment } from "../domains/types";
 
 // 規約片の作成
 export async function createTermFragment(

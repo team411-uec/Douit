@@ -24,7 +24,7 @@ import {
   isFragmentUnderstood,
 } from "@/functions/understandingService";
 import { getUserTermSets, addFragmentToSet } from "@/functions/termSetService";
-import { TermFragment } from "@/types";
+import { TermFragment } from "@/domains/types";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function FragmentDetailPage({

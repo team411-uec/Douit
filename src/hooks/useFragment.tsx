@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, version } from "react";
-import { TermFragment } from "@/types";
+import { TermFragment } from "@/domains/types";
 import { getTermFragment } from "@/functions/termFragments";
 
 export default function useFragment(id: string): TermFragment | null {

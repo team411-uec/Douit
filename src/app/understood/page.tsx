@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getUserUnderstoodRecords } from "@/functions/understandingService";
 import { useAuth } from "@/contexts/AuthContext";
-import { UnderstoodRecord } from "@/types";
+import { UnderstoodRecord } from "@/domains/types";
 import useFragment from "@/hooks/useFragment";
 
 export default function UnderstoodPage() {

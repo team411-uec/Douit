@@ -1,6 +1,6 @@
 import { db } from "./firebase";
 import { collection, doc, getDocs, query, where } from "firebase/firestore";
-import { TermFragment } from "../types";
+import { TermFragment } from "../domains/types";
 
 // 機能2: 規約片のタグ付け機能
 // ※ createTermFragment と updateTermFragment で tags を配列として保存済み

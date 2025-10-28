@@ -10,7 +10,7 @@ import {
   orderBy,
   serverTimestamp,
 } from "firebase/firestore";
-import { TermSet, FragmentRef } from "../types";
+import { TermSet, FragmentRef } from "../domains/types";
 
 // 機能4: 利用規約セットの作成・管理機能
 

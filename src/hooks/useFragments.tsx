@@ -1,5 +1,5 @@
 import { searchTermFragments } from "@/functions/tagSearch";
-import { TermFragment } from "@/types";
+import { TermFragment } from "@/domains/types";
 import { useEffect, useState } from "react";
 
 export function useFragments(searchTag: string): [TermFragment[], boolean] {
