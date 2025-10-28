@@ -11,8 +11,6 @@ import {
   SegmentedControl,
   Link,
   Button,
-  Dialog,
-  TextField,
 } from "@radix-ui/themes";
 import { CheckIcon, Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import Header from "@/components/Organisims/Header";
@@ -27,6 +25,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import useFragment from "@/hooks/useFragment";
 import { useUnderstandingStatus } from "@/hooks/useUnderstandingStatus";
 import { useUserTermSets } from "@/hooks/useUserTermSets";
+import AddFragmentToSetDialog from "@/components/Organisims/AddFragmentToSetDialog";
 
 export default function FragmentDetailPage({
   params,
@@ -39,8 +38,6 @@ export default function FragmentDetailPage({
   const { data: userTermSets } = useUserTermSets();
 
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [selectedTermSet, setSelectedTermSet] = useState<string>("");
-  const [parameterValues, setParameterValues] = useState<Record<string, string>>({});
   const { user } = useAuth();
 
   const handleUnderstandingChange = async (value: string) => {
@@ -92,25 +89,16 @@ export default function FragmentDetailPage({
 
   const handleAddToTermSet = () => {
     setShowAddDialog(true);
-    if (fragmentData?.parameters) {
-      const initialParams: Record<string, string> = {};
-      fragmentData.parameters.forEach(param => {
-        initialParams[param] = "";
-      });
-      setParameterValues(initialParams);
-    }
   };
 
-  const handleConfirmAdd = async () => {
-    if (!selectedTermSet || !fragmentData || !user) return;
+  const handleConfirmAdd = async (termSetId: string, parameterValues: Record<string, string>) => {
+    if (!termSetId || !fragmentData || !user) return;
 
     try {
-      await addFragmentToSet(selectedTermSet, resolvedParams.fragmentid, parameterValues);
+      await addFragmentToSet(termSetId, resolvedParams.fragmentid, parameterValues);
 
       console.log("規約セットに追加しました");
       setShowAddDialog(false);
-      setSelectedTermSet("");
-      setParameterValues({});
     } catch (error) {
       console.error("規約セットへの追加に失敗しました:", error);
     }
@@ -202,73 +190,13 @@ export default function FragmentDetailPage({
           </Flex>
         </Flex>
 
-        <Dialog.Root open={showAddDialog} onOpenChange={setShowAddDialog}>
-          <Dialog.Content style={{ maxWidth: 450 }}>
-            <Dialog.Title>規約セットに追加</Dialog.Title>
-            <Dialog.Description size="2" mb="4">
-              このフラグメントを追加する規約セットを選択してください。
-            </Dialog.Description>
-
-            <Flex direction="column" gap="3">
-              <label>
-                <Text as="div" size="2" mb="1" weight="bold">
-                  規約セット
-                </Text>
-                <Select.Root value={selectedTermSet} onValueChange={setSelectedTermSet}>
-                  <Select.Trigger className="w-full" placeholder="規約セットを選択してください" />
-                  <Select.Content>
-                    {userTermSets &&
-                      userTermSets.map(termSet => (
-                        <Select.Item key={termSet.id} value={termSet.id}>
-                          {termSet.title}
-                        </Select.Item>
-                      ))}
-                  </Select.Content>
-                </Select.Root>
-              </label>
-
-              {fragmentData?.parameters && fragmentData.parameters.length > 0 && (
-                <>
-                  <Text as="div" size="2" weight="bold" mt="2">
-                    パラメータ値
-                  </Text>
-                  {fragmentData.parameters.map(param => (
-                    <label key={param}>
-                      <Text as="div" size="2" mb="1">
-                        {param}
-                      </Text>
-                      <TextField.Root
-                        placeholder={`${param}の値を入力`}
-                        value={parameterValues[param] || ""}
-                        onChange={e =>
-                          setParameterValues(prev => ({
-                            ...prev,
-                            [param]: e.target.value,
-                          }))
-                        }
-                      />
-                    </label>
-                  ))}
-                </>
-              )}
-            </Flex>
-
-            <Flex gap="3" mt="4" justify="end">
-              <Dialog.Close>
-                <Button variant="soft" color="gray">
-                  キャンセル
-                </Button>
-              </Dialog.Close>
-              <Button
-                onClick={handleConfirmAdd}
-                disabled={!selectedTermSet}
-                className=" text-white"
-              >
-                追加
-              </Button>
-            </Flex>
-          </Dialog.Content>
-        </Dialog.Root>
+        <AddFragmentToSetDialog
+          open={showAddDialog}
+          onOpenChange={setShowAddDialog}
+          fragmentData={fragmentData}
+          userTermSets={userTermSets}
+          onConfirm={handleConfirmAdd}
+        />
       </Container>
     </Box>
   );
