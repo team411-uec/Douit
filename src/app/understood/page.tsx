@@ -1,12 +1,11 @@
 "use client";
 
-import { Box, Flex, Heading, Button, Container, Card } from "@radix-ui/themes";
+import { Box, Flex, Heading, Button, Container } from "@radix-ui/themes";
 import Header from "@/components/Organisims/Header";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import { UnderstoodRecord } from "@/domains/types";
-import useFragment from "@/hooks/useFragment";
 import { useUnderstoodRecords } from "@/hooks/useUnderstoodRecords";
+import UnderstoodTermCard from "@/components/Organisims/UnderstoodTermCard";
 
 export default function UnderstoodPage() {
   const { user } = useAuth();
@@ -70,34 +69,5 @@ export default function UnderstoodPage() {
         )}
       </Container>
     </Box>
-  );
-}
-
-type UnderstoodTermCardProps = {
-  record: UnderstoodRecord;
-};
-
-function UnderstoodTermCard({ record }: UnderstoodTermCardProps) {
-  const { data: fragment, loading, error } = useFragment(record.fragmentId);
-
-  if (loading || !fragment) return null;
-  if (error) return null; // or show error state
-
-  return (
-    <Link href={`/fragment/${record.fragmentId}`} className="no-underline">
-      <Card size="2" className="hover:shadow-md transition-shadow cursor-pointer">
-        <Flex align="center" justify="between">
-          <Heading size="4" color="gray" className="flex-1">
-            {fragment.title || "規約片"}
-          </Heading>
-          <Flex align="center" gap="2">
-            <Box className="text-sm text-gray-500">{record.version}</Box>
-            <Box className="text-sm text-gray-500">
-              {record.understoodAt ? new Date(record.understoodAt).toLocaleDateString() : ""}
-            </Box>
-          </Flex>
-        </Flex>
-      </Card>
-    </Link>
   );
 }

@@ -1,16 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Flex,
-  Heading,
-  Button,
-  Container,
-  Card,
-  Text,
-  Dialog,
-  TextField,
-} from "@radix-ui/themes";
+import { Box, Flex, Heading, Button, Container, Text, Dialog, TextField } from "@radix-ui/themes";
 import { PlusIcon } from "@radix-ui/react-icons";
 import Header from "@/components/Organisims/Header";
 import Link from "next/link";
@@ -18,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import { createTermSet } from "@/repositories/termSetService";
 import { useUserTermSets } from "@/hooks/useUserTermSets";
-import { TermSet } from "@/domains/types";
+import TermsCard from "@/components/Organisims/TermsCard";
 
 export default function TermsPage() {
   const { user } = useAuth();
@@ -155,31 +145,5 @@ export default function TermsPage() {
         </Dialog.Root>
       </Container>
     </Box>
-  );
-}
-
-type TermsCardProps = {
-  term: TermSet;
-};
-
-function TermsCard({ term }: TermsCardProps) {
-  return (
-    <Link href={`/terms/${term.id}`} className="no-underline">
-      <Card size="2" className="hover:shadow-md transition-shadow cursor-pointer">
-        <Flex direction="column" gap="2">
-          <Heading size="4" color="gray">
-            {term.title}
-          </Heading>
-          {term.description && (
-            <Text size="2" color="gray">
-              {term.description}
-            </Text>
-          )}
-          <Text size="1" color="gray">
-            作成日: {new Date(term.createdAt).toLocaleDateString()}
-          </Text>
-        </Flex>
-      </Card>
-    </Link>
   );
 }
