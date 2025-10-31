@@ -1,19 +1,19 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
-import HomePage from "../page";
+import HomePage from "@/app/page";
 
 // mock useAuth
 const mockUseAuth = jest.fn();
-jest.mock("../contexts/AuthContext", () => ({
+jest.mock("@/app/contexts/AuthContext", () => ({
   useAuth: () => mockUseAuth(),
 }));
 
 // mock getAllTermFragments to avoid network / firebase
-jest.mock("../functions/tagSearch", () => ({
+jest.mock("@/app/functions/tagSearch", () => ({
   getAllTermFragments: async () => [],
 }));
 // mock createTermFragment to avoid importing firebase-backed module
-jest.mock("../functions/termFragments", () => ({
+jest.mock("@/app/functions/termFragments", () => ({
   createTermFragment: async () => ({}),
 }));
 

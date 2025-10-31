@@ -5,11 +5,7 @@
     "dist",
     "node_modules",
     ".next",
-    "open-next.config.ts",
-    "src/app/functions/termSetService.ts",
-    "src/app/functions/understandingService.ts",
-    "src/app/functions/userService.ts",
-    "src/types.ts"
+    "open-next.config.ts"
   ],
   "ignoreDependencies": [
     "@tailwindcss/postcss",

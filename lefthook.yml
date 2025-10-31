@@ -10,4 +10,3 @@ pre-commit:
     knip:
       run: npm run knip
       stage_fixed: true
-      fail: warn

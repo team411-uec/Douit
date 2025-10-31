@@ -31,20 +31,18 @@ npm run build
 - [用語集](src/docs/dictionary.md) - プロジェクト内で使用する用語の定義
 - [データベース設計](src/docs/firestore.md) - Firestore の設計と実装状況
 
-### 外部リンク
-
 ### ✅ テスト実行（ローカル）
 
 このリポジトリでは Jest + React Testing Library を使ったテストが用意されています。ローカルでテストを実行するには次のコマンドを実行してください。
 
-```powershell
-#### 依存が入っていない場合は先にインストール
+```bash
+# 依存が入っていない場合は先にインストール
 npm install
 
-#### すべてのテストを実行
+# すべてのテストを実行
 npm test
 
-#### カバレッジを出力する場合
+# カバレッジを出力する場合
 npm run test:coverage
 ```
 
@@ -64,6 +62,8 @@ npm run test:coverage
 ポイント:
 
 - CI 実行時もテストは外部サービスに依存しないようモックしてあるため、Firebase のシークレット等は不要です（ただし将来的に E2E を追加する場合はシークレット設定が必要）。
+
+### 外部リンク
 
 main以外のbranchにpushするとこれが更新されます、このURLの前にブランチ名とハイフンをつけるとそのブランチの状態が出るはずです。  
 例）feat/docs→feat-docs-douit-electr2s-projects.vercel.app  

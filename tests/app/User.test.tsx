@@ -1,9 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import LoginPage from "../login/page";
+import UserPage from "@/app/user/page";
 
 const mockUseAuth = jest.fn();
-jest.mock("../contexts/AuthContext", () => ({
+jest.mock("@/app/contexts/AuthContext", () => ({
   useAuth: () => mockUseAuth(),
 }));
 
@@ -12,14 +12,13 @@ jest.mock("next/navigation", () => ({
   useRouter: () => ({ push: jest.fn() }),
 }));
 
-describe("LoginPage", () => {
+describe("UserPage", () => {
   afterEach(() => mockUseAuth.mockReset());
 
-  test("未ログイン時にログインフォームが表示される", () => {
+  test("未ログイン時はログインが必要ですのメッセージを表示", () => {
     mockUseAuth.mockReturnValue({ user: null, loading: false } as any);
-    render(<LoginPage />);
+    render(<UserPage />);
 
-    // ページ見出しとしての「ログイン」が表示されていることを確認
-    expect(screen.getByRole("heading", { name: /ログイン/ })).toBeInTheDocument();
+    expect(screen.getByText(/ログインが必要です/)).toBeInTheDocument();
   });
 });

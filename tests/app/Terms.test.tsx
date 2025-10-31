@@ -1,14 +1,14 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import TermsPage from "../terms/page";
+import TermsPage from "@/app/terms/page";
 
 const mockUseAuth = jest.fn();
-jest.mock("../contexts/AuthContext", () => ({
+jest.mock("@/app/contexts/AuthContext", () => ({
   useAuth: () => mockUseAuth(),
 }));
 
 // mock term set service to avoid firebase imports if needed
-jest.mock("../functions/termSetService", () => ({
+jest.mock("@/app/functions/termSetService", () => ({
   createUserTermSet: async () => ({}),
   getUserTermSets: async () => [],
 }));
