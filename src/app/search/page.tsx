@@ -1,12 +1,12 @@
 "use client";
 
 import { Box, Container } from "@radix-ui/themes";
-import Header from "@/components/Organisims/Header";
-import { useFragments } from "@/hooks/useFragments";
-import { useAuth } from "@/contexts/AuthContext";
-import NewFragmentDialog from "@/components/Organisims/NewFragmentDialog";
-import SearchBar from "@/components/Molecules/SearchBar";
-import FragmentList from "@/components/Organisims/FragmentList";
+import Header from "@/components/ui/Header";
+import { useFragments } from "@/features/fragment/hooks/useFragments";
+import { useAuth } from "@/features/auth/contexts/AuthContext";
+import NewFragmentDialog from "@/features/fragment/components/NewFragmentDialog";
+import SearchBar from "@/components/ui/SearchBar";
+import FragmentList from "@/features/fragment/components/FragmentList";
 
 export default function HomePage() {
   const { user } = useAuth();

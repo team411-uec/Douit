@@ -2,13 +2,13 @@
 
 import { Box, Heading, Button, Container, Dialog } from "@radix-ui/themes";
 import { PlusIcon } from "@radix-ui/react-icons";
-import Header from "@/components/Organisims/Header";
-import { useAuth } from "@/contexts/AuthContext";
+import Header from "@/components/ui/Header";
+import { useAuth } from "@/features/auth/contexts/AuthContext";
 import { useState } from "react";
-import { useUserTermSets } from "@/hooks/useUserTermSets";
-import PageStatus from "@/components/Molecules/PageStatus";
-import TermSetList from "@/components/Organisims/TermSetList";
-import NewTermSetDialog from "@/components/Organisims/NewTermSetDialog";
+import { useUserTermSets } from "@/features/termSet/hooks/useUserTermSets";
+import PageStatus from "@/components/ui/PageStatus";
+import TermSetList from "@/features/termSet/components/TermSetList";
+import NewTermSetDialog from "@/features/termSet/components/NewTermSetDialog";
 
 export default function TermsPage() {
   const { user } = useAuth();

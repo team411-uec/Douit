@@ -1,11 +1,11 @@
 "use client";
 
 import { Box, Container } from "@radix-ui/themes";
-import Header from "@/components/Organisims/Header";
-import { useAuth } from "@/contexts/AuthContext";
-import { useRedirectIfLoggedIn } from "@/hooks/useRedirectIfLoggedIn";
-import UserProfile from "@/components/Organisims/UserProfile";
-import LoginForm from "@/components/Organisims/LoginForm";
+import Header from "@/components/ui/Header";
+import { useAuth } from "@/features/auth/contexts/AuthContext";
+import { useRedirectIfLoggedIn } from "@/features/auth/hooks/useRedirectIfLoggedIn";
+import UserProfile from "@/features/user/components/UserProfile";
+import LoginForm from "@/features/auth/components/LoginForm";
 
 export default function LoginPage() {
   const { user } = useAuth();

@@ -1,12 +1,12 @@
 "use client";
 
 import { Box } from "@radix-ui/themes";
-import Header from "@/components/Organisims/Header";
+import Header from "@/components/ui/Header";
 import { use } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import useFragment from "@/hooks/useFragment";
-import PageStatus from "@/components/Molecules/PageStatus";
-import EditFragment from "@/components/Organisims/EditFragment";
+import { useAuth } from "@/features/auth/contexts/AuthContext";
+import useFragment from "@/features/fragment/hooks/useFragment";
+import PageStatus from "@/components/ui/PageStatus";
+import EditFragment from "@/features/fragment/components/EditFragment";
 
 export default function EditFragmentPage({ params }: { params: Promise<{ fragmentid: string }> }) {
   const { user } = useAuth();

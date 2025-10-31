@@ -1,14 +1,14 @@
 "use client";
 
 import { Box } from "@radix-ui/themes";
-import Header from "@/components/Organisims/Header";
-import { useAuth } from "@/contexts/AuthContext";
+import Header from "@/components/ui/Header";
+import { useAuth } from "@/features/auth/contexts/AuthContext";
 import { use } from "react";
-import useTermSet from "@/hooks/useTermSet";
-import { useTermSetFragments } from "@/hooks/useTermSetFragments";
-import { useUnderstandingStatusForSet } from "@/hooks/useUnderstandingStatusForSet";
-import PageStatus from "@/components/Molecules/PageStatus";
-import TermSetDetail from "@/components/Organisims/TermSetDetail";
+import useTermSet from "@/features/termSet/hooks/useTermSet";
+import { useTermSetFragments } from "@/features/termSet/hooks/useTermSetFragments";
+import { useUnderstandingStatusForSet } from "@/features/understanding/hooks/useUnderstandingStatusForSet";
+import PageStatus from "@/components/ui/PageStatus";
+import TermSetDetail from "@/features/termSet/components/TermSetDetail";
 
 export default function TermDetailPage({ params }: { params: Promise<{ termid: string }> }) {
   const { user } = useAuth();
