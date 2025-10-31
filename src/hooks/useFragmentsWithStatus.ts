@@ -5,7 +5,7 @@ import { isFragmentUnderstood } from "@/repositories/understandingService";
 import { useAuth } from "@/contexts/AuthContext";
 import { AsyncState } from "@/lib/AsyncState";
 
-interface FragmentWithData {
+export interface FragmentWithData {
   ref: FragmentRef;
   data: TermFragment;
   understood: boolean;
@@ -28,11 +28,11 @@ export function useFragmentsWithStatus(
           setState(s => ({ ...s, loading: true, error: null }));
           const fragmentsWithData = await Promise.all(
             fragmentRefs.map(async ref => {
-              const [fragmentData, understood] = await Promise.all([
-                // eslint-disable-next-line array-element-newline
-                getTermFragment(ref.fragmentId),
-                isFragmentUnderstood(user.uid, ref.fragmentId),
+              const promiseAllResult = await Promise.all([
+                getTermFragment(ref.fragmentId), //eslint-disable-line
+                isFragmentUnderstood(user.uid, ref.fragmentId), //eslint-disable-line
               ]);
+              const [fragmentData, understood] = promiseAllResult;
               if (!fragmentData) {
                 throw new Error(`Fragment with id ${ref.fragmentId} not found`);
               }
