@@ -71,25 +71,6 @@ export async function getUserTermSets(
 }
 
 /**
- * 規約セットの作成
- */
-export async function createTermSet(): Promise<string> {
-  const setData: Omit<TermSet, "id"> = {
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    currentVersion: 1,
-  };
-
-  const docRef = await addDoc(collection(db, "termSets"), {
-    ...setData,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  });
-
-  return docRef.id;
-}
-
-/**
  * 規約セットにフラグメントを追加
  */
 export async function addFragmentToSet(
