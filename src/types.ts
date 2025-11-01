@@ -51,10 +51,3 @@ export interface UnderstoodRecord {
   version: number; // 理解した時点でのバージョン
   understoodAt: Date; // 理解した日時
 }
-
-// APIキーの型定義
-export interface ApiKey {
-  key: string; // APIキー文字列
-  issuedBy: string; // 発行者のユーザーID
-  createdAt: Date; // 発行日時
-}

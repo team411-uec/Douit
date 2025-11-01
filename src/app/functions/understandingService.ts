@@ -105,14 +105,6 @@ export async function isFragmentUnderstood(
 }
 
 /**
- * 理解済みフラグメントIDのセットを取得（高速化用）
- */
-export async function getUnderstoodFragmentIds(userId: string): Promise<Set<string>> {
-  const records = await getUserUnderstoodRecords(userId);
-  return new Set(records.map(record => record.fragmentId));
-}
-
-/**
  * 理解記録一覧（フラグメント情報付き）を取得
  */
 export async function getUnderstoodRecordsWithFragments(userId: string): Promise<
