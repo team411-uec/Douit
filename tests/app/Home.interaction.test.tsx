@@ -1,17 +1,17 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import HomePage from "../page";
+import HomePage from "@/app/page";
 
 const mockUseAuth = jest.fn();
-jest.mock("../contexts/AuthContext", () => ({
+jest.mock("@/app/contexts/AuthContext", () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-jest.mock("../functions/tagSearch", () => ({
+jest.mock("@/app/functions/tagSearch", () => ({
   getAllTermFragments: async () => [],
 }));
-jest.mock("../functions/termFragments", () => ({
+jest.mock("@/app/functions/termFragments", () => ({
   createTermFragment: async () => ({}),
 }));
 

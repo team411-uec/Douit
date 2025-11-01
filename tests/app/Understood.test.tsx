@@ -1,14 +1,14 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import UnderstoodPage from "../understood/page";
+import UnderstoodPage from "@/app/understood/page";
 
 const mockUseAuth = jest.fn();
-jest.mock("../contexts/AuthContext", () => ({
+jest.mock("@/app/contexts/AuthContext", () => ({
   useAuth: () => mockUseAuth(),
 }));
 
 // mock understanding service to avoid firebase imports
-jest.mock("../functions/understandingService", () => ({
+jest.mock("@/app/functions/understandingService", () => ({
   getUnderstoodRecordsWithFragments: async () => [],
 }));
 

@@ -1,10 +1,10 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import LoginPage from "../login/page";
+import LoginPage from "@/app/login/page";
 
 const mockUseAuth = jest.fn();
-jest.mock("../contexts/AuthContext", () => ({
+jest.mock("@/app/contexts/AuthContext", () => ({
   useAuth: () => mockUseAuth(),
 }));
 
