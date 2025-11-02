@@ -1,12 +1,7 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": ["src/app/page.tsx", "src/app/layout.tsx", "jest.config.js"],
-  "ignore": [
-    "dist",
-    "node_modules",
-    ".next",
-    "open-next.config.ts"
-  ],
+  "ignore": ["dist", "node_modules", ".next", "open-next.config.ts"],
   "ignoreDependencies": [
     "@tailwindcss/postcss",
     "@types/node",

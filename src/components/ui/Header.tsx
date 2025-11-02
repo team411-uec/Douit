@@ -3,7 +3,7 @@
 import { Box, Flex, Heading, Avatar, Button } from "@radix-ui/themes";
 import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "@/features/auth/contexts/AuthContext";
 
 type HeaderProps = {
   showNumber?: boolean;
@@ -79,11 +79,7 @@ export default function Header({
             ) : (
               // 未ログイン - ログインボタン
               <Link href="/login" className="no-underline">
-                <Button
-                  size="2"
-                  variant="outline"
-                  className="text-[#00ADB5] border-[#00ADB5] hover:bg-[#00ADB5] hover:text-white"
-                >
+                <Button size="2" variant="outline">
                   ログイン
                 </Button>
               </Link>

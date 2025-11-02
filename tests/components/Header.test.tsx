@@ -1,13 +1,12 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 
+import Header from "@/components/ui/Header";
 // AuthContext をテスト単位でモック可能にするため、useAuth を jest.fn() で置き換え
 const mockUseAuth = jest.fn();
 jest.mock("@/app/contexts/AuthContext", () => ({
   useAuth: () => mockUseAuth(),
 }));
-
-import Header from "@/app/components/Header";
 
 // next/image をシンプルな img にモック
 jest.mock("next/image", () => ({
