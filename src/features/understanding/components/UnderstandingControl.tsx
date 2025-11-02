@@ -1,10 +1,10 @@
 import { Flex, SegmentedControl } from "@radix-ui/themes";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 
-type UnderstandingControlProps = {
+interface UnderstandingControlProps {
   understanding: "understood" | "unknown";
   onUnderstandingChange: (value: "understood" | "unknown") => void;
-};
+}
 
 export default function UnderstandingControl({
   understanding,

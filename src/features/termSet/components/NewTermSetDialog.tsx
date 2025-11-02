@@ -5,11 +5,11 @@ import { useState } from "react";
 import { createTermSet } from "../services/termSetService";
 import { useAuth } from "@/features/auth/contexts/AuthContext";
 
-type NewTermSetDialogProps = {
+interface NewTermSetDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onTermSetCreated: () => void;
-};
+}
 
 export default function NewTermSetDialog({
   open,

@@ -1,9 +1,9 @@
 import { Box, Text } from "@radix-ui/themes";
 import { FragmentWithData } from "@/features/fragment/hooks/useFragmentsWithStatus";
 
-type UnderstandingSummaryProps = {
+interface UnderstandingSummaryProps {
   fragments: FragmentWithData[];
-};
+}
 
 export default function UnderstandingSummary({ fragments }: UnderstandingSummaryProps) {
   if (fragments.length === 0) {

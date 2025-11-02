@@ -4,9 +4,9 @@ import { Box, Flex, Heading } from "@radix-ui/themes";
 import UnderstoodTermCard from "./UnderstoodTermCard";
 import { UnderstoodRecord } from "@/types";
 
-type UnderstoodRecordListProps = {
+interface UnderstoodRecordListProps {
   records: UnderstoodRecord[];
-};
+}
 
 export default function UnderstoodRecordList({ records }: UnderstoodRecordListProps) {
   if (records.length === 0) {

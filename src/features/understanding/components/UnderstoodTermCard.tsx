@@ -3,9 +3,9 @@ import Link from "next/link";
 import { UnderstoodRecord } from "@/types";
 import useFragment from "@/features/fragment/hooks/useFragment";
 
-type UnderstoodTermCardProps = {
+interface UnderstoodTermCardProps {
   record: UnderstoodRecord;
-};
+}
 
 export default function UnderstoodTermCard({ record }: UnderstoodTermCardProps) {
   const { data: fragment, loading, error } = useFragment(record.fragmentId);

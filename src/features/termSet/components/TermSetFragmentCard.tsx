@@ -5,11 +5,11 @@ import { User } from "firebase/auth";
 import useFragment from "@/features/fragment/hooks/useFragment";
 import { FragmentRef } from "@/types";
 
-type TermSetFragmentCardProps = {
+interface TermSetFragmentCardProps {
   fragment: FragmentRef;
   user: User;
   isUnderstood: boolean;
-};
+}
 
 export default function TermSetFragmentCard({
   fragment,

@@ -7,20 +7,20 @@ import TermSetFragmentCard from "./TermSetFragmentCard";
 import ShareButton from "@/components/ui/ShareButton";
 import { TermSet, FragmentRef } from "@/types";
 
-type UnderstandingStatus = {
+interface UnderstandingStatus {
   fragmentId: string;
   isUnderstood: boolean;
   understoodAt?: Date;
   version?: number;
-};
+}
 
-type TermSetDetailProps = {
+interface TermSetDetailProps {
   user: User;
   termSet: TermSet;
   fragments: FragmentRef[];
   understandingStatus: UnderstandingStatus[];
   termSetId: string;
-};
+}
 
 export default function TermSetDetail({
   user,

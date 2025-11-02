@@ -7,10 +7,10 @@ import UnderstandingSummary from "./UnderstandingSummary";
 import { TermSet } from "@/types";
 import { FragmentWithData } from "@/features/fragment/hooks/useFragmentsWithStatus";
 
-type AcceptCheckProps = {
+interface AcceptCheckProps {
   termSetData: TermSet;
   fragments: FragmentWithData[];
-};
+}
 
 export default function AcceptCheck({ termSetData, fragments }: AcceptCheckProps) {
   const getCommonParameters = () => {

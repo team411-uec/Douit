@@ -4,9 +4,9 @@ import { Box, Flex, Text } from "@radix-ui/themes";
 import TermsCard from "./TermsCard";
 import { TermSet } from "@/types";
 
-type TermSetListProps = {
+interface TermSetListProps {
   termSets: TermSet[];
-};
+}
 
 export default function TermSetList({ termSets }: TermSetListProps) {
   if (termSets.length === 0) {

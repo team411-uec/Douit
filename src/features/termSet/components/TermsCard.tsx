@@ -2,9 +2,9 @@ import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import { TermSet } from "@/types";
 
-type TermsCardProps = {
+interface TermsCardProps {
   term: TermSet;
-};
+}
 
 export default function TermsCard({ term }: TermsCardProps) {
   return (

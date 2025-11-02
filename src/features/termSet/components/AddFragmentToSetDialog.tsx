@@ -2,13 +2,13 @@ import { Dialog, Flex, Text, Select, TextField, Button } from "@radix-ui/themes"
 import { useState } from "react";
 import { TermFragment, TermSet } from "@/types";
 
-type AddFragmentToSetDialogProps = {
+interface AddFragmentToSetDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   fragmentData: TermFragment | null;
   userTermSets: TermSet[] | null;
   onConfirm: (termSetId: string, parameterValues: Record<string, string>) => void;
-};
+}
 
 export default function AddFragmentToSetDialog({
   open,

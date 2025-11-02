@@ -3,12 +3,12 @@ import { getUnderstandingStatusForSet } from "../services/understandingService";
 import { useAuth } from "@/features/auth/contexts/AuthContext";
 import { AsyncState } from "@/lib/AsyncState";
 
-type UnderstandingStatus = {
+interface UnderstandingStatus {
   fragmentId: string;
   isUnderstood: boolean;
   understoodAt?: Date;
   version?: number;
-};
+}
 
 export function useUnderstandingStatusForSet(termSetId: string): AsyncState<UnderstandingStatus[]> {
   const { user } = useAuth();

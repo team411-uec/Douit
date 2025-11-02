@@ -5,7 +5,7 @@ import { getAuth } from "firebase/auth";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
 // Firebase configurationの型定義
-type FirebaseConfig = {
+interface FirebaseConfig {
   apiKey: string;
   authDomain: string;
   projectId: string;
@@ -13,7 +13,7 @@ type FirebaseConfig = {
   messagingSenderId: string;
   appId: string;
   measurementId: string;
-};
+}
 
 // 環境変数から設定を読み込み
 function loadFirebaseConfig(): FirebaseConfig {
