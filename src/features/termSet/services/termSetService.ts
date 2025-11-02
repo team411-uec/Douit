@@ -41,7 +41,7 @@ export async function getTermSetsOf(userId: string): Promise<TermSet[]> {
     if (data.createdBy === userId) {
       termSets.push({
         id: doc.id,
-        ...data.doc(),
+        ...data,
       } as TermSet);
     }
   });
