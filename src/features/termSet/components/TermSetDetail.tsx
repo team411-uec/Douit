@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex, Heading, Text, Container } from "@radix-ui/themes";
+import { Flex, Heading, Text, Container } from "@radix-ui/themes";
 import { User } from "firebase/auth";
 import CommonParametersCard from "@/components/ui/CommonParametersCard";
 import TermSetFragmentCard from "./TermSetFragmentCard";

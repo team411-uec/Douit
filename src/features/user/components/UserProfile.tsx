@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Button, Container, Avatar, Text } from "@radix-ui/themes";
+import { Flex, Heading, Button, Container, Avatar, Text } from "@radix-ui/themes";
 import { useAuth } from "@/features/auth/contexts/AuthContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
