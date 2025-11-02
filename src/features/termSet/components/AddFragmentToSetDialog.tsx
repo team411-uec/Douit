@@ -82,7 +82,7 @@ export default function AddFragmentToSetDialog({
               キャンセル
             </Button>
           </Dialog.Close>
-          <Button onClick={handleConfirm} disabled={!selectedTermSet} className=" text-white">
+          <Button onClick={handleConfirm} disabled={!selectedTermSet} className="text-white">
             追加
           </Button>
         </Flex>

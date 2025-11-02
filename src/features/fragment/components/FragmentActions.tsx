@@ -9,7 +9,7 @@ type FragmentActionsProps = {
 export default function FragmentActions({ fragmentId, onAddToTermSet }: FragmentActionsProps) {
   return (
     <Flex gap="3">
-      <Button size="3" className="flex-1  text-white" onClick={onAddToTermSet}>
+      <Button size="3" className="flex-1 text-white" onClick={onAddToTermSet}>
         <PlusIcon width="18" height="18" />
         利用規約に追加
       </Button>
