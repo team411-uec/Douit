@@ -4,16 +4,41 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAoZkSyD7a6-T1aBf0TiXJNNnbhGSUYZ9Q",
-  authDomain: "douit-d488e.firebaseapp.com",
-  projectId: "douit-d488e",
-  storageBucket: "douit-d488e.firebasestorage.app",
-  messagingSenderId: "723041762423",
-  appId: "1:723041762423:web:8be43af9ee6f4dda53da72",
-  measurementId: "G-RTJQ1T0ZF5",
+// Firebase configurationの型定義
+type FirebaseConfig = {
+  apiKey: string;
+  authDomain: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
+  measurementId: string;
 };
+
+// 環境変数から設定を読み込み
+function loadFirebaseConfig(): FirebaseConfig {
+  const config = {
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  };
+
+  // 必須の環境変数をチェック
+  Object.entries(config).forEach(([key, value]) => {
+    if (!value) {
+      throw new Error(`Missing required environment variable: ${key}`);
+    }
+  });
+
+  return config as FirebaseConfig;
+}
+
+// Your web app's Firebase configuration
+const firebaseConfig = loadFirebaseConfig();
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
