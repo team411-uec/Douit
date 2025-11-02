@@ -4,11 +4,11 @@ import { Box, Flex, Heading } from "@radix-ui/themes";
 import FragmentSearchCard from "./FragmentSearchCard";
 import { TermFragment } from "@/types";
 
-type SearchResultListProps = {
+interface SearchResultListProps {
   fragments: TermFragment[] | null;
   loading: boolean;
   searchTag: string;
-};
+}
 
 export default function SearchResultList({ fragments, loading, searchTag }: SearchResultListProps) {
   if (loading) {
