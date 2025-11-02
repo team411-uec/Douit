@@ -21,9 +21,7 @@ export function useTermSetFragments(termSetId: string): AsyncState<FragmentRef[]
             orderBy("order")
           );
           const fragmentsSnapshot = await getDocs(fragmentsQuery);
-          const fragments = fragmentsSnapshot.docs.map(
-            doc => ({ fragmentId: doc.id, ...doc.data() }) as FragmentRef
-          );
+          const fragments = fragmentsSnapshot.docs.map(doc => ({ ...doc.data() }) as FragmentRef);
           setState(s => ({ ...s, data: fragments, loading: false }));
         } catch (error) {
           console.error("フラグメント参照の取得に失敗しました:", error);
