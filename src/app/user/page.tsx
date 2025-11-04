@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Box } from "@radix-ui/themes";
-import Header from "@/components/ui/Header";
-import { useAuth } from "@/features/auth/contexts/AuthContext";
-import UserProfile from "@/features/user/components/UserProfile";
-import PageStatus from "@/components/ui/PageStatus";
+import { Box } from '@radix-ui/themes';
+import Header from '@/components/ui/Header';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
+import UserProfile from '@/features/user/components/UserProfile';
+import PageStatus from '@/components/ui/PageStatus';
 
 export default function UserPage() {
   const { user } = useAuth();

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Box, Heading, Container } from "@radix-ui/themes";
-import Header from "@/components/ui/Header";
-import { useAuth } from "@/features/auth/contexts/AuthContext";
-import { useUnderstoodRecords } from "@/features/understanding/hooks/useUnderstoodRecords";
-import PageStatus from "@/components/ui/PageStatus";
-import UnderstoodRecordList from "@/features/understanding/components/UnderstoodRecordList";
+import { Box, Heading, Container } from '@radix-ui/themes';
+import Header from '@/components/ui/Header';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { useUnderstoodRecords } from '@/features/understanding/hooks/useUnderstoodRecords';
+import PageStatus from '@/components/ui/PageStatus';
+import UnderstoodRecordList from '@/features/understanding/components/UnderstoodRecordList';
 
 export default function UnderstoodPage() {
   const { user } = useAuth();
