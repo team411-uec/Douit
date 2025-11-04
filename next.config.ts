@@ -1,9 +1,9 @@
-import type { NextConfig } from "next";
-import type { Configuration } from "webpack";
+import type { NextConfig } from 'next';
+import type { Configuration } from 'webpack';
 
 const nextConfig: NextConfig = {
   turbopack: {
-    resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
+    resolveExtensions: ['.mdx', '.tsx', '.ts', '.jsx', '.js', '.mjs', '.json'],
   },
   webpack: (config: Configuration) => {
     if (!config.resolve) {

@@ -1,22 +1,22 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Theme } from "@radix-ui/themes";
-import { AuthProvider } from "@/features/auth/contexts/AuthContext";
-import "@/styles/globals.css";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { Theme } from '@radix-ui/themes';
+import { AuthProvider } from '@/features/auth/contexts/AuthContext';
+import '@/styles/globals.css';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Douit",
-  description: "利用規約の検索・共有サービス",
+  title: 'Douit',
+  description: '利用規約の検索・共有サービス',
 };
 
 export default function RootLayout({
