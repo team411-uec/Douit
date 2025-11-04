@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Box, Heading, Text, Container } from "@radix-ui/themes";
-import CommonParametersCard from "@/components/ui/CommonParametersCard";
-import FragmentStatusCard from "@/features/fragment/components/FragmentStatusCard";
-import UnderstandingSummary from "./UnderstandingSummary";
-import { TermSet } from "@/types";
-import { FragmentWithData } from "@/features/fragment/hooks/useFragmentsWithStatus";
+import { Box, Heading, Text, Container } from '@radix-ui/themes';
+import CommonParametersCard from '@/components/ui/CommonParametersCard';
+import FragmentStatusCard from '@/features/fragment/components/FragmentStatusCard';
+import UnderstandingSummary from './UnderstandingSummary';
+import type { TermSet } from '@/types';
+import type { FragmentWithData } from '@/features/fragment/hooks/useFragmentsWithStatus';
 
 interface AcceptCheckProps {
   termSetData: TermSet;
@@ -16,7 +16,7 @@ export default function AcceptCheck({ termSetData, fragments }: AcceptCheckProps
   const getCommonParameters = () => {
     if (!fragments) return {};
     const allParams: Record<string, string> = {};
-    fragments.forEach(fragment => {
+    fragments.forEach((fragment) => {
       Object.entries(fragment.ref.parameterValues).forEach(([key, value]) => {
         if (allParams[key] && allParams[key] !== value) {
           delete allParams[key];
@@ -46,7 +46,7 @@ export default function AcceptCheck({ termSetData, fragments }: AcceptCheckProps
       <CommonParametersCard commonParams={commonParams} />
 
       <Box>
-        {fragments.map(fragment => (
+        {fragments.map((fragment) => (
           <FragmentStatusCard
             key={fragment.ref.fragmentId}
             fragment={fragment}

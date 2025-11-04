@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Box, Flex, Heading } from "@radix-ui/themes";
-import FragmentSearchCard from "./FragmentSearchCard";
-import { TermFragment } from "@/types";
+import { Box, Flex, Heading } from '@radix-ui/themes';
+import FragmentSearchCard from '@/features/search/components/FragmentSearchCard';
+import type { TermFragment } from '@/types';
 
 interface SearchResultListProps {
   fragments: TermFragment[] | null;
@@ -31,17 +31,16 @@ export default function SearchResultList({ fragments, loading, searchTag }: Sear
         </Box>
       )}
       <Flex direction="column" gap="4">
-        {fragments &&
-          fragments.map(fragment => (
-            <FragmentSearchCard
-              key={fragment.id}
-              fragment={{
-                id: fragment.id,
-                title: fragment.title,
-                tags: fragment.tags,
-              }}
-            />
-          ))}
+        {fragments?.map((fragment) => (
+          <FragmentSearchCard
+            key={fragment.id}
+            fragment={{
+              id: fragment.id,
+              title: fragment.title,
+              tags: fragment.tags,
+            }}
+          />
+        ))}
       </Flex>
     </>
   );

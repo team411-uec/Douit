@@ -1,6 +1,7 @@
-import { Dialog, Flex, Text, Select, TextField, Button } from "@radix-ui/themes";
-import { useState } from "react";
-import { TermFragment, TermSet } from "@/types";
+import { Dialog, Flex, Text, Select, Button } from '@radix-ui/themes';
+import { useState } from 'react';
+import type { TermFragment, TermSet } from '@/types';
+import { LabeledSelect, LabeledTextField } from '@/components/ui/HTMLForms';
 
 interface AddFragmentToSetDialogProps {
   open: boolean;
@@ -17,7 +18,7 @@ export default function AddFragmentToSetDialog({
   userTermSets,
   onConfirm,
 }: AddFragmentToSetDialogProps) {
-  const [selectedTermSet, setSelectedTermSet] = useState<string>("");
+  const [selectedTermSet, setSelectedTermSet] = useState<string>('');
   const [parameterValues, setParameterValues] = useState<Record<string, string>>({});
 
   const handleConfirm = () => {
@@ -33,44 +34,39 @@ export default function AddFragmentToSetDialog({
         </Dialog.Description>
 
         <Flex direction="column" gap="3">
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              規約セット
-            </Text>
-            <Select.Root value={selectedTermSet} onValueChange={setSelectedTermSet}>
-              <Select.Trigger className="w-full" placeholder="規約セットを選択してください" />
-              <Select.Content>
-                {userTermSets &&
-                  userTermSets.map(termSet => (
-                    <Select.Item key={termSet.id} value={termSet.id}>
-                      {termSet.title}
-                    </Select.Item>
-                  ))}
-              </Select.Content>
-            </Select.Root>
-          </label>
+          <LabeledSelect
+            name="termSet"
+            label="規約セット"
+            value={selectedTermSet}
+            onValueChange={setSelectedTermSet}
+            placeholder="規約セットを選択してください"
+          >
+            {userTermSets?.map((termSet) => (
+              <Select.Item key={termSet.id} value={termSet.id}>
+                {termSet.title}
+              </Select.Item>
+            ))}
+          </LabeledSelect>
 
           {fragmentData?.parameters && fragmentData.parameters.length > 0 && (
             <>
               <Text as="div" size="2" weight="bold" mt="2">
                 パラメータ値
               </Text>
-              {fragmentData.parameters.map(param => (
-                <label key={param}>
-                  <Text as="div" size="2" mb="1">
-                    {param}
-                  </Text>
-                  <TextField.Root
-                    placeholder={`${param}の値を入力`}
-                    value={parameterValues[param] || ""}
-                    onChange={e =>
-                      setParameterValues(prev => ({
-                        ...prev,
-                        [param]: e.target.value,
-                      }))
-                    }
-                  />
-                </label>
+              {fragmentData.parameters.map((param) => (
+                <LabeledTextField
+                  key={param}
+                  name={param}
+                  label={param}
+                  placeholder={`${param}の値を入力`}
+                  value={parameterValues[param] || ''}
+                  onChange={(e) =>
+                    setParameterValues((prev) => ({
+                      ...prev,
+                      [param]: e.target.value,
+                    }))
+                  }
+                />
               ))}
             </>
           )}
