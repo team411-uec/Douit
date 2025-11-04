@@ -1,13 +1,13 @@
-import { Flex, TextField, Button } from "@radix-ui/themes";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { Flex, TextField, Button } from '@radix-ui/themes';
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { useState } from 'react';
 
 type SearchBarProps = {
   onSearch: (query: string) => void;
 };
 
 export default function SearchBar({ onSearch }: SearchBarProps) {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -16,7 +16,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleSearch();
     }
   };
@@ -28,7 +28,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         placeholder="規約片をタグで検索"
         className="flex-1"
         value={searchQuery}
-        onChange={e => setSearchQuery(e.target.value)}
+        onChange={(e) => setSearchQuery(e.target.value)}
         onKeyPress={handleKeyPress}
       >
         <TextField.Slot side="left">

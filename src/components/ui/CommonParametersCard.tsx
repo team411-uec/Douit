@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Text, Card } from "@radix-ui/themes";
+import { Box, Flex, Heading, Text, Card } from '@radix-ui/themes';
 
 type CommonParametersCardProps = {
   commonParams: Record<string, string>;

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Button } from "@radix-ui/themes";
-import { CopyIcon, CheckIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { Button } from '@radix-ui/themes';
+import { CopyIcon, CheckIcon } from '@radix-ui/react-icons';
+import { useState } from 'react';
 
 type ShareButtonProps = {
   termSetId: string;
@@ -18,7 +18,7 @@ export default function ShareButton({ termSetId }: ShareButtonProps) {
       setCopySuccess(true);
       setTimeout(() => setCopySuccess(false), 2000);
     } catch (error) {
-      console.error("リンクのコピーに失敗しました:", error);
+      console.error('リンクのコピーに失敗しました:', error);
       setCopySuccess(false);
     }
   };
@@ -27,7 +27,7 @@ export default function ShareButton({ termSetId }: ShareButtonProps) {
     <Button
       size="3"
       className={`w-full ${
-        copySuccess ? "bg-green-600 hover:bg-green-700" : "bg-[#00ADB5] hover:bg-[#009AA2]"
+        copySuccess ? 'bg-green-600 hover:bg-green-700' : 'bg-[#00ADB5] hover:bg-[#009AA2]'
       } text-white`}
       onClick={handleShareButtonClick}
     >
