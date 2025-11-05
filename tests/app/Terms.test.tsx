@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import TermsPage from '@/app/terms/page';
-import type { AuthContextType } from '@/features/auth/contexts/AuthContext';
+import type { AuthContextValue } from '../mocks/auth';
 
 const mockUseAuth = jest.fn();
 jest.mock('@/app/contexts/AuthContext', () => ({
@@ -24,7 +24,7 @@ describe('TermsPage', () => {
       signUp: jest.fn(),
       signInWithGoogle: jest.fn(),
       logout: jest.fn(),
-    } as AuthContextType);
+    } satisfies AuthContextValue);
     render(<TermsPage />);
 
     expect(screen.getByText(/ログインが必要です/)).toBeInTheDocument();

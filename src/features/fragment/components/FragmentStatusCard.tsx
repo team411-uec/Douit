@@ -1,6 +1,6 @@
-import { Box, Flex, Heading, Text, Card, Button, Link } from "@radix-ui/themes";
-import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
-import { FragmentWithData } from "../hooks/useFragmentsWithStatus";
+import { Box, Flex, Heading, Text, Card, Button, Link } from '@radix-ui/themes';
+import { CheckIcon, Cross2Icon } from '@radix-ui/react-icons';
+import type { FragmentWithData } from '../hooks/useFragmentsWithStatus';
 
 type FragmentStatusCardProps = {
   fragment: FragmentWithData;
@@ -12,7 +12,7 @@ export default function FragmentStatusCard({ fragment, commonParams }: FragmentS
     <Card
       key={fragment.ref.fragmentId}
       className={`mb-4 p-4 border-l-4 ${
-        fragment.understood ? "border-l-green-500 bg-green-50" : "border-l-red-500 bg-red-50"
+        fragment.understood ? 'border-l-green-500 bg-green-50' : 'border-l-red-500 bg-red-50'
       }`}
     >
       <Flex align="center" justify="between">
@@ -25,7 +25,7 @@ export default function FragmentStatusCard({ fragment, commonParams }: FragmentS
           <Box className="flex-1">
             <Heading
               size="4"
-              className={`mb-2 ${fragment.understood ? "text-green-700" : "text-red-700"}`}
+              className={`mb-2 ${fragment.understood ? 'text-green-700' : 'text-red-700'}`}
             >
               {fragment.data.title}
             </Heading>
@@ -47,7 +47,7 @@ export default function FragmentStatusCard({ fragment, commonParams }: FragmentS
         <Link href={`/fragment/${fragment.ref.fragmentId}`}>
           <Button
             size="2"
-            className={`${fragment.understood ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"} text-white`}
+            className={`${fragment.understood ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'} text-white`}
           >
             読む
           </Button>

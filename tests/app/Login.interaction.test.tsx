@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginPage from '@/app/login/page';
-import type { AuthContextType } from '@/features/auth/contexts/AuthContext';
+import type { AuthContextValue } from '../mocks/auth';
 
 const mockUseAuth = jest.fn();
 jest.mock('@/app/contexts/AuthContext', () => ({
@@ -25,7 +25,7 @@ describe('LoginPage interactions', () => {
       signUp: jest.fn(),
       signInWithGoogle: jest.fn(),
       logout: jest.fn(),
-    } as AuthContextType);
+    } satisfies AuthContextValue);
 
     const user = userEvent.setup();
     const { container } = render(<LoginPage />);
@@ -53,7 +53,7 @@ describe('LoginPage interactions', () => {
       signIn: jest.fn(),
       signInWithGoogle: jest.fn(),
       logout: jest.fn(),
-    } as AuthContextType);
+    } satisfies AuthContextValue);
 
     const user = userEvent.setup();
     render(<LoginPage />);

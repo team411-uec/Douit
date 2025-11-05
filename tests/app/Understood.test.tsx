@@ -1,15 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import UnderstoodPage from '@/app/understood/page';
-import type { AuthContextType } from '@/features/auth/contexts/AuthContext';
+import type { UnderstoodRecord } from '@/types';
+import type { AuthContextValue } from '../mocks/auth';
 
-const mockUseAuth = jest.fn();
-jest.mock('@/app/contexts/AuthContext', () => ({
+const mockUseAuth = jest.fn<AuthContextValue, []>();
+
+jest.mock('@/features/auth/contexts/AuthContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-// mock understanding service to avoid firebase imports
-jest.mock('@/app/functions/understandingService', () => ({
-  getUnderstoodRecordsWithFragments: async () => [],
+jest.mock('@/features/understanding/services/understandingService', () => ({
+  getUserUnderstoodRecords: jest.fn<Promise<UnderstoodRecord[]>, [string]>().mockResolvedValue([]),
 }));
 
 describe('UnderstoodPage', () => {
@@ -23,7 +24,7 @@ describe('UnderstoodPage', () => {
       signUp: jest.fn(),
       signInWithGoogle: jest.fn(),
       logout: jest.fn(),
-    } as AuthContextType);
+    });
     render(<UnderstoodPage />);
 
     expect(screen.getByText(/ログインが必要です/)).toBeInTheDocument();

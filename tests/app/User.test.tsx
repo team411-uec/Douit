@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import UserPage from '@/app/user/page';
-import type { MockAuthContextType } from '../mocks/authContext';
+import type { AuthContextValue } from '../mocks/auth';
 
 const mockUseAuth = jest.fn();
 jest.mock('@/app/contexts/AuthContext', () => ({
@@ -16,7 +16,14 @@ describe('UserPage', () => {
   afterEach(() => mockUseAuth.mockReset());
 
   test('未ログイン時はログインが必要ですのメッセージを表示', () => {
-    mockUseAuth.mockReturnValue({ user: null, loading: false } satisfies MockAuthContextType);
+    mockUseAuth.mockReturnValue({
+      user: null,
+      loading: false,
+      signIn: jest.fn(),
+      signUp: jest.fn(),
+      signInWithGoogle: jest.fn(),
+      logout: jest.fn(),
+    } satisfies AuthContextValue);
     render(<UserPage />);
 
     expect(screen.getByText(/ログインが必要です/)).toBeInTheDocument();

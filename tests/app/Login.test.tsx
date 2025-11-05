@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import LoginPage from '@/app/login/page';
-import type { AuthContextType } from '@/features/auth/contexts/AuthContext';
+import type { AuthContextValue } from '../mocks/auth';
 
 const mockUseAuth = jest.fn();
 jest.mock('@/app/contexts/AuthContext', () => ({
@@ -23,7 +23,7 @@ describe('LoginPage', () => {
       signUp: jest.fn(),
       signInWithGoogle: jest.fn(),
       logout: jest.fn(),
-    } as AuthContextType);
+    } satisfies AuthContextValue);
     render(<LoginPage />);
 
     // ページ見出しとしての「ログイン」が表示されていることを確認

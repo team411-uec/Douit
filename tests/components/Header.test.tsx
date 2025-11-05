@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import type { MockAuthContextType } from '../mocks/authContext';
-import type { MockNextImageProps } from '../mocks/nextImage';
+import type { User } from 'firebase/auth';
 import Header from '@/components/ui/Header';
+import type { AuthContextValue } from '../mocks/auth';
 
 // AuthContext をテスト単位でモック可能にするため、useAuth を jest.fn() で置き換え
 const mockUseAuth = jest.fn();
@@ -12,11 +12,7 @@ jest.mock('@/app/contexts/AuthContext', () => ({
 // next/image をシンプルな img にモック
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: MockNextImageProps) => {
-    // eslint-disable-next-line @next/next/no-img-element
-    const { src, alt } = props;
-    return <img src={src} alt={alt} />;
-  },
+  default: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} />,
 }));
 
 describe('Header', () => {
@@ -33,7 +29,7 @@ describe('Header', () => {
         signUp: jest.fn(),
         signInWithGoogle: jest.fn(),
         logout: jest.fn(),
-      } satisfies MockAuthContextType);
+      } satisfies AuthContextValue);
     });
 
     test('ログインリンク (/login) が表示される', () => {
@@ -49,7 +45,25 @@ describe('Header', () => {
   });
 
   describe('ログイン済み時の表示', () => {
-    const mockUser = { uid: '1', displayName: 'Test User', email: 'a@b.com', photoURL: null };
+    const mockUser: User = {
+      uid: '1',
+      displayName: 'Test User',
+      email: 'a@b.com',
+      photoURL: null,
+      emailVerified: false,
+      isAnonymous: false,
+      metadata: {},
+      providerData: [],
+      refreshToken: '',
+      tenantId: null,
+      phoneNumber: null,
+      providerId: 'google.com',
+      delete: jest.fn(),
+      getIdToken: jest.fn(),
+      getIdTokenResult: jest.fn(),
+      reload: jest.fn(),
+      toJSON: jest.fn(),
+    };
 
     beforeEach(() => {
       mockUseAuth.mockReturnValue({
@@ -59,7 +73,7 @@ describe('Header', () => {
         signUp: jest.fn(),
         signInWithGoogle: jest.fn(),
         logout: jest.fn(),
-      } satisfies MockAuthContextType);
+      } satisfies AuthContextValue);
     });
 
     test('/user へのリンクが表示される', () => {
@@ -103,7 +117,7 @@ describe('Header', () => {
         signUp: jest.fn(),
         signInWithGoogle: jest.fn(),
         logout: jest.fn(),
-      } satisfies MockAuthContextType);
+      } satisfies AuthContextValue);
     });
 
     test('showUserIcon=true のときユーザーアイコン (img) が表示される', () => {

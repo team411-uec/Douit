@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import HomePage from '@/app/page';
-import type { MockAuthContextType } from '../mocks/authContext';
+import type { AuthContextValue } from '../mocks/auth';
 
 const mockUseAuth = jest.fn();
 jest.mock('@/app/contexts/AuthContext', () => ({
@@ -19,7 +19,14 @@ describe('HomePage interactions', () => {
   afterEach(() => mockUseAuth.mockReset());
 
   test('検索入力に値を入れて検索ボタンを押すと window.location.href が変更される', async () => {
-    mockUseAuth.mockReturnValue({ user: null, loading: false } satisfies MockAuthContextType);
+    mockUseAuth.mockReturnValue({
+      user: null,
+      loading: false,
+      signIn: jest.fn(),
+      signUp: jest.fn(),
+      signInWithGoogle: jest.fn(),
+      logout: jest.fn(),
+    } satisfies AuthContextValue);
     const user = userEvent.setup();
     // make location writable
     render(<HomePage />);

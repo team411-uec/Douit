@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { Container } from "@radix-ui/themes";
-import { useState } from "react";
-import { updateTermFragment } from "@/features/fragment/services/fragmentService";
-import { useAuth } from "@/features/auth/contexts/AuthContext";
-import FragmentHeader from "./FragmentHeader";
-import EditableFragmentContent from "./EditableFragmentContent";
-import SaveFragmentButton from "./SaveFragmentButton";
-import { TermFragment } from "@/types";
+import { Container } from '@radix-ui/themes';
+import { useState } from 'react';
+import { updateTermFragment } from '@/features/fragment/services/fragmentService';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
+import FragmentHeader from './FragmentHeader';
+import EditableFragmentContent from './EditableFragmentContent';
+import SaveFragmentButton from './SaveFragmentButton';
+import type { TermFragment } from '@/types';
 
 type EditFragmentProps = {
   fragmentId: string;
@@ -30,14 +30,14 @@ export default function EditFragment({ fragmentId, fragmentData, refetch }: Edit
         fragmentData.title,
         editedContent.trim(),
         fragmentData.tags,
-        fragmentData.parameters || []
+        fragmentData.parameters || [],
       );
 
       await refetch();
 
-      console.log("規約片の更新が完了しました");
+      console.log('規約片の更新が完了しました');
     } catch (error) {
-      console.error("規約片の更新に失敗しました:", error);
+      console.error('規約片の更新に失敗しました:', error);
     } finally {
       setIsSaving(false);
     }

@@ -1,7 +1,7 @@
-import { Flex, Heading, Button, Container, Avatar, Text } from "@radix-ui/themes";
-import { useAuth } from "@/features/auth/contexts/AuthContext";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Flex, Heading, Button, Container, Avatar, Text } from '@radix-ui/themes';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type UserProfileProps = {
   showEmail?: boolean;
@@ -15,9 +15,9 @@ export default function UserProfile({ showEmail = false, showLinks = false }: Us
   const handleLogout = async () => {
     try {
       await logout();
-      router.push("/");
+      router.push('/');
     } catch (error) {
-      console.error("ログアウトに失敗しました:", error);
+      console.error('ログアウトに失敗しました:', error);
     }
   };
 
@@ -31,11 +31,11 @@ export default function UserProfile({ showEmail = false, showLinks = false }: Us
         <Avatar
           size="7"
           src={user.photoURL || undefined}
-          fallback={user.displayName?.[0] || user.email?.[0] || "U"}
-          style={{ backgroundColor: "#00ADB5", color: "white" }}
+          fallback={user.displayName?.[0] || user.email?.[0] || 'U'}
+          style={{ backgroundColor: '#00ADB5', color: 'white' }}
         />
         <Heading size="6" color="gray">
-          {user.displayName || "名前未設定"}
+          {user.displayName || '名前未設定'}
         </Heading>
         {showEmail && (
           <Text size="3" color="gray">

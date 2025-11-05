@@ -1,4 +1,4 @@
-import { db } from "@/lib/firebase";
+import { db } from '@/lib/firebase';
 import {
   collection,
   addDoc,
@@ -8,8 +8,8 @@ import {
   where,
   orderBy,
   serverTimestamp,
-} from "firebase/firestore";
-import { UnderstoodRecord, TermFragment } from "@/types";
+} from 'firebase/firestore';
+import type { UnderstoodRecord } from '@/types';
 
 // 機能6: 理解済み規約片の識別表示機能
 // 機能7: 利用規約の理解（understood）の記録機能
@@ -21,28 +21,28 @@ import { UnderstoodRecord, TermFragment } from "@/types";
 export async function addUnderstoodRecord(
   userId: string,
   fragmentId: string,
-  version: number
+  version: number,
 ): Promise<string> {
   // 既に同じフラグメントIDとバージョンの記録が存在するかチェック
   const existingQuery = query(
-    collection(db, "users", userId, "understood"),
-    where("fragmentId", "==", fragmentId),
-    where("version", "==", version)
+    collection(db, 'users', userId, 'understood'),
+    where('fragmentId', '==', fragmentId),
+    where('version', '==', version),
   );
 
   const existingSnapshot = await getDocs(existingQuery);
 
   if (!existingSnapshot.empty) {
-    throw new Error("この規約片のバージョンは既に理解済みとして記録されています");
+    throw new Error('この規約片のバージョンは既に理解済みとして記録されています');
   }
 
-  const recordData: Omit<UnderstoodRecord, "id"> = {
+  const recordData: Omit<UnderstoodRecord, 'id'> = {
     fragmentId,
     version,
     understoodAt: new Date(),
   };
 
-  const docRef = await addDoc(collection(db, "users", userId, "understood"), {
+  const docRef = await addDoc(collection(db, 'users', userId, 'understood'), {
     ...recordData,
     understoodAt: serverTimestamp(),
   });
@@ -55,14 +55,14 @@ export async function addUnderstoodRecord(
  */
 export async function removeUnderstoodRecord(userId: string, fragmentId: string): Promise<void> {
   const q = query(
-    collection(db, "users", userId, "understood"),
-    where("fragmentId", "==", fragmentId)
+    collection(db, 'users', userId, 'understood'),
+    where('fragmentId', '==', fragmentId),
   );
 
   const querySnapshot = await getDocs(q);
 
   // 該当する記録をすべて削除
-  const deletePromises = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
+  const deletePromises = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
   await Promise.all(deletePromises);
 }
 
@@ -71,10 +71,10 @@ export async function removeUnderstoodRecord(userId: string, fragmentId: string)
  */
 export async function getUserUnderstoodRecords(userId: string): Promise<UnderstoodRecord[]> {
   const querySnapshot = await getDocs(
-    query(collection(db, "users", userId, "understood"), orderBy("understoodAt", "desc"))
+    query(collection(db, 'users', userId, 'understood'), orderBy('understoodAt', 'desc')),
   );
 
-  return querySnapshot.docs.map(doc => ({
+  return querySnapshot.docs.map((doc) => ({
     ...doc.data(),
   })) as UnderstoodRecord[];
 }
@@ -85,15 +85,15 @@ export async function getUserUnderstoodRecords(userId: string): Promise<Understo
 export async function isFragmentUnderstood(
   userId: string,
   fragmentId: string,
-  version?: number
+  version?: number,
 ): Promise<boolean> {
   let q = query(
-    collection(db, "users", userId, "understood"),
-    where("fragmentId", "==", fragmentId)
+    collection(db, 'users', userId, 'understood'),
+    where('fragmentId', '==', fragmentId),
   );
 
   if (version !== undefined) {
-    q = query(q, where("version", "==", version));
+    q = query(q, where('version', '==', version));
   }
 
   const querySnapshot = await getDocs(q);
@@ -105,7 +105,7 @@ export async function isFragmentUnderstood(
  */
 export async function getUnderstandingStatusForSet(
   userId: string,
-  termSetId: string
+  termSetId: string,
 ): Promise<
   {
     fragmentId: string;
@@ -114,7 +114,7 @@ export async function getUnderstandingStatusForSet(
     version?: number;
   }[]
 > {
-  const { getTermSetWithFragments } = await import("@/features/termSet/services/termSetService");
+  const { getTermSetWithFragments } = await import('@/features/termSet/services/termSetService');
   const termSetData = await getTermSetWithFragments(termSetId);
 
   if (!termSetData) {
@@ -122,9 +122,9 @@ export async function getUnderstandingStatusForSet(
   }
 
   const understoodRecords = await getUserUnderstoodRecords(userId);
-  const understoodMap = new Map(understoodRecords.map(record => [record.fragmentId, record]));
+  const understoodMap = new Map(understoodRecords.map((record) => [record.fragmentId, record]));
 
-  return termSetData.fragments.map(fragmentRef => {
+  return termSetData.fragments.map((fragmentRef) => {
     const understood = understoodMap.get(fragmentRef.fragmentId);
     return {
       fragmentId: fragmentRef.fragmentId,

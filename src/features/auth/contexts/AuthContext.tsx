@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import {
-  User,
+  type User,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
-} from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import { ensureUser } from "@/features/user/services/userService";
+} from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { ensureUser } from '@/features/user/services/userService';
 
 interface AuthContextType {
   user: User | null;
@@ -27,7 +27,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
@@ -41,13 +41,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async user => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         // ユーザーがログインした場合、Firestoreにユーザー情報を保存
         try {
-          await ensureUser(user.uid, user.displayName || "ユーザー", user.email || undefined);
+          await ensureUser(user.uid, user.displayName || 'ユーザー', user.email || undefined);
         } catch (error) {
-          console.error("ユーザー情報の保存に失敗しました:", error);
+          console.error('ユーザー情報の保存に失敗しました:', error);
         }
       }
       setUser(user);
@@ -64,8 +64,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // ログイン成功時にFirestoreにユーザー情報を保存
       await ensureUser(
         result.user.uid,
-        result.user.displayName || "ユーザー",
-        result.user.email || undefined
+        result.user.displayName || 'ユーザー',
+        result.user.email || undefined,
       );
     } catch (error) {
       setLoading(false);
@@ -80,8 +80,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // アカウント作成時にFirestoreにユーザー情報を保存
       await ensureUser(
         result.user.uid,
-        result.user.displayName || "ユーザー",
-        result.user.email || undefined
+        result.user.displayName || 'ユーザー',
+        result.user.email || undefined,
       );
     } catch (error) {
       setLoading(false);
@@ -97,8 +97,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // Googleログイン成功時にFirestoreにユーザー情報を保存
       await ensureUser(
         result.user.uid,
-        result.user.displayName || "ユーザー",
-        result.user.email || undefined
+        result.user.displayName || 'ユーザー',
+        result.user.email || undefined,
       );
     } catch (error) {
       setLoading(false);

@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import HomePage from '@/app/page';
-import type { MockAuthContextType } from '../mocks/authContext';
+import type { AuthContextValue } from '../mocks/auth';
 
 // mock useAuth
 const mockUseAuth = jest.fn();
@@ -30,7 +30,7 @@ describe('HomePage', () => {
       signUp: jest.fn(),
       signInWithGoogle: jest.fn(),
       logout: jest.fn(),
-    } satisfies MockAuthContextType);
+    } satisfies AuthContextValue);
     render(<HomePage />);
 
     expect(screen.getByPlaceholderText(/規約片をタグで検索/)).toBeInTheDocument();

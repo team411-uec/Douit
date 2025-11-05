@@ -1,5 +1,5 @@
-import { Flex, Button, Link } from "@radix-ui/themes";
-import { PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { Flex, Button, Link } from '@radix-ui/themes';
+import { PlusIcon, Pencil2Icon } from '@radix-ui/react-icons';
 
 type FragmentActionsProps = {
   fragmentId: string;
