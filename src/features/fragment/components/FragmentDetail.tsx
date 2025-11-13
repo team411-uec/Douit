@@ -16,7 +16,7 @@ import FragmentHeader from './FragmentHeader';
 import FragmentContent from './FragmentContent';
 import FragmentActions from './FragmentActions';
 import UnderstandingControl from '@/features/understanding/components/UnderstandingControl';
-import type { TermFragment } from '@/types';
+import type { TermFragment } from '../types';
 
 type FragmentDetailProps = {
   fragmentId: string;

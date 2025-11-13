@@ -7,26 +7,14 @@
     "@types/node",
     "@types/react",
     "@types/react-dom",
-    "eslint-plugin-react",
-    "eslint-plugin-react-hooks",
-    "typescript-eslint",
     "postcss",
-    "@eslint/css",
-    "@eslint/eslintrc",
-    "@eslint/js",
-    "@eslint/markdown",
     "@types/jest",
-    "eslint-config-prettier",
-    "eslint-config-next",
     "globals",
     "jest",
     "lefthook",
-    "prettier",
     "tailwindcss",
     "ts-jest",
-    "typescript-eslint",
-    "lightningcss",
-    "eslint"
+    "lightningcss"
   ],
   "ignoreExportsUsedInFile": true
 }

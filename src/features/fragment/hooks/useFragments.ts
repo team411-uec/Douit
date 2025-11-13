@@ -1,5 +1,5 @@
 import { searchTermFragments } from '@/features/search/services/tagSearch';
-import type { TermFragment } from '@/types';
+import type { TermFragment } from '../types';
 import { useEffect, useState } from 'react';
 import type { AsyncState } from '@/lib/AsyncState';
 

@@ -2,7 +2,7 @@
 
 import { Box, Flex, Text } from '@radix-ui/themes';
 import TermsCard from './TermsCard';
-import type { TermSet } from '@/types';
+import type { TermSet } from '../types';
 
 interface TermSetListProps {
   termSets: TermSet[];

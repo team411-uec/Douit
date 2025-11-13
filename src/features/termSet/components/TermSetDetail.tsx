@@ -5,7 +5,7 @@ import type { User } from 'firebase/auth';
 import CommonParametersCard from '@/components/ui/CommonParametersCard';
 import TermSetFragmentCard from './TermSetFragmentCard';
 import ShareButton from '@/components/ui/ShareButton';
-import type { TermSet, FragmentRef } from '@/types';
+import type { TermSet, FragmentRef } from '../types';
 
 interface UnderstandingStatus {
   fragmentId: string;

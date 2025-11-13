@@ -9,7 +9,7 @@ import {
   orderBy,
   serverTimestamp,
 } from 'firebase/firestore';
-import type { UnderstoodRecord } from '@/types';
+import type { UnderstoodRecord } from '../types';
 
 // 機能6: 理解済み規約片の識別表示機能
 // 機能7: 利用規約の理解（understood）の記録機能

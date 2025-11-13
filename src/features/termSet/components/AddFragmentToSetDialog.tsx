@@ -1,6 +1,7 @@
 import { Dialog, Flex, Text, Select, Button } from '@radix-ui/themes';
 import { useState } from 'react';
-import type { TermFragment, TermSet } from '@/types';
+import type { TermFragment } from '@/features/fragment/types';
+import type { TermSet } from '../types';
 import { LabeledSelect, LabeledTextField } from '@/components/ui/HTMLForms';
 
 interface AddFragmentToSetDialogProps {

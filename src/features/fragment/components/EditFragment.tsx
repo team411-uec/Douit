@@ -7,7 +7,7 @@ import { useAuth } from '@/features/auth/contexts/AuthContext';
 import FragmentHeader from './FragmentHeader';
 import EditableFragmentContent from './EditableFragmentContent';
 import SaveFragmentButton from './SaveFragmentButton';
-import type { TermFragment } from '@/types';
+import type { TermFragment } from '../types';
 
 type EditFragmentProps = {
   fragmentId: string;

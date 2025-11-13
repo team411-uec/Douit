@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import type { TermFragment } from '@/types';
+import type { TermFragment } from '../types';
 import { getTermFragment } from '../services/fragmentService';
 import type { AsyncState } from '@/lib/AsyncState';
 

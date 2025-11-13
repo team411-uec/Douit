@@ -3,12 +3,11 @@
 import { Box, Heading, Button, Container } from '@radix-ui/themes';
 import Link from 'next/link';
 import type { User } from 'firebase/auth';
-import type { ApplicationError } from '@/types';
 
 type PageStatusProps = {
   user: User | null | undefined;
   loading: boolean;
-  error: ApplicationError | null;
+  error: Error | string | null;
   children: React.ReactNode;
 };
 

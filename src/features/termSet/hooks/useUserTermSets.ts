@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { getTermSetsOf } from '../services/termSetService';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
-import type { TermSet } from '@/types';
+import type { TermSet } from '../types';
 import type { AsyncState } from '@/lib/AsyncState';
 
 export function useUserTermSets(): AsyncState<TermSet[]> & { refetch: () => void } {

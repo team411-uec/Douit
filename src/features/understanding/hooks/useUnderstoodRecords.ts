@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import type { AsyncState } from '@/lib/AsyncState';
-import type { UnderstoodRecord } from '@/types';
+import type { UnderstoodRecord } from '../types';
 import { getUserUnderstoodRecords } from '../services/understandingService';
 
 export function useUnderstoodRecords(): AsyncState<UnderstoodRecord[]> {

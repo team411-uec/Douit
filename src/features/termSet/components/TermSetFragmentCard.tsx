@@ -3,7 +3,7 @@ import { CheckIcon, QuestionMarkIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import type { User } from 'firebase/auth';
 import useFragment from '@/features/fragment/hooks/useFragment';
-import type { FragmentRef } from '@/types';
+import type { FragmentRef } from '../types';
 
 interface TermSetFragmentCardProps {
   fragment: FragmentRef;

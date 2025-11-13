@@ -2,7 +2,7 @@
 
 import { Box, Flex, Heading } from '@radix-ui/themes';
 import UnderstoodTermCard from './UnderstoodTermCard';
-import type { UnderstoodRecord } from '@/types';
+import type { UnderstoodRecord } from '../types';
 
 interface UnderstoodRecordListProps {
   records: UnderstoodRecord[];

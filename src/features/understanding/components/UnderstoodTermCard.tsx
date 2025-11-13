@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, Card } from '@radix-ui/themes';
 import Link from 'next/link';
-import type { UnderstoodRecord } from '@/types';
+import type { UnderstoodRecord } from '../types';
 import useFragment from '@/features/fragment/hooks/useFragment';
 
 interface UnderstoodTermCardProps {

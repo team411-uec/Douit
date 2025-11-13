@@ -10,7 +10,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import type { TermSet, FragmentRef } from '@/types';
+import type { TermSet, FragmentRef } from '../types';
 
 export async function createTermSet(
   userId: string,
