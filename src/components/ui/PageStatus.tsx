@@ -3,12 +3,11 @@
 import { Box, Heading, Button, Container } from '@radix-ui/themes';
 import Link from 'next/link';
 import type { User } from 'firebase/auth';
-import type { ApplicationError } from '@/types';
 
 type PageStatusProps = {
   user: User | null | undefined;
   loading: boolean;
-  error: ApplicationError | null;
+  error: string | null;
   children: React.ReactNode;
 };
 
@@ -30,7 +29,7 @@ export default function PageStatus({ user, loading, error, children }: PageStatu
       <Container size="1" className="px-6 py-6">
         <Box className="text-center py-8">
           <Heading size="4" color="red">
-            {error.toString()}
+            {error}
           </Heading>
         </Box>
       </Container>

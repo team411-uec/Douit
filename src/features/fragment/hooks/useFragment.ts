@@ -1,11 +1,13 @@
 import { useEffect, useState, useCallback } from 'react';
 import type { TermFragment } from '@/types';
 import { getTermFragment } from '../services/fragmentService';
+import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import type { AsyncState } from '@/lib/AsyncState';
 
 export default function useFragment(
   id: string,
 ): AsyncState<TermFragment> & { refetch: () => void } {
+  const { db } = useFirebaseServices();
   const [state, setState] = useState<AsyncState<TermFragment>>({
     data: null,
     loading: true,
@@ -15,7 +17,7 @@ export default function useFragment(
   const refetch = useCallback(async () => {
     try {
       setState((s) => ({ ...s, loading: true, error: null }));
-      const data = await getTermFragment(id);
+      const data = await getTermFragment(db, id);
       if (data) {
         setState((s) => ({ ...s, data, loading: false }));
       } else {
@@ -25,7 +27,7 @@ export default function useFragment(
       console.error('Failed to fetch fragment:', error);
       setState((s) => ({ ...s, error: '規約片の取得に失敗しました', loading: false }));
     }
-  }, [id]);
+  }, [db, id]);
 
   useEffect(() => {
     if (id) {

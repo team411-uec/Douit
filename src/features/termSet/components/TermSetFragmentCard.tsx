@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Flex, Heading, Button, Text, Card, Separator } from '@radix-ui/themes';
 import { CheckIcon, QuestionMarkIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';

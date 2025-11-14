@@ -1,9 +1,11 @@
 import { searchTermFragments } from '@/features/search/services/tagSearch';
+import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import type { TermFragment } from '@/types';
 import { useEffect, useState } from 'react';
 import type { AsyncState } from '@/lib/AsyncState';
 
 export function useFragments(searchTag?: string): AsyncState<TermFragment[]> {
+  const { db } = useFirebaseServices();
   const [state, setState] = useState<AsyncState<TermFragment[]>>({
     data: null,
     loading: true,
@@ -14,7 +16,7 @@ export function useFragments(searchTag?: string): AsyncState<TermFragment[]> {
     const fetchFragments = async () => {
       try {
         setState((s) => ({ ...s, loading: true, error: null }));
-        const results = await searchTermFragments(searchTag);
+        const results = await searchTermFragments(db, searchTag);
         setState((s) => ({ ...s, data: results, loading: false }));
       } catch (error) {
         console.error('規約片の取得に失敗しました:', error);
@@ -23,7 +25,7 @@ export function useFragments(searchTag?: string): AsyncState<TermFragment[]> {
     };
 
     fetchFragments();
-  }, [searchTag]);
+  }, [db, searchTag]);
 
   return state;
 }

@@ -3,6 +3,7 @@ import type { TermFragment, FragmentRef } from '@/types';
 import { getTermFragment } from '../services/fragmentService';
 import { isFragmentUnderstood } from '@/features/understanding/services/understandingService';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import type { AsyncState } from '@/lib/AsyncState';
 
 export interface FragmentWithData {
@@ -15,6 +16,7 @@ export function useFragmentsWithStatus(
   fragmentRefs: FragmentRef[] | undefined,
 ): AsyncState<FragmentWithData[]> {
   const { user } = useAuth();
+  const { db } = useFirebaseServices();
   const [state, setState] = useState<AsyncState<FragmentWithData[]>>({
     data: null,
     loading: true,
@@ -29,8 +31,8 @@ export function useFragmentsWithStatus(
           const fragmentsWithData = await Promise.all(
             fragmentRefs.map(async (ref) => {
               const promiseAllResult = await Promise.all([
-                getTermFragment(ref.fragmentId), //eslint-disable-line
-                isFragmentUnderstood(user.uid, ref.fragmentId), //eslint-disable-line
+                getTermFragment(db, ref.fragmentId), //eslint-disable-line
+                isFragmentUnderstood(db, user.uid, ref.fragmentId), //eslint-disable-line
               ]);
               const [fragmentData, understood] = promiseAllResult;
               if (!fragmentData) {
@@ -52,7 +54,7 @@ export function useFragmentsWithStatus(
     };
 
     fetchFragments();
-  }, [user, fragmentRefs]);
+  }, [user, fragmentRefs, db]);
 
   return state;
 }

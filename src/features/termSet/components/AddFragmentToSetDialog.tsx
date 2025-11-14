@@ -1,3 +1,5 @@
+'use client';
+
 import { Dialog, Flex, Text, Select, Button } from '@radix-ui/themes';
 import { useState } from 'react';
 import type { TermFragment, TermSet } from '@/types';

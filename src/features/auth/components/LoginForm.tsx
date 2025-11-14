@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Box, Flex, Heading, Button, TextField, Text } from '@radix-ui/themes';
 import { GoogleIcon } from '@/components/ui/GoogleIcon';

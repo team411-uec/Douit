@@ -1,22 +1,14 @@
-import {
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  query,
-  orderBy,
-  serverTimestamp,
-} from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import type { Firestore } from 'firebase/firestore';
 import type { TermSet, FragmentRef } from '@/types';
 
 export async function createTermSet(
+  db: Firestore,
   userId: string,
   title: string,
   description?: string,
 ): Promise<string> {
+  const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+
   const setData = {
     title,
     description: description || '',
@@ -31,7 +23,9 @@ export async function createTermSet(
   return docRef.id;
 }
 
-export async function getTermSetsOf(userId: string): Promise<TermSet[]> {
+export async function getTermSetsOf(db: Firestore, userId: string): Promise<TermSet[]> {
+  const { collection, query, orderBy, getDocs } = await import('firebase/firestore');
+
   const q = query(collection(db, 'term_sets'), orderBy('createdAt', 'desc'));
   const querySnapshot = await getDocs(q);
   const termSets: TermSet[] = [];
@@ -50,11 +44,15 @@ export async function getTermSetsOf(userId: string): Promise<TermSet[]> {
 }
 
 export async function addFragmentToSet(
+  db: Firestore,
   termSetId: string,
   fragmentId: string,
   parameterValues: Record<string, string>,
   order?: number,
 ): Promise<void> {
+  const { collection, addDoc, query, orderBy, getDocs, doc, updateDoc, serverTimestamp } =
+    await import('firebase/firestore');
+
   const fragmentsCollection = collection(db, 'term_sets', termSetId, 'fragments');
 
   if (order === undefined) {
@@ -75,7 +73,9 @@ export async function addFragmentToSet(
   });
 }
 
-export async function getTermSet(termSetId: string): Promise<TermSet> {
+export async function getTermSet(db: Firestore, termSetId: string): Promise<TermSet> {
+  const { doc, getDoc } = await import('firebase/firestore');
+
   const setDoc = await getDoc(doc(db, 'term_sets', termSetId));
 
   return {
@@ -85,9 +85,12 @@ export async function getTermSet(termSetId: string): Promise<TermSet> {
 }
 
 export async function getTermSetWithFragments(
+  db: Firestore,
   termSetId: string,
 ): Promise<(TermSet & { fragments: FragmentRef[] }) | null> {
-  const termSet = await getTermSet(termSetId);
+  const { collection, query, orderBy, getDocs } = await import('firebase/firestore');
+
+  const termSet = await getTermSet(db, termSetId);
   if (!termSet) {
     return null;
   }

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import type { AsyncState } from '@/lib/AsyncState';
 import type { UnderstoodRecord } from '@/types';
 import { getUserUnderstoodRecords } from '../services/understandingService';
 
 export function useUnderstoodRecords(): AsyncState<UnderstoodRecord[]> {
   const { user } = useAuth();
+  const { db } = useFirebaseServices();
   const [state, setState] = useState<AsyncState<UnderstoodRecord[]>>({
     data: null,
     loading: true,
@@ -17,7 +19,7 @@ export function useUnderstoodRecords(): AsyncState<UnderstoodRecord[]> {
       if (user) {
         try {
           setState((s) => ({ ...s, loading: true, error: null }));
-          const records = await getUserUnderstoodRecords(user.uid);
+          const records = await getUserUnderstoodRecords(db, user.uid);
           setState((s) => ({ ...s, data: records, loading: false }));
         } catch (error) {
           console.error('理解記録の取得に失敗しました:', error);
@@ -27,7 +29,7 @@ export function useUnderstoodRecords(): AsyncState<UnderstoodRecord[]> {
     };
 
     fetchRecords();
-  }, [user]);
+  }, [db, user]);
 
   return state;
 }

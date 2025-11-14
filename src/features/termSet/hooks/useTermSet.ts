@@ -2,17 +2,19 @@ import { useEffect, useState } from 'react';
 import type { AsyncState } from '@/lib/AsyncState';
 import type { TermSet } from '@/types';
 import { getTermSet } from '../services/termSetService';
+import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 
 export default function useTermSet(termSetId: string): AsyncState<TermSet> {
   const [termSetData, setTermSetData] = useState<TermSet | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { db } = useFirebaseServices();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const termSetResult = await getTermSet(termSetId);
+        const termSetResult = await getTermSet(db, termSetId);
         if (!termSetResult) {
           setError('規約が見つかりませんでした');
           return;
@@ -28,7 +30,7 @@ export default function useTermSet(termSetId: string): AsyncState<TermSet> {
     };
 
     fetchData();
-  }, [termSetId]);
+  }, [db, termSetId]);
 
   return {
     data: termSetData,

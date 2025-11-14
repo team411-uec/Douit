@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Theme } from '@radix-ui/themes';
+import { FirebaseProvider } from '@/providers/FirebaseProvider';
 import { AuthProvider } from '@/features/auth/contexts/AuthContext';
 import '@/styles/globals.css';
 
@@ -30,9 +31,11 @@ export default function RootLayout({
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AuthProvider>
-          <Theme accentColor="teal">{children}</Theme>
-        </AuthProvider>
+        <FirebaseProvider>
+          <AuthProvider>
+            <Theme accentColor="teal">{children}</Theme>
+          </AuthProvider>
+        </FirebaseProvider>
       </body>
     </html>
   );

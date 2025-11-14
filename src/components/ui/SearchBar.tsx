@@ -1,3 +1,5 @@
+'use client';
+
 import { Flex, TextField, Button } from '@radix-ui/themes';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';

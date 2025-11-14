@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Flex, Heading, Card } from '@radix-ui/themes';
 import Link from 'next/link';
 import type { UnderstoodRecord } from '@/types';

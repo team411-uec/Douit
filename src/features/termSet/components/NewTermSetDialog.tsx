@@ -5,6 +5,7 @@ import { useState } from 'react';
 import * as Label from '@radix-ui/react-label';
 import { createTermSet } from '../services/termSetService';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 
 interface NewTermSetDialogProps {
   open: boolean;
@@ -18,6 +19,7 @@ export default function NewTermSetDialog({
   onTermSetCreated,
 }: NewTermSetDialogProps) {
   const { user } = useAuth();
+  const { db } = useFirebaseServices();
   const [newTermTitle, setNewTermTitle] = useState('');
   const [newTermDescription, setNewTermDescription] = useState('');
   const [isCreating, setIsCreating] = useState(false);
@@ -27,7 +29,7 @@ export default function NewTermSetDialog({
 
     setIsCreating(true);
     try {
-      await createTermSet(user.uid, newTermTitle.trim(), newTermDescription.trim());
+      await createTermSet(db, user.uid, newTermTitle.trim(), newTermDescription.trim());
       onTermSetCreated();
       setNewTermTitle('');
       setNewTermDescription('');

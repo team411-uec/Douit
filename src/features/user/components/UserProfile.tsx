@@ -1,3 +1,5 @@
+'use client';
+
 import { Flex, Heading, Button, Container, Avatar, Text } from '@radix-ui/themes';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import Link from 'next/link';

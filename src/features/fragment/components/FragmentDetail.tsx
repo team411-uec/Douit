@@ -9,6 +9,7 @@ import {
 } from '@/features/understanding/services/understandingService';
 import { addFragmentToSet } from '@/features/termSet/services/termSetService';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import { useUnderstandingStatus } from '@/features/understanding/hooks/useUnderstandingStatus';
 import { useUserTermSets } from '@/features/termSet/hooks/useUserTermSets';
 import AddFragmentToSetDialog from '@/features/termSet/components/AddFragmentToSetDialog';
@@ -26,6 +27,7 @@ type FragmentDetailProps = {
 export default function FragmentDetail({ fragmentId, fragmentData }: FragmentDetailProps) {
   const { understanding, setUnderstanding } = useUnderstandingStatus(fragmentId);
   const { data: userTermSets } = useUserTermSets();
+  const { db } = useFirebaseServices();
 
   const [showAddDialog, setShowAddDialog] = useState(false);
   const { user } = useAuth();
@@ -38,6 +40,7 @@ export default function FragmentDetail({ fragmentId, fragmentData }: FragmentDet
     if (value === 'understood') {
       try {
         const alreadyUnderstood = await isFragmentUnderstood(
+          db,
           user.uid,
           fragmentId,
           fragmentData.currentVersion,
@@ -57,10 +60,10 @@ export default function FragmentDetail({ fragmentId, fragmentData }: FragmentDet
 
     try {
       if (value === 'understood') {
-        await addUnderstoodRecord(user.uid, fragmentId, fragmentData.currentVersion);
+        await addUnderstoodRecord(db, user.uid, fragmentId, fragmentData.currentVersion);
         console.log('理解記録を追加しました');
       } else if (value === 'unknown') {
-        await removeUnderstoodRecord(user.uid, fragmentId);
+        await removeUnderstoodRecord(db, user.uid, fragmentId);
         console.log('理解記録を削除しました');
       }
     } catch (error) {
@@ -83,7 +86,7 @@ export default function FragmentDetail({ fragmentId, fragmentData }: FragmentDet
     if (!termSetId || !user) return;
 
     try {
-      await addFragmentToSet(termSetId, fragmentId, parameterValues);
+      await addFragmentToSet(db, termSetId, fragmentId, parameterValues);
 
       console.log('規約セットに追加しました');
       setShowAddDialog(false);

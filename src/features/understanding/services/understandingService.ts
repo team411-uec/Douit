@@ -1,14 +1,4 @@
-import { db } from '@/lib/firebase';
-import {
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  serverTimestamp,
-} from 'firebase/firestore';
+import type { Firestore } from 'firebase/firestore';
 import type { UnderstoodRecord } from '@/types';
 
 // 機能6: 理解済み規約片の識別表示機能
@@ -19,10 +9,15 @@ import type { UnderstoodRecord } from '@/types';
  * 理解記録の追加
  */
 export async function addUnderstoodRecord(
+  db: Firestore,
   userId: string,
   fragmentId: string,
   version: number,
 ): Promise<string> {
+  const { collection, addDoc, query, where, getDocs, serverTimestamp } = await import(
+    'firebase/firestore'
+  );
+
   // 既に同じフラグメントIDとバージョンの記録が存在するかチェック
   const existingQuery = query(
     collection(db, 'users', userId, 'understood'),
@@ -53,7 +48,13 @@ export async function addUnderstoodRecord(
 /**
  * 理解記録の削除
  */
-export async function removeUnderstoodRecord(userId: string, fragmentId: string): Promise<void> {
+export async function removeUnderstoodRecord(
+  db: Firestore,
+  userId: string,
+  fragmentId: string,
+): Promise<void> {
+  const { collection, query, where, getDocs, deleteDoc } = await import('firebase/firestore');
+
   const q = query(
     collection(db, 'users', userId, 'understood'),
     where('fragmentId', '==', fragmentId),
@@ -69,7 +70,12 @@ export async function removeUnderstoodRecord(userId: string, fragmentId: string)
 /**
  * ユーザーの理解記録を取得
  */
-export async function getUserUnderstoodRecords(userId: string): Promise<UnderstoodRecord[]> {
+export async function getUserUnderstoodRecords(
+  db: Firestore,
+  userId: string,
+): Promise<UnderstoodRecord[]> {
+  const { collection, query, orderBy, getDocs } = await import('firebase/firestore');
+
   const querySnapshot = await getDocs(
     query(collection(db, 'users', userId, 'understood'), orderBy('understoodAt', 'desc')),
   );
@@ -83,10 +89,13 @@ export async function getUserUnderstoodRecords(userId: string): Promise<Understo
  * 特定のフラグメントを理解しているかチェック
  */
 export async function isFragmentUnderstood(
+  db: Firestore,
   userId: string,
   fragmentId: string,
   version?: number,
 ): Promise<boolean> {
+  const { collection, query, where, getDocs } = await import('firebase/firestore');
+
   let q = query(
     collection(db, 'users', userId, 'understood'),
     where('fragmentId', '==', fragmentId),
@@ -104,6 +113,7 @@ export async function isFragmentUnderstood(
  * 特定の規約セット内での理解状況を取得
  */
 export async function getUnderstandingStatusForSet(
+  db: Firestore,
   userId: string,
   termSetId: string,
 ): Promise<
@@ -115,13 +125,13 @@ export async function getUnderstandingStatusForSet(
   }[]
 > {
   const { getTermSetWithFragments } = await import('@/features/termSet/services/termSetService');
-  const termSetData = await getTermSetWithFragments(termSetId);
+  const termSetData = await getTermSetWithFragments(db, termSetId);
 
   if (!termSetData) {
     return [];
   }
 
-  const understoodRecords = await getUserUnderstoodRecords(userId);
+  const understoodRecords = await getUserUnderstoodRecords(db, userId);
   const understoodMap = new Map(understoodRecords.map((record) => [record.fragmentId, record]));
 
   return termSetData.fragments.map((fragmentRef) => {
