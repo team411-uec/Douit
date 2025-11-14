@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { getUnderstandingStatusForSet } from '../services/understandingService';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import type { AsyncState } from '@/lib/AsyncState';
+import { getUnderstandingStatusForSet } from '../services/understandingService';
 
 interface UnderstandingStatus {
   fragmentId: string;

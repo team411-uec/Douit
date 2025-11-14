@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback } from 'react';
-import type { TermFragment } from '@/types';
-import { getTermFragment } from '../services/fragmentService';
+import { useCallback, useEffect, useState } from 'react';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import type { AsyncState } from '@/lib/AsyncState';
+import type { TermFragment } from '@/types';
+import { getTermFragment } from '../services/fragmentService';
 
 export default function useFragment(
   id: string,

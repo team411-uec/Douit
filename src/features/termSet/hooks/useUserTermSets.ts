@@ -1,9 +1,9 @@
-import { useEffect, useState, useCallback } from 'react';
-import { getTermSetsOf } from '../services/termSetService';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
-import type { TermSet } from '@/types';
 import type { AsyncState } from '@/lib/AsyncState';
+import type { TermSet } from '@/types';
+import { getTermSetsOf } from '../services/termSetService';
 
 export function useUserTermSets(): AsyncState<TermSet[]> & { refetch: () => void } {
   const { user } = useAuth();

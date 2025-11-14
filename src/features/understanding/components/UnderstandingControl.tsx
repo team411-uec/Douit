@@ -1,5 +1,5 @@
-import { Flex, SegmentedControl } from '@radix-ui/themes';
 import { CheckIcon, Cross2Icon } from '@radix-ui/react-icons';
+import { Flex, SegmentedControl } from '@radix-ui/themes';
 
 interface UnderstandingControlProps {
   understanding: 'understood' | 'unknown';

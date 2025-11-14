@@ -1,4 +1,4 @@
-import { Card, Heading, Box, Badge, Flex } from '@radix-ui/themes';
+import { Badge, Box, Card, Flex, Heading } from '@radix-ui/themes';
 import Link from 'next/link';
 
 interface FragmentSearchCardProps {

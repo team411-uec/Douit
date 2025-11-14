@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import type { TermFragment, FragmentRef } from '@/types';
-import { getTermFragment } from '../services/fragmentService';
-import { isFragmentUnderstood } from '@/features/understanding/services/understandingService';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { isFragmentUnderstood } from '@/features/understanding/services/understandingService';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import type { AsyncState } from '@/lib/AsyncState';
+import type { FragmentRef, TermFragment } from '@/types';
+import { getTermFragment } from '../services/fragmentService';
 
 export interface FragmentWithData {
   ref: FragmentRef;

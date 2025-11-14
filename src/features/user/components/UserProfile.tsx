@@ -1,9 +1,9 @@
 'use client';
 
-import { Flex, Heading, Button, Container, Avatar, Text } from '@radix-ui/themes';
-import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { Avatar, Button, Container, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
 
 type UserProfileProps = {
   showEmail?: boolean;

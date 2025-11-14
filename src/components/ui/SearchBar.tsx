@@ -1,7 +1,7 @@
 'use client';
 
-import { Flex, TextField, Button } from '@radix-ui/themes';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { Button, Flex, TextField } from '@radix-ui/themes';
 import { useState } from 'react';
 
 type SearchBarProps = {

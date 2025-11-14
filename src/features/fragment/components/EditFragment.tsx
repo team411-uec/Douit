@@ -2,13 +2,13 @@
 
 import { Container } from '@radix-ui/themes';
 import { useState } from 'react';
-import { updateTermFragment } from '@/features/fragment/services/fragmentService';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { updateTermFragment } from '@/features/fragment/services/fragmentService';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
-import FragmentHeader from './FragmentHeader';
-import EditableFragmentContent from './EditableFragmentContent';
-import SaveFragmentButton from './SaveFragmentButton';
 import type { TermFragment } from '@/types';
+import EditableFragmentContent from './EditableFragmentContent';
+import FragmentHeader from './FragmentHeader';
+import SaveFragmentButton from './SaveFragmentButton';
 
 type EditFragmentProps = {
   fragmentId: string;

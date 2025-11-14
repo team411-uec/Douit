@@ -1,11 +1,11 @@
 'use client';
 
-import { Dialog, Flex, Text, TextField, Button } from '@radix-ui/themes';
-import { useState } from 'react';
 import * as Label from '@radix-ui/react-label';
-import { createTermSet } from '../services/termSetService';
+import { Button, Dialog, Flex, Text, TextField } from '@radix-ui/themes';
+import { useState } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
+import { createTermSet } from '../services/termSetService';
 
 interface NewTermSetDialogProps {
   open: boolean;

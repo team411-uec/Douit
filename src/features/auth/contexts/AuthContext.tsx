@@ -1,9 +1,9 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { User } from 'firebase/auth';
-import { useFirebase } from '@/providers/FirebaseProvider';
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 import { ensureUserWithDb } from '@/features/user/services/userService';
+import { useFirebase } from '@/providers/FirebaseProvider';
 
 interface AuthContextType {
   user: User | null;

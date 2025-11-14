@@ -1,9 +1,9 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { FirebaseApp } from 'firebase/app';
 import type { Auth } from 'firebase/auth';
 import type { Firestore } from 'firebase/firestore';
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 import { getFirebaseConfig } from '@/lib/firebase';
 
 interface FirebaseContextType {

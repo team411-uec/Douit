@@ -1,8 +1,8 @@
+import { Theme } from '@radix-ui/themes';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { Theme } from '@radix-ui/themes';
-import { FirebaseProvider } from '@/providers/FirebaseProvider';
 import { AuthProvider } from '@/features/auth/contexts/AuthContext';
+import { FirebaseProvider } from '@/providers/FirebaseProvider';
 import '@/styles/globals.css';
 
 const geistSans = Geist({

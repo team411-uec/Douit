@@ -2,22 +2,22 @@
 
 import { Container, Flex } from '@radix-ui/themes';
 import { useState } from 'react';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
+import AddFragmentToSetDialog from '@/features/termSet/components/AddFragmentToSetDialog';
+import { useUserTermSets } from '@/features/termSet/hooks/useUserTermSets';
+import { addFragmentToSet } from '@/features/termSet/services/termSetService';
+import UnderstandingControl from '@/features/understanding/components/UnderstandingControl';
+import { useUnderstandingStatus } from '@/features/understanding/hooks/useUnderstandingStatus';
 import {
   addUnderstoodRecord,
-  removeUnderstoodRecord,
   isFragmentUnderstood,
+  removeUnderstoodRecord,
 } from '@/features/understanding/services/understandingService';
-import { addFragmentToSet } from '@/features/termSet/services/termSetService';
-import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
-import { useUnderstandingStatus } from '@/features/understanding/hooks/useUnderstandingStatus';
-import { useUserTermSets } from '@/features/termSet/hooks/useUserTermSets';
-import AddFragmentToSetDialog from '@/features/termSet/components/AddFragmentToSetDialog';
-import FragmentHeader from './FragmentHeader';
-import FragmentContent from './FragmentContent';
-import FragmentActions from './FragmentActions';
-import UnderstandingControl from '@/features/understanding/components/UnderstandingControl';
 import type { TermFragment } from '@/types';
+import FragmentActions from './FragmentActions';
+import FragmentContent from './FragmentContent';
+import FragmentHeader from './FragmentHeader';
 
 type FragmentDetailProps = {
   fragmentId: string;
