@@ -63,12 +63,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               commit_sha: '${{ github.sha }}',
-              body: `## 🚀 Production Deployment Successful
-
-**URL**: https://douit.i2512022.workers.dev
-**Deployed by**: @${{ github.actor }}
-**Workflow**: [View run](${workflowUrl})
-
-*Deployed with OpenNext.js on Cloudflare Workers*`
+              body: `## 🚀 Production Deployment Successful\n\n**URL**: https://douit.i2512022.workers.dev\n**Deployed by**: @${{ github.actor }}\n**Workflow**: [View run](${workflowUrl})\n\n*Deployed with OpenNext.js on Cloudflare Workers*`
             });
 
