@@ -1,5 +1,5 @@
 import type { Firestore } from 'firebase/firestore';
-import type { User } from '@/types';
+import type { User } from '@/features/user/types';
 
 /**
  * ユーザーが存在しない場合は作成する

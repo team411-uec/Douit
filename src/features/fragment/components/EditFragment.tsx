@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { updateTermFragment } from '@/features/fragment/services/fragmentService';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
-import type { TermFragment } from '@/types';
+import type { TermFragment } from '@/features/fragment/types';
 import EditableFragmentContent from './EditableFragmentContent';
 import FragmentHeader from './FragmentHeader';
 import SaveFragmentButton from './SaveFragmentButton';

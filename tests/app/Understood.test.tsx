@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import UnderstoodPage from '@/app/understood/page';
-import type { UnderstoodRecord } from '@/types';
+import type { UnderstoodRecord } from '@/features/understanding/types';
 import type { AuthContextValue } from '../mocks/auth';
 
 const mockUseAuth = jest.fn<AuthContextValue, []>();

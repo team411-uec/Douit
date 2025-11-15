@@ -3,7 +3,8 @@ import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { isFragmentUnderstood } from '@/features/understanding/services/understandingService';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import type { AsyncState } from '@/lib/AsyncState';
-import type { FragmentRef, TermFragment } from '@/types';
+import type { TermFragment } from '@/features/fragment/types';
+import type { FragmentRef } from '@/features/termSet/types';
 import { getTermFragment } from '../services/fragmentService';
 
 export interface FragmentWithData {

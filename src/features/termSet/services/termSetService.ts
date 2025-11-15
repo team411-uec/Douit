@@ -1,5 +1,5 @@
 import type { Firestore } from 'firebase/firestore';
-import type { FragmentRef, TermSet } from '@/types';
+import type { FragmentRef, TermSet } from '@/features/termSet/types';
 
 export async function createTermSet(
   db: Firestore,

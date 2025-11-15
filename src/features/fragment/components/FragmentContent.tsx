@@ -1,5 +1,5 @@
 import { Box, ScrollArea, Text } from '@radix-ui/themes';
-import type { TermFragment } from '@/types';
+import type { TermFragment } from '@/features/fragment/types';
 
 type FragmentContentProps = {
   fragmentData: TermFragment;

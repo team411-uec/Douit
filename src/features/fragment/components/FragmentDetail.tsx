@@ -14,7 +14,7 @@ import {
   removeUnderstoodRecord,
 } from '@/features/understanding/services/understandingService';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
-import type { TermFragment } from '@/types';
+import type { TermFragment } from '@/features/fragment/types';
 import FragmentActions from './FragmentActions';
 import FragmentContent from './FragmentContent';
 import FragmentHeader from './FragmentHeader';

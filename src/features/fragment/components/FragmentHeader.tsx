@@ -1,5 +1,5 @@
 import { Flex, Heading, Select } from '@radix-ui/themes';
-import type { TermFragment } from '@/types';
+import type { TermFragment } from '../types';
 
 type FragmentHeaderProps = {
   fragmentData: TermFragment;
