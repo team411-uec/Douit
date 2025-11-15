@@ -1,5 +1,5 @@
 import type { Firestore } from 'firebase/firestore';
-import type { TermFragment } from '@/types';
+import type { TermFragment } from '@/features/fragment/types';
 
 // 統合検索機能：タグ指定ありなしを統一したインターフェース
 export async function searchTermFragments(db: Firestore, tag?: string): Promise<TermFragment[]> {
