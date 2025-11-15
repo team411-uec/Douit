@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
+import type { TermFragment } from '@/features/fragment/types';
 import { searchTermFragments } from '@/features/search/services/tagSearch';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import type { AsyncState } from '@/lib/AsyncState';
-import type { TermFragment } from '@/features/fragment/types';
 
 export function useFragments(searchTag?: string): AsyncState<TermFragment[]> {
   const { db } = useFirebaseServices();

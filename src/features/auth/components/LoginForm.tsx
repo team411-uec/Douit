@@ -24,8 +24,12 @@ export default function LoginForm() {
       } else {
         await signIn(email, password);
       }
-    } catch (error: any) {
-      setError(error.message || `${isSignUp ? 'アカウント作成' : 'ログイン'}に失敗しました`);
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : `${isSignUp ? 'アカウント作成' : 'ログイン'}に失敗しました`;
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -37,8 +41,9 @@ export default function LoginForm() {
 
     try {
       await signInWithGoogle();
-    } catch (error: any) {
-      setError(error.message || 'Googleログインに失敗しました');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Googleログインに失敗しました';
+      setError(message);
     } finally {
       setIsLoading(false);
     }
