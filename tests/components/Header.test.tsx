@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import type { User } from 'firebase/auth';
+import Image from 'next/image';
 import Header from '@/components/ui/Header';
 import type { AuthContextValue } from '../mocks/auth';
 
@@ -12,7 +13,7 @@ jest.mock('@/app/contexts/AuthContext', () => ({
 // next/image をシンプルな img にモック
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} />,
+  default: ({ src, alt }: { src: string; alt: string }) => <Image src={src} alt={alt} />,
 }));
 
 describe('Header', () => {
