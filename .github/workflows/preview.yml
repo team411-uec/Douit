@@ -3,7 +3,6 @@ name: OpenNext Preview Deployment
 on:
   push:
     branches-ignore:
-      - main
       - release/**
 
 env:
