@@ -1,6 +1,6 @@
-import { Card, Flex, Heading, Text } from "@radix-ui/themes";
-import Link from "next/link";
-import { TermSet } from "@/types";
+import { Card, Flex, Heading, Text } from '@radix-ui/themes';
+import Link from 'next/link';
+import type { TermSet } from '../types';
 
 interface TermsCardProps {
   term: TermSet;

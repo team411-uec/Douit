@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Flex, Heading, Text, Container } from "@radix-ui/themes";
-import { User } from "firebase/auth";
-import CommonParametersCard from "@/components/ui/CommonParametersCard";
-import TermSetFragmentCard from "./TermSetFragmentCard";
-import ShareButton from "@/components/ui/ShareButton";
-import { TermSet, FragmentRef } from "@/types";
+import { Container, Flex, Heading, Text } from '@radix-ui/themes';
+import type { User } from 'firebase/auth';
+import CommonParametersCard from '@/components/ui/CommonParametersCard';
+import ShareButton from '@/components/ui/ShareButton';
+import type { FragmentRef, TermSet } from '../types';
+import TermSetFragmentCard from './TermSetFragmentCard';
 
 interface UnderstandingStatus {
   fragmentId: string;
@@ -30,8 +30,8 @@ export default function TermSetDetail({
   termSetId,
 }: TermSetDetailProps) {
   const commonParams = {
-    PROVIDER: user.displayName || user.email || "",
-    CONTACT: user.email || "",
+    PROVIDER: user.displayName || user.email || '',
+    CONTACT: user.email || '',
   };
 
   return (
@@ -44,9 +44,9 @@ export default function TermSetDetail({
       </Text>
       <CommonParametersCard commonParams={commonParams} />
       <Flex direction="column" gap="4" mb="6">
-        {fragments.map(fragment => {
+        {fragments.map((fragment) => {
           const fragmentUnderstanding = understandingStatus?.find(
-            status => status.fragmentId === fragment.fragmentId
+            (status) => status.fragmentId === fragment.fragmentId,
           );
           return (
             <TermSetFragmentCard

@@ -1,6 +1,6 @@
-import { Box, Flex, Heading } from "@radix-ui/themes";
-import FragmentSearchCard from "@/features/search/components/FragmentSearchCard";
-import { TermFragment } from "@/types";
+import { Box, Flex, Heading } from '@radix-ui/themes';
+import FragmentSearchCard from '@/features/search/components/FragmentSearchCard';
+import type { TermFragment } from '../types';
 
 type FragmentListProps = {
   fragments: TermFragment[] | null;
@@ -32,7 +32,7 @@ export default function FragmentList({ fragments, loading, error }: FragmentList
   if (fragments) {
     return (
       <Flex direction="column" gap="4">
-        {fragments.map(fragmentItem => (
+        {fragments.map((fragmentItem) => (
           <FragmentSearchCard
             key={fragmentItem.id}
             fragment={{

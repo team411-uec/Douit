@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { Box } from "@radix-ui/themes";
-import Header from "@/components/ui/Header";
-import { use } from "react";
-import { useAuth } from "@/features/auth/contexts/AuthContext";
-import useFragment from "@/features/fragment/hooks/useFragment";
-import PageStatus from "@/components/ui/PageStatus";
-import FragmentDetail from "@/features/fragment/components/FragmentDetail";
+import { Box } from '@radix-ui/themes';
+import { use } from 'react';
+import Header from '@/components/ui/Header';
+import PageStatus from '@/components/ui/PageStatus';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
+import FragmentDetail from '@/features/fragment/components/FragmentDetail';
+import useFragment from '@/features/fragment/hooks/useFragment';
 
 export default function FragmentDetailPage({
   params,

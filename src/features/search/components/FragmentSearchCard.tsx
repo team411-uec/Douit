@@ -1,5 +1,5 @@
-import { Card, Heading, Box, Badge, Flex } from "@radix-ui/themes";
-import Link from "next/link";
+import { Badge, Box, Card, Flex, Heading } from '@radix-ui/themes';
+import Link from 'next/link';
 
 interface FragmentSearchCardProps {
   fragment: {
@@ -23,8 +23,8 @@ export default function FragmentSearchCard({ fragment }: FragmentSearchCardProps
 
           <Flex align="center" gap="2" wrap="wrap">
             <Box className="text-gray-600">Tags</Box>
-            {fragment.tags.map((tag, index) => (
-              <Badge key={index} size="2">
+            {fragment.tags.map((tag) => (
+              <Badge key={`${fragment.id}-${tag}`} size="2">
                 {tag}
               </Badge>
             ))}

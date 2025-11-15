@@ -1,9 +1,9 @@
-import { Box, Flex, Heading, Button, Text, Card, Separator } from "@radix-ui/themes";
-import { CheckIcon, QuestionMarkIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
-import { User } from "firebase/auth";
-import useFragment from "@/features/fragment/hooks/useFragment";
-import { FragmentRef } from "@/types";
+import { CheckIcon, QuestionMarkIcon } from '@radix-ui/react-icons';
+import { Box, Button, Card, Flex, Heading, Separator, Text } from '@radix-ui/themes';
+import type { User } from 'firebase/auth';
+import Link from 'next/link';
+import useFragment from '@/features/fragment/hooks/useFragment';
+import type { FragmentRef } from '../types';
 
 interface TermSetFragmentCardProps {
   fragment: FragmentRef;
@@ -32,7 +32,7 @@ export default function TermSetFragmentCard({
     return (
       <Card size="2">
         <Text size="3" color="red">
-          {error || "フラグメント詳細の取得に失敗しました"}
+          {error || 'フラグメント詳細の取得に失敗しました'}
         </Text>
       </Card>
     );
@@ -42,14 +42,14 @@ export default function TermSetFragmentCard({
     <Card size="2">
       <Flex align="center" justify="between" className="mb-3">
         <Flex align="center" gap="2">
-          <Box className={isUnderstood ? "text-green-600" : "text-gray-500"}>
+          <Box className={isUnderstood ? 'text-green-600' : 'text-gray-500'}>
             {isUnderstood ? (
               <CheckIcon width="16" height="16" />
             ) : (
               <QuestionMarkIcon width="16" height="16" />
             )}
           </Box>
-          <Heading size="4" className={isUnderstood ? "text-green-600" : "text-gray-500"}>
+          <Heading size="4" className={isUnderstood ? 'text-green-600' : 'text-gray-500'}>
             {fragmentDetails.title}
           </Heading>
         </Flex>

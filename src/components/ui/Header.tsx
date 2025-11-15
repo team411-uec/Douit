@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Box, Flex, Heading, Avatar, Button } from "@radix-ui/themes";
-import Image from "next/image";
-import Link from "next/link";
-import { useAuth } from "@/features/auth/contexts/AuthContext";
+import { Avatar, Box, Button, Flex, Heading } from '@radix-ui/themes';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
 
 type HeaderProps = {
   showNumber?: boolean;
@@ -13,7 +13,7 @@ type HeaderProps = {
 
 export default function Header({
   showNumber = false,
-  number = "4",
+  number = '4',
   showUserIcon = false,
 }: HeaderProps) {
   const { user } = useAuth();
@@ -51,8 +51,8 @@ export default function Header({
                   <Avatar
                     size="2"
                     src={user.photoURL || undefined}
-                    fallback={user.displayName?.[0] || user.email?.[0] || "U"}
-                    style={{ backgroundColor: "#00ADB5", color: "white" }}
+                    fallback={user.displayName?.[0] || user.email?.[0] || 'U'}
+                    style={{ backgroundColor: '#00ADB5', color: 'white' }}
                     className="cursor-pointer"
                   />
                 </Link>
@@ -61,7 +61,7 @@ export default function Header({
                   <Avatar
                     size="2"
                     fallback={number}
-                    style={{ backgroundColor: "#00ADB5", color: "white" }}
+                    style={{ backgroundColor: '#00ADB5', color: 'white' }}
                     className="cursor-pointer"
                   />
                 </Link>
@@ -70,8 +70,8 @@ export default function Header({
                   <Avatar
                     size="2"
                     src={user.photoURL || undefined}
-                    fallback={user.displayName?.[0] || user.email?.[0] || "U"}
-                    style={{ backgroundColor: "#00ADB5", color: "white" }}
+                    fallback={user.displayName?.[0] || user.email?.[0] || 'U'}
+                    style={{ backgroundColor: '#00ADB5', color: 'white' }}
                     className="cursor-pointer"
                   />
                 </Link>

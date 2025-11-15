@@ -1,10 +1,10 @@
-import { useEffect, useState, useCallback } from "react";
-import { TermFragment } from "@/types";
-import { getTermFragment } from "../services/fragmentService";
-import { AsyncState } from "@/lib/AsyncState";
+import { useCallback, useEffect, useState } from 'react';
+import type { AsyncState } from '@/lib/AsyncState';
+import { getTermFragment } from '../services/fragmentService';
+import type { TermFragment } from '../types';
 
 export default function useFragment(
-  id: string
+  id: string,
 ): AsyncState<TermFragment> & { refetch: () => void } {
   const [state, setState] = useState<AsyncState<TermFragment>>({
     data: null,
@@ -14,16 +14,16 @@ export default function useFragment(
 
   const refetch = useCallback(async () => {
     try {
-      setState(s => ({ ...s, loading: true, error: null }));
+      setState((s) => ({ ...s, loading: true, error: null }));
       const data = await getTermFragment(id);
       if (data) {
-        setState(s => ({ ...s, data, loading: false }));
+        setState((s) => ({ ...s, data, loading: false }));
       } else {
-        setState(s => ({ ...s, error: "規約片が見つかりませんでした", loading: false }));
+        setState((s) => ({ ...s, error: '規約片が見つかりませんでした', loading: false }));
       }
     } catch (error) {
-      console.error("Failed to fetch fragment:", error);
-      setState(s => ({ ...s, error: "規約片の取得に失敗しました", loading: false }));
+      console.error('Failed to fetch fragment:', error);
+      setState((s) => ({ ...s, error: '規約片の取得に失敗しました', loading: false }));
     }
   }, [id]);
 

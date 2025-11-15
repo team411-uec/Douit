@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { isFragmentUnderstood } from "../services/understandingService";
-import { useAuth } from "@/features/auth/contexts/AuthContext";
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { isFragmentUnderstood } from '../services/understandingService';
 
 export function useUnderstandingStatus(fragmentId: string) {
   const { user } = useAuth();
-  const [understanding, setUnderstanding] = useState<"understood" | "unknown">("unknown");
+  const [understanding, setUnderstanding] = useState<'understood' | 'unknown'>('unknown');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -15,10 +15,10 @@ export function useUnderstandingStatus(fragmentId: string) {
           setLoading(true);
           setError(null);
           const isUnderstood = await isFragmentUnderstood(user.uid, fragmentId);
-          setUnderstanding(isUnderstood ? "understood" : "unknown");
+          setUnderstanding(isUnderstood ? 'understood' : 'unknown');
         } catch (error) {
-          console.error("理解状態の取得に失敗しました:", error);
-          setError("理解状態の取得に失敗しました");
+          console.error('理解状態の取得に失敗しました:', error);
+          setError('理解状態の取得に失敗しました');
         } finally {
           setLoading(false);
         }

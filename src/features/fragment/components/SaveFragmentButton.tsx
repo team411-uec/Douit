@@ -1,4 +1,4 @@
-import { Button } from "@radix-ui/themes";
+import { Button } from '@radix-ui/themes';
 
 type SaveFragmentButtonProps = {
   isSaving: boolean;
@@ -20,7 +20,7 @@ export default function SaveFragmentButton({
       onClick={onSave}
       disabled={isDisabled}
     >
-      {isSaving ? "保存中..." : "保存"}
+      {isSaving ? '保存中...' : '保存'}
     </Button>
   );
 }

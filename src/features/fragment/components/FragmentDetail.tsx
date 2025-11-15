@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { Container, Flex } from "@radix-ui/themes";
-import { useState } from "react";
+import { Container, Flex } from '@radix-ui/themes';
+import { useState } from 'react';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
+import AddFragmentToSetDialog from '@/features/termSet/components/AddFragmentToSetDialog';
+import { useUserTermSets } from '@/features/termSet/hooks/useUserTermSets';
+import { addFragmentToSet } from '@/features/termSet/services/termSetService';
+import UnderstandingControl from '@/features/understanding/components/UnderstandingControl';
+import { useUnderstandingStatus } from '@/features/understanding/hooks/useUnderstandingStatus';
 import {
   addUnderstoodRecord,
-  removeUnderstoodRecord,
   isFragmentUnderstood,
-} from "@/features/understanding/services/understandingService";
-import { addFragmentToSet } from "@/features/termSet/services/termSetService";
-import { useAuth } from "@/features/auth/contexts/AuthContext";
-import { useUnderstandingStatus } from "@/features/understanding/hooks/useUnderstandingStatus";
-import { useUserTermSets } from "@/features/termSet/hooks/useUserTermSets";
-import AddFragmentToSetDialog from "@/features/termSet/components/AddFragmentToSetDialog";
-import FragmentHeader from "./FragmentHeader";
-import FragmentContent from "./FragmentContent";
-import FragmentActions from "./FragmentActions";
-import UnderstandingControl from "@/features/understanding/components/UnderstandingControl";
-import { TermFragment } from "@/types";
+  removeUnderstoodRecord,
+} from '@/features/understanding/services/understandingService';
+import type { TermFragment } from '../types';
+import FragmentActions from './FragmentActions';
+import FragmentContent from './FragmentContent';
+import FragmentHeader from './FragmentHeader';
 
 type FragmentDetailProps = {
   fragmentId: string;
@@ -30,47 +30,47 @@ export default function FragmentDetail({ fragmentId, fragmentData }: FragmentDet
   const [showAddDialog, setShowAddDialog] = useState(false);
   const { user } = useAuth();
 
-  const handleUnderstandingChange = async (value: "understood" | "unknown") => {
+  const handleUnderstandingChange = async (value: 'understood' | 'unknown') => {
     if (!user) return;
 
     if (value === understanding) return;
 
-    if (value === "understood") {
+    if (value === 'understood') {
       try {
         const alreadyUnderstood = await isFragmentUnderstood(
           user.uid,
           fragmentId,
-          fragmentData.currentVersion
+          fragmentData.currentVersion,
         );
 
         if (alreadyUnderstood) {
-          console.log("この規約片は既に理解済みです");
-          setUnderstanding("understood");
+          console.log('この規約片は既に理解済みです');
+          setUnderstanding('understood');
           return;
         }
       } catch (error) {
-        console.error("理解状態の事前チェックに失敗しました:", error);
+        console.error('理解状態の事前チェックに失敗しました:', error);
       }
     }
 
     setUnderstanding(value);
 
     try {
-      if (value === "understood") {
+      if (value === 'understood') {
         await addUnderstoodRecord(user.uid, fragmentId, fragmentData.currentVersion);
-        console.log("理解記録を追加しました");
-      } else if (value === "unknown") {
+        console.log('理解記録を追加しました');
+      } else if (value === 'unknown') {
         await removeUnderstoodRecord(user.uid, fragmentId);
-        console.log("理解記録を削除しました");
+        console.log('理解記録を削除しました');
       }
     } catch (error) {
-      console.error("理解記録の更新に失敗しました:", error);
+      console.error('理解記録の更新に失敗しました:', error);
 
-      if (error instanceof Error && error.message.includes("既に理解済み")) {
-        console.log("既に理解済みの規約片です");
-        setUnderstanding("understood");
+      if (error instanceof Error && error.message.includes('既に理解済み')) {
+        console.log('既に理解済みの規約片です');
+        setUnderstanding('understood');
       } else {
-        setUnderstanding(value === "understood" ? "unknown" : "understood");
+        setUnderstanding(value === 'understood' ? 'unknown' : 'understood');
       }
     }
   };
@@ -85,10 +85,10 @@ export default function FragmentDetail({ fragmentId, fragmentData }: FragmentDet
     try {
       await addFragmentToSet(termSetId, fragmentId, parameterValues);
 
-      console.log("規約セットに追加しました");
+      console.log('規約セットに追加しました');
       setShowAddDialog(false);
     } catch (error) {
-      console.error("規約セットへの追加に失敗しました:", error);
+      console.error('規約セットへの追加に失敗しました:', error);
     }
   };
 

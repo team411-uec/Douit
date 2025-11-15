@@ -1,32 +1,39 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import HomePage from "@/app/page";
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import HomePage from '@/app/page';
+import type { AuthContextValue } from '../mocks/auth';
 
 const mockUseAuth = jest.fn();
-jest.mock("@/app/contexts/AuthContext", () => ({
+jest.mock('@/app/contexts/AuthContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-jest.mock("@/app/functions/tagSearch", () => ({
+jest.mock('@/app/functions/tagSearch', () => ({
   getAllTermFragments: async () => [],
 }));
-jest.mock("@/app/functions/termFragments", () => ({
+jest.mock('@/app/functions/termFragments', () => ({
   createTermFragment: async () => ({}),
 }));
 
-describe("HomePage interactions", () => {
+describe('HomePage interactions', () => {
   afterEach(() => mockUseAuth.mockReset());
 
-  test("検索入力に値を入れて検索ボタンを押すと window.location.href が変更される", async () => {
-    mockUseAuth.mockReturnValue({ user: null, loading: false } as any);
+  test('検索入力に値を入れて検索ボタンを押すと window.location.href が変更される', async () => {
+    mockUseAuth.mockReturnValue({
+      user: null,
+      loading: false,
+      signIn: jest.fn(),
+      signUp: jest.fn(),
+      signInWithGoogle: jest.fn(),
+      logout: jest.fn(),
+    } satisfies AuthContextValue);
     const user = userEvent.setup();
     // make location writable
     render(<HomePage />);
-    await user.type(screen.getByPlaceholderText(/規約片をタグで検索/), "privacy");
-    await user.click(screen.getByRole("button", { name: /検索/ }));
+    await user.type(screen.getByPlaceholderText(/規約片をタグで検索/), 'privacy');
+    await user.click(screen.getByRole('button', { name: /検索/ }));
     // navigation の実行は jsdom の制約によりここで検証できないため、
     // ユーザ操作が行われても例外が発生しないことと、入力値が正しくセットされていることを確認する。
-    expect(screen.getByPlaceholderText(/規約片をタグで検索/)).toHaveValue("privacy");
+    expect(screen.getByPlaceholderText(/規約片をタグで検索/)).toHaveValue('privacy');
   });
 });

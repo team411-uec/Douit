@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { Box, Heading, Button, Container } from "@radix-ui/themes";
-import Link from "next/link";
-import { User } from "firebase/auth";
+import { Box, Button, Container, Heading } from '@radix-ui/themes';
+import type { User } from 'firebase/auth';
+import Link from 'next/link';
 
 type PageStatusProps = {
   user: User | null | undefined;
   loading: boolean;
-  error: any;
+  error: Error | string | null;
   children: React.ReactNode;
 };
 

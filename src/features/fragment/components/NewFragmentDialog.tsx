@@ -1,19 +1,19 @@
-import { createTermFragment } from "../services/fragmentService";
-import { PlusIcon } from "@radix-ui/react-icons";
-import { Dialog, Box, Button, Flex, TextField, TextArea, Text } from "@radix-ui/themes";
-import { useState } from "react";
+import { PlusIcon } from '@radix-ui/react-icons';
+import { Box, Button, Dialog, Flex, Text, TextArea, TextField } from '@radix-ui/themes';
+import { useState } from 'react';
+import { createTermFragment } from '../services/fragmentService';
 
 export default function NewFragmentDialog() {
   const [isOpen, setIsOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [tags, setTags] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [tags, setTags] = useState('');
 
   const resetForm = () => {
-    setTitle("");
-    setContent("");
-    setTags("");
+    setTitle('');
+    setContent('');
+    setTags('');
     setIsOpen(false);
   };
 
@@ -22,21 +22,21 @@ export default function NewFragmentDialog() {
 
     setIsCreating(true);
     const tagList = tags
-      .split(",")
-      .map(tag => tag.trim())
-      .filter(tag => tag.length > 0);
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter((tag) => tag.length > 0);
 
     try {
       await createTermFragment(
         title.trim(),
         content.trim(),
         tagList,
-        [] // parameters は空配列
+        [], // parameters は空配列
       );
 
       resetForm();
     } catch (error) {
-      console.error("規約片の作成に失敗しました:", error);
+      console.error('規約片の作成に失敗しました:', error);
     } finally {
       setIsCreating(false);
     }
@@ -62,39 +62,42 @@ export default function NewFragmentDialog() {
         </Dialog.Description>
 
         <Flex direction="column" gap="3">
-          <label>
+          <div>
             <Text as="div" size="2" mb="1" weight="bold">
               タイトル
             </Text>
             <TextField.Root
+              id="fragment-title"
               placeholder="例: プライバシーポリシー"
               value={title}
-              onChange={e => setTitle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value)}
             />
-          </label>
+          </div>
 
-          <label>
+          <div>
             <Text as="div" size="2" mb="1" weight="bold">
               内容
             </Text>
             <TextArea
+              id="fragment-content"
               placeholder="規約片の内容を入力してください..."
               value={content}
-              onChange={e => setContent(e.target.value)}
+              onChange={(e) => setContent(e.target.value)}
               rows={6}
             />
-          </label>
+          </div>
 
-          <label>
+          <div>
             <Text as="div" size="2" mb="1" weight="bold">
               タグ（カンマ区切り）
             </Text>
             <TextField.Root
+              id="fragment-tags"
               placeholder="例: プライバシー, データ保護, GDPR"
               value={tags}
-              onChange={e => setTags(e.target.value)}
+              onChange={(e) => setTags(e.target.value)}
             />
-          </label>
+          </div>
         </Flex>
 
         <Flex gap="3" mt="4" justify="end">
@@ -108,7 +111,7 @@ export default function NewFragmentDialog() {
             disabled={!title.trim() || !content.trim() || isCreating}
             className="bg-green-600 hover:bg-green-700 text-white"
           >
-            {isCreating ? "作成中..." : "作成"}
+            {isCreating ? '作成中...' : '作成'}
           </Button>
         </Flex>
       </Dialog.Content>

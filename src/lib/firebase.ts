@@ -1,8 +1,7 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-import { getAnalytics, isSupported } from "firebase/analytics";
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 // Firebase configurationの型定義
 interface FirebaseConfig {
@@ -48,13 +47,3 @@ export const db = getFirestore(app);
 
 // Initialize Firebase Auth
 export const auth = getAuth(app);
-
-// Initialize Analytics (only on client side)
-let analytics;
-if (typeof window !== "undefined") {
-  isSupported().then(supported => {
-    if (supported) {
-      analytics = getAnalytics(app);
-    }
-  });
-}

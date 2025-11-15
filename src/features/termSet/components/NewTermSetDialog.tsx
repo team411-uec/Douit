@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import { Dialog, Flex, Text, TextField, Button } from "@radix-ui/themes";
-import { useState } from "react";
-import { createTermSet } from "../services/termSetService";
-import { useAuth } from "@/features/auth/contexts/AuthContext";
+import * as Label from '@radix-ui/react-label';
+import { Button, Dialog, Flex, Text, TextField } from '@radix-ui/themes';
+import { useState } from 'react';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { createTermSet } from '../services/termSetService';
 
 interface NewTermSetDialogProps {
   open: boolean;
@@ -17,8 +18,8 @@ export default function NewTermSetDialog({
   onTermSetCreated,
 }: NewTermSetDialogProps) {
   const { user } = useAuth();
-  const [newTermTitle, setNewTermTitle] = useState("");
-  const [newTermDescription, setNewTermDescription] = useState("");
+  const [newTermTitle, setNewTermTitle] = useState('');
+  const [newTermDescription, setNewTermDescription] = useState('');
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreateTerm = async () => {
@@ -28,11 +29,11 @@ export default function NewTermSetDialog({
     try {
       await createTermSet(user.uid, newTermTitle.trim(), newTermDescription.trim());
       onTermSetCreated();
-      setNewTermTitle("");
-      setNewTermDescription("");
+      setNewTermTitle('');
+      setNewTermDescription('');
       onOpenChange(false);
     } catch (error) {
-      console.error("利用規約の作成に失敗しました:", error);
+      console.error('利用規約の作成に失敗しました:', error);
     } finally {
       setIsCreating(false);
     }
@@ -47,26 +48,30 @@ export default function NewTermSetDialog({
         </Dialog.Description>
 
         <Flex direction="column" gap="3">
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              タイトル
-            </Text>
-            <TextField.Root
-              placeholder="例: サークル会則"
-              value={newTermTitle}
-              onChange={e => setNewTermTitle(e.target.value)}
-            />
-          </label>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              説明（任意）
-            </Text>
-            <TextField.Root
-              placeholder="例: サークル活動に関する規約"
-              value={newTermDescription}
-              onChange={e => setNewTermDescription(e.target.value)}
-            />
-          </label>
+          <div>
+            <Label.Root>
+              <Text as="div" size="2" mb="1" weight="bold">
+                タイトル
+              </Text>
+              <TextField.Root
+                placeholder="例: サークル会則"
+                value={newTermTitle}
+                onChange={(e) => setNewTermTitle(e.target.value)}
+              />
+            </Label.Root>
+          </div>
+          <div>
+            <Label.Root>
+              <Text as="div" size="2" mb="1" weight="bold">
+                説明（任意）
+              </Text>
+              <TextField.Root
+                placeholder="例: サークル活動に関する規約"
+                value={newTermDescription}
+                onChange={(e) => setNewTermDescription(e.target.value)}
+              />
+            </Label.Root>
+          </div>
         </Flex>
 
         <Flex gap="3" mt="4" justify="end">
@@ -80,7 +85,7 @@ export default function NewTermSetDialog({
             disabled={!newTermTitle.trim() || isCreating}
             className="text-white"
           >
-            {isCreating ? "作成中..." : "作成"}
+            {isCreating ? '作成中...' : '作成'}
           </Button>
         </Flex>
       </Dialog.Content>

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Box, Flex, Text } from "@radix-ui/themes";
-import TermsCard from "./TermsCard";
-import { TermSet } from "@/types";
+import { Box, Flex, Text } from '@radix-ui/themes';
+import type { TermSet } from '../types';
+import TermsCard from './TermsCard';
 
 interface TermSetListProps {
   termSets: TermSet[];
@@ -21,7 +21,7 @@ export default function TermSetList({ termSets }: TermSetListProps) {
 
   return (
     <Flex direction="column" gap="3" className="mb-6">
-      {termSets.map(term => (
+      {termSets.map((term) => (
         <TermsCard key={term.id} term={term} />
       ))}
     </Flex>

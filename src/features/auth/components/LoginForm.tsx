@@ -1,12 +1,12 @@
-import { Box, Flex, Heading, Button, TextField, Text } from "@radix-ui/themes";
-import { GoogleIcon } from "@/components/ui/GoogleIcon";
-import { useAuth } from "@/features/auth/contexts/AuthContext";
-import { useState } from "react";
+import { Box, Button, Flex, Heading, Text, TextField } from '@radix-ui/themes';
+import { useState } from 'react';
+import { GoogleIcon } from '@/components/ui/GoogleIcon';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
 
 export default function LoginForm() {
   const { signIn, signUp, signInWithGoogle } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -22,8 +22,12 @@ export default function LoginForm() {
       } else {
         await signIn(email, password);
       }
-    } catch (error: any) {
-      setError(error.message || `${isSignUp ? "アカウント作成" : "ログイン"}に失敗しました`);
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : `${isSignUp ? 'アカウント作成' : 'ログイン'}に失敗しました`;
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -35,8 +39,9 @@ export default function LoginForm() {
 
     try {
       await signInWithGoogle();
-    } catch (error: any) {
-      setError(error.message || "Googleログインに失敗しました");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Googleログインに失敗しました';
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -45,7 +50,7 @@ export default function LoginForm() {
   return (
     <Flex direction="column" align="center" gap="6" className="max-w-md mx-auto">
       <Heading size="6" color="gray" className="mb-4">
-        {isSignUp ? "アカウント作成" : "ログイン"}
+        {isSignUp ? 'アカウント作成' : 'ログイン'}
       </Heading>
 
       {error && (
@@ -59,7 +64,7 @@ export default function LoginForm() {
           type="email"
           placeholder="メールアドレス"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           required
           className="w-full"
         />
@@ -67,21 +72,21 @@ export default function LoginForm() {
           type="password"
           placeholder="パスワード"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           required
           className="w-full"
         />
         <Button type="submit" size="3" className="w-full text-white" disabled={isLoading}>
           {isLoading
-            ? `${isSignUp ? "作成中" : "ログイン中"}...`
+            ? `${isSignUp ? '作成中' : 'ログイン中'}...`
             : isSignUp
-              ? "アカウント作成"
-              : "ログイン"}
+              ? 'アカウント作成'
+              : 'ログイン'}
         </Button>
       </form>
 
       <Button variant="ghost" size="2" onClick={() => setIsSignUp(!isSignUp)}>
-        {isSignUp ? "既にアカウントをお持ちの方はこちら" : "新規アカウント作成"}
+        {isSignUp ? '既にアカウントをお持ちの方はこちら' : '新規アカウント作成'}
       </Button>
 
       <Box className="w-full">
@@ -104,7 +109,7 @@ export default function LoginForm() {
         <Box className="mr-3">
           <GoogleIcon />
         </Box>
-        {isLoading ? "ログイン中..." : "Googleでログイン"}
+        {isLoading ? 'ログイン中...' : 'Googleでログイン'}
       </Button>
     </Flex>
   );

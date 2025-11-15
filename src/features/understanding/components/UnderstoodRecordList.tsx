@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Box, Flex, Heading } from "@radix-ui/themes";
-import UnderstoodTermCard from "./UnderstoodTermCard";
-import { UnderstoodRecord } from "@/types";
+import { Box, Flex, Heading } from '@radix-ui/themes';
+import type { UnderstoodRecord } from '../types';
+import UnderstoodTermCard from './UnderstoodTermCard';
 
 interface UnderstoodRecordListProps {
   records: UnderstoodRecord[];
@@ -21,7 +21,7 @@ export default function UnderstoodRecordList({ records }: UnderstoodRecordListPr
 
   return (
     <Flex direction="column" gap="4">
-      {records.map(record => (
+      {records.map((record) => (
         <UnderstoodTermCard key={record.fragmentId} record={record} />
       ))}
     </Flex>
