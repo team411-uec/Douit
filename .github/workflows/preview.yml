@@ -1,14 +1,14 @@
-name: Vercel Preview Deployment
+name: OpenNext Preview Deployment
 
 on:
   push:
     branches-ignore:
       - main
+      - release/**
 
 env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
 jobs:
   Deploy-Preview:
@@ -17,17 +17,61 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=preview --token=${{ env.VERCEL_TOKEN }}
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Build Project Artifacts
-        run: vercel build --token=${{ env.VERCEL_TOKEN }}
+      - name: Build with OpenNext
+        run: npx opennextjs-cloudflare build
+        env:
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
+          NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}
 
-      - name: Deploy Project Artifacts to Vercel (Branch-specific)
+      - name: Sanitize branch name
+        id: sanitize
         run: |
-          SANITIZED_BRANCH=$(echo "${{ github.ref_name }}" | tr '/' '-')
-          DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }} --yes)
-          vercel alias set "$DEPLOY_URL" "${SANITIZED_BRANCH}-douit-electr2s-projects.vercel.app" --token=${{ env.VERCEL_TOKEN }}
+          SANITIZED_BRANCH=$(echo "${{ github.ref_name }}" | tr '/' '-' | tr '_' '-' | tr '[:upper:]' '[:lower:]')
+          echo "branch_name=${SANITIZED_BRANCH}" >> $GITHUB_OUTPUT
+          echo "worker_name=douit-preview-${SANITIZED_BRANCH}" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Cloudflare Workers
+        run: npx wrangler deploy --name ${{ steps.sanitize.outputs.worker_name }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ env.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Add custom subdomain
+        run: |
+          WORKER_URL="https://${{ steps.sanitize.outputs.worker_name }}.i2512022.workers.dev"
+          echo "✅ Deployed to: ${WORKER_URL}"
+          echo "📝 Branch: ${{ github.ref_name }}"
+          echo "🔗 Subdomain: ${{ steps.sanitize.outputs.branch_name }}"
+
+      - name: Comment PR with deployment URL
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workerName = '${{ steps.sanitize.outputs.worker_name }}';
+            const workerUrl = `https://${workerName}.i2512022.workers.dev`;
+            const branchName = '${{ github.ref_name }}';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🚀 Preview Deployment
+              **Branch**: \`${branchName}\`
+              **URL**: ${workerUrl}
+              *Deployed with OpenNext.js on Cloudflare Workers*`
+            });
