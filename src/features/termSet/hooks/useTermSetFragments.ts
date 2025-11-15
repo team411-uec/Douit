@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
+import type { FragmentRef } from '@/features/termSet/types';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import type { AsyncState } from '@/lib/AsyncState';
-import type { FragmentRef } from '@/features/termSet/types';
 
 export function useTermSetFragments(termSetId: string): AsyncState<FragmentRef[]> {
   const { db } = useFirebaseServices();

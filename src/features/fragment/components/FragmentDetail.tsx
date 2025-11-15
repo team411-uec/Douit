@@ -3,6 +3,7 @@
 import { Container, Flex } from '@radix-ui/themes';
 import { useState } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import type { TermFragment } from '@/features/fragment/types';
 import AddFragmentToSetDialog from '@/features/termSet/components/AddFragmentToSetDialog';
 import { useUserTermSets } from '@/features/termSet/hooks/useUserTermSets';
 import { addFragmentToSet } from '@/features/termSet/services/termSetService';
@@ -14,7 +15,6 @@ import {
   removeUnderstoodRecord,
 } from '@/features/understanding/services/understandingService';
 import { useFirebaseServices } from '@/hooks/useFirebaseServices';
-import type { TermFragment } from '@/features/fragment/types';
 import FragmentActions from './FragmentActions';
 import FragmentContent from './FragmentContent';
 import FragmentHeader from './FragmentHeader';
