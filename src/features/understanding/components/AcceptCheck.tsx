@@ -4,7 +4,7 @@ import { Box, Container, Heading, Text } from '@radix-ui/themes';
 import CommonParametersCard from '@/components/ui/CommonParametersCard';
 import FragmentStatusCard from '@/features/fragment/components/FragmentStatusCard';
 import type { FragmentWithData } from '@/features/fragment/hooks/useFragmentsWithStatus';
-import type { TermSet } from '@/types';
+import type { TermSet } from '@/features/termSet/types';
 import UnderstandingSummary from './UnderstandingSummary';
 
 interface AcceptCheckProps {

@@ -1,6 +1,6 @@
 import { Box, Flex, Heading } from '@radix-ui/themes';
 import FragmentSearchCard from '@/features/search/components/FragmentSearchCard';
-import type { TermFragment } from '@/types';
+import type { TermFragment } from '../types';
 
 type FragmentListProps = {
   fragments: TermFragment[] | null;

@@ -1,8 +1,8 @@
 'use client';
 
 import { Box, Flex, Heading } from '@radix-ui/themes';
+import type { TermFragment } from '@/features/fragment/types';
 import FragmentSearchCard from '@/features/search/components/FragmentSearchCard';
-import type { TermFragment } from '@/types';
 
 interface SearchResultListProps {
   fragments: TermFragment[] | null;

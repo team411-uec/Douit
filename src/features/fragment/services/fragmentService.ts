@@ -1,5 +1,5 @@
 import type { Firestore } from 'firebase/firestore';
-import type { TermFragment } from '@/types';
+import type { TermFragment } from '@/features/fragment/types';
 
 // 規約片の作成
 export async function createTermFragment(
