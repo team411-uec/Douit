@@ -16,15 +16,17 @@ export async function ensureUserWithDb(
   const userDoc = await getDoc(userDocRef);
 
   if (!userDoc.exists()) {
-    const userData: Omit<User, 'id'> = {
-      name,
+    const userData: Omit<User, 'uid'> = {
+      displayName: name,
       email: email || '',
       createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
     await setDoc(userDocRef, {
       ...userData,
       createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     });
   }
 }
