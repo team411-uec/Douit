@@ -1,14 +1,16 @@
-import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import type { TermFragment } from '../types';
+import type { Firestore } from 'firebase/firestore';
+import type { TermFragment } from '@/features/fragment/types';
 
 // 規約片の作成
 export async function createTermFragment(
+  db: Firestore,
   title: string,
   content: string,
   tags: string[],
   parameters: string[],
 ): Promise<string> {
+  const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+
   const fragmentData = {
     title,
     content,
@@ -25,12 +27,17 @@ export async function createTermFragment(
 
 // 規約片の編集
 export async function updateTermFragment(
+  db: Firestore,
   fragmentId: string,
   title: string,
   content: string,
   tags: string[],
   parameters: string[],
 ): Promise<void> {
+  const { doc, getDoc, collection, addDoc, updateDoc, serverTimestamp } = await import(
+    'firebase/firestore'
+  );
+
   const fragmentRef = doc(db, 'termFragments', fragmentId);
   const fragmentDoc = await getDoc(fragmentRef);
 
@@ -62,7 +69,12 @@ export async function updateTermFragment(
 }
 
 // 規約片の取得
-export async function getTermFragment(fragmentId: string): Promise<TermFragment | null> {
+export async function getTermFragment(
+  db: Firestore,
+  fragmentId: string,
+): Promise<TermFragment | null> {
+  const { doc, getDoc } = await import('firebase/firestore');
+
   const fragmentRef = doc(db, 'termFragments', fragmentId);
   const fragmentDoc = await getDoc(fragmentRef);
 

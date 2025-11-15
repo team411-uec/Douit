@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Button, Flex, Heading, Text, TextField } from '@radix-ui/themes';
 import { useState } from 'react';
 import { GoogleIcon } from '@/components/ui/GoogleIcon';
@@ -22,12 +24,8 @@ export default function LoginForm() {
       } else {
         await signIn(email, password);
       }
-    } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : `${isSignUp ? 'アカウント作成' : 'ログイン'}に失敗しました`;
-      setError(message);
+    } catch (error: any) {
+      setError(error.message || `${isSignUp ? 'アカウント作成' : 'ログイン'}に失敗しました`);
     } finally {
       setIsLoading(false);
     }
@@ -39,9 +37,8 @@ export default function LoginForm() {
 
     try {
       await signInWithGoogle();
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Googleログインに失敗しました';
-      setError(message);
+    } catch (error: any) {
+      setError(error.message || 'Googleログインに失敗しました');
     } finally {
       setIsLoading(false);
     }

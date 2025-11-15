@@ -7,7 +7,7 @@ import Link from 'next/link';
 type PageStatusProps = {
   user: User | null | undefined;
   loading: boolean;
-  error: Error | string | null;
+  error: string | null;
   children: React.ReactNode;
 };
 
@@ -29,7 +29,7 @@ export default function PageStatus({ user, loading, error, children }: PageStatu
       <Container size="1" className="px-6 py-6">
         <Box className="text-center py-8">
           <Heading size="4" color="red">
-            {error.toString()}
+            {error}
           </Heading>
         </Box>
       </Container>

@@ -4,7 +4,8 @@ import { Container } from '@radix-ui/themes';
 import { useState } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 import { updateTermFragment } from '@/features/fragment/services/fragmentService';
-import type { TermFragment } from '../types';
+import { useFirebaseServices } from '@/hooks/useFirebaseServices';
+import type { TermFragment } from '@/features/fragment/types';
 import EditableFragmentContent from './EditableFragmentContent';
 import FragmentHeader from './FragmentHeader';
 import SaveFragmentButton from './SaveFragmentButton';
@@ -17,6 +18,7 @@ type EditFragmentProps = {
 
 export default function EditFragment({ fragmentId, fragmentData, refetch }: EditFragmentProps) {
   const { user } = useAuth();
+  const { db } = useFirebaseServices();
   const [editedContent, setEditedContent] = useState(fragmentData.content);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -26,6 +28,7 @@ export default function EditFragment({ fragmentId, fragmentData, refetch }: Edit
     setIsSaving(true);
     try {
       await updateTermFragment(
+        db,
         fragmentId,
         fragmentData.title,
         editedContent.trim(),

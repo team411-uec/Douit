@@ -2,6 +2,7 @@ import { Theme } from '@radix-ui/themes';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { AuthProvider } from '@/features/auth/contexts/AuthContext';
+import { FirebaseProvider } from '@/providers/FirebaseProvider';
 import '@/styles/globals.css';
 
 const geistSans = Geist({
@@ -30,9 +31,11 @@ export default function RootLayout({
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AuthProvider>
-          <Theme accentColor="teal">{children}</Theme>
-        </AuthProvider>
+        <FirebaseProvider>
+          <AuthProvider>
+            <Theme accentColor="teal">{children}</Theme>
+          </AuthProvider>
+        </FirebaseProvider>
       </body>
     </html>
   );

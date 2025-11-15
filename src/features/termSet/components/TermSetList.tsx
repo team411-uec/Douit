@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Flex, Text } from '@radix-ui/themes';
-import type { TermSet } from '../types';
+import type { TermSet } from '@/features/termSet/types';
 import TermsCard from './TermsCard';
 
 interface TermSetListProps {

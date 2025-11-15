@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import { isFragmentUnderstood } from '../services/understandingService';
 
 export function useUnderstandingStatus(fragmentId: string) {
   const { user } = useAuth();
+  const { db } = useFirebaseServices();
   const [understanding, setUnderstanding] = useState<'understood' | 'unknown'>('unknown');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -14,7 +16,7 @@ export function useUnderstandingStatus(fragmentId: string) {
         try {
           setLoading(true);
           setError(null);
-          const isUnderstood = await isFragmentUnderstood(user.uid, fragmentId);
+          const isUnderstood = await isFragmentUnderstood(db, user.uid, fragmentId);
           setUnderstanding(isUnderstood ? 'understood' : 'unknown');
         } catch (error) {
           console.error('理解状態の取得に失敗しました:', error);
@@ -26,7 +28,7 @@ export function useUnderstandingStatus(fragmentId: string) {
     };
 
     checkStatus();
-  }, [user, fragmentId]);
+  }, [db, user, fragmentId]);
 
   return { understanding, setUnderstanding, loading, error };
 }

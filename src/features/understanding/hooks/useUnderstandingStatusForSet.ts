@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import type { AsyncState } from '@/lib/AsyncState';
 import { getUnderstandingStatusForSet } from '../services/understandingService';
 
@@ -12,6 +13,7 @@ interface UnderstandingStatus {
 
 export function useUnderstandingStatusForSet(termSetId: string): AsyncState<UnderstandingStatus[]> {
   const { user } = useAuth();
+  const { db } = useFirebaseServices();
   const [state, setState] = useState<AsyncState<UnderstandingStatus[]>>({
     data: null,
     loading: true,
@@ -23,7 +25,7 @@ export function useUnderstandingStatusForSet(termSetId: string): AsyncState<Unde
       if (user && termSetId) {
         try {
           setState((s) => ({ ...s, loading: true, error: null }));
-          const statusData = await getUnderstandingStatusForSet(user.uid, termSetId);
+          const statusData = await getUnderstandingStatusForSet(db, user.uid, termSetId);
           setState((s) => ({ ...s, data: statusData, loading: false }));
         } catch (error) {
           console.error('理解状況の取得に失敗しました:', error);
@@ -33,7 +35,7 @@ export function useUnderstandingStatusForSet(termSetId: string): AsyncState<Unde
     };
 
     fetchStatus();
-  }, [user, termSetId]);
+  }, [db, user, termSetId]);
 
   return state;
 }

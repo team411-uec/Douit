@@ -1,9 +1,13 @@
+'use client';
+
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Box, Button, Dialog, Flex, Text, TextArea, TextField } from '@radix-ui/themes';
 import { useState } from 'react';
+import { useFirebaseServices } from '@/hooks/useFirebaseServices';
 import { createTermFragment } from '../services/fragmentService';
 
 export default function NewFragmentDialog() {
+  const { db } = useFirebaseServices();
   const [isOpen, setIsOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [title, setTitle] = useState('');
@@ -28,6 +32,7 @@ export default function NewFragmentDialog() {
 
     try {
       await createTermFragment(
+        db,
         title.trim(),
         content.trim(),
         tagList,

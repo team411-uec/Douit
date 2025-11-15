@@ -1,9 +1,11 @@
+'use client';
+
 import { CheckIcon, QuestionMarkIcon } from '@radix-ui/react-icons';
 import { Box, Button, Card, Flex, Heading, Separator, Text } from '@radix-ui/themes';
 import type { User } from 'firebase/auth';
 import Link from 'next/link';
 import useFragment from '@/features/fragment/hooks/useFragment';
-import type { FragmentRef } from '../types';
+import type { FragmentRef } from '@/features/termSet/types';
 
 interface TermSetFragmentCardProps {
   fragment: FragmentRef;

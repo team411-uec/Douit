@@ -1,10 +1,5 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-
-// Firebase configurationの型定義
-interface FirebaseConfig {
+// Firebase configuration型定義
+export interface FirebaseConfig {
   apiKey: string;
   authDomain: string;
   projectId: string;
@@ -14,8 +9,8 @@ interface FirebaseConfig {
   measurementId: string;
 }
 
-// 環境変数から設定を読み込み
-function loadFirebaseConfig(): FirebaseConfig {
+// 環境変数から設定を読み込み（設定のみ、初期化はしない）
+export function getFirebaseConfig(): FirebaseConfig {
   const config = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -35,15 +30,3 @@ function loadFirebaseConfig(): FirebaseConfig {
 
   return config as FirebaseConfig;
 }
-
-// Your web app's Firebase configuration
-const firebaseConfig = loadFirebaseConfig();
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firestore Database
-export const db = getFirestore(app);
-
-// Initialize Firebase Auth
-export const auth = getAuth(app);

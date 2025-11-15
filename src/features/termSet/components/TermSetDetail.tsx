@@ -4,7 +4,7 @@ import { Container, Flex, Heading, Text } from '@radix-ui/themes';
 import type { User } from 'firebase/auth';
 import CommonParametersCard from '@/components/ui/CommonParametersCard';
 import ShareButton from '@/components/ui/ShareButton';
-import type { FragmentRef, TermSet } from '../types';
+import type { FragmentRef, TermSet } from '@/features/termSet/types';
 import TermSetFragmentCard from './TermSetFragmentCard';
 
 interface UnderstandingStatus {

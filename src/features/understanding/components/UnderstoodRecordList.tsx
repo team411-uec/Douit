@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Flex, Heading } from '@radix-ui/themes';
-import type { UnderstoodRecord } from '../types';
+import type { UnderstoodRecord } from '@/features/understanding/types';
 import UnderstoodTermCard from './UnderstoodTermCard';
 
 interface UnderstoodRecordListProps {
