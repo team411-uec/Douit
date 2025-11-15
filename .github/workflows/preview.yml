@@ -4,8 +4,6 @@ on:
   push:
     branches-ignore:
       - release/**
-  pull_request:
-    types: [opened, synchronize, reopened]
 
 env:
   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -57,19 +55,3 @@ jobs:
           echo "✅ Deployed to: ${WORKER_URL}"
           echo "📝 Branch: ${{ github.ref_name }}"
           echo "🔗 Subdomain: ${{ steps.sanitize.outputs.branch_name }}"
-
-      - name: Comment PR with deployment URL
-        if: github.event.pull_request != null
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const workerName = '${{ steps.sanitize.outputs.worker_name }}';
-            const workerUrl = `https://${workerName}.i2512022.workers.dev`;
-            const branchName = '${{ github.ref_name }}';
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `## 🚀 Preview Deployment\n\n**Branch**: \`${branchName}\`\n**URL**: ${workerUrl}\n\n*Deployed with OpenNext.js on Cloudflare Workers*`
-            });
