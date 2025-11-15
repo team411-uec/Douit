@@ -70,7 +70,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: `## 🚀 Preview Deployment
-              **Branch**: \`${branchName}\`
-              **URL**: ${workerUrl}
-              *Deployed with OpenNext.js on Cloudflare Workers*`
+**Branch**: \`${branchName}\`
+**URL**: ${workerUrl}
+*Deployed with OpenNext.js on Cloudflare Workers*`
             });
