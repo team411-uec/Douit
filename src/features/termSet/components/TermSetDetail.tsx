@@ -1,11 +1,11 @@
 'use client';
 
-import { Flex, Heading, Text, Container } from '@radix-ui/themes';
+import { Container, Flex, Heading, Text } from '@radix-ui/themes';
 import type { User } from 'firebase/auth';
 import CommonParametersCard from '@/components/ui/CommonParametersCard';
-import TermSetFragmentCard from './TermSetFragmentCard';
 import ShareButton from '@/components/ui/ShareButton';
-import type { TermSet, FragmentRef } from '../types';
+import type { FragmentRef, TermSet } from '../types';
+import TermSetFragmentCard from './TermSetFragmentCard';
 
 interface UnderstandingStatus {
   fragmentId: string;

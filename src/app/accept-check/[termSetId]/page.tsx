@@ -1,12 +1,12 @@
 'use client';
 
 import { Box } from '@radix-ui/themes';
-import Header from '@/components/ui/Header';
 import { use } from 'react';
-import { useAuth } from '@/features/auth/contexts/AuthContext';
-import useTermSet from '@/features/termSet/hooks/useTermSet';
-import { useFragmentsWithStatus } from '@/features/fragment/hooks/useFragmentsWithStatus';
+import Header from '@/components/ui/Header';
 import PageStatus from '@/components/ui/PageStatus';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { useFragmentsWithStatus } from '@/features/fragment/hooks/useFragmentsWithStatus';
+import useTermSet from '@/features/termSet/hooks/useTermSet';
 import AcceptCheck from '@/features/understanding/components/AcceptCheck';
 
 export default function AcceptCheckPage({ params }: { params: Promise<{ termSetId: string }> }) {

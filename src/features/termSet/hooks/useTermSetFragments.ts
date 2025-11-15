@@ -1,9 +1,8 @@
-import { collection, query, orderBy, getDocs } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-
+import type { AsyncState } from '@/lib/AsyncState';
 import { db } from '@/lib/firebase';
 import type { FragmentRef } from '../types';
-import type { AsyncState } from '@/lib/AsyncState';
 
 export function useTermSetFragments(termSetId: string): AsyncState<FragmentRef[]> {
   const [state, setState] = useState<AsyncState<FragmentRef[]>>({

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { AsyncState } from '@/lib/AsyncState';
-import type { TermSet } from '../types';
 import { getTermSet } from '../services/termSetService';
+import type { TermSet } from '../types';
 
 export default function useTermSet(termSetId: string): AsyncState<TermSet> {
   const [termSetData, setTermSetData] = useState<TermSet | null>(null);

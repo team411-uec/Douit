@@ -1,10 +1,10 @@
 'use client';
 
+import { Box, Container } from '@radix-ui/themes';
 import { Suspense, use } from 'react';
 import Header from '@/components/ui/Header';
-import { Box, Container } from '@radix-ui/themes';
-import { useFragments } from '@/features/fragment/hooks/useFragments';
 import SearchBar from '@/components/ui/SearchBar';
+import { useFragments } from '@/features/fragment/hooks/useFragments';
 import SearchResultList from '@/features/search/components/SearchResultList';
 
 export default function SearchPage({ params }: { params: Promise<{ tag: string }> }) {

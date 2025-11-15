@@ -1,17 +1,17 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import {
-  type User,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  GoogleAuthProvider,
   signInWithPopup,
+  signOut,
+  type User,
 } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 import { ensureUser } from '@/features/user/services/userService';
+import { auth } from '@/lib/firebase';
 
 interface AuthContextType {
   user: User | null;

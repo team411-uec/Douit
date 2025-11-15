@@ -1,5 +1,5 @@
+import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import type { TermFragment } from '../types';
 
 // 規約片の作成

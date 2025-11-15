@@ -1,7 +1,7 @@
 'use client';
 
+import { CheckIcon, CopyIcon } from '@radix-ui/react-icons';
 import { Button } from '@radix-ui/themes';
-import { CopyIcon, CheckIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 
 type ShareButtonProps = {

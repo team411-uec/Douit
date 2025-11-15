@@ -1,8 +1,8 @@
 'use client';
 
-import { Box, Heading, Button, Container } from '@radix-ui/themes';
-import Link from 'next/link';
+import { Box, Button, Container, Heading } from '@radix-ui/themes';
 import type { User } from 'firebase/auth';
+import Link from 'next/link';
 
 type PageStatusProps = {
   user: User | null | undefined;

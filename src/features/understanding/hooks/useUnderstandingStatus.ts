@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { isFragmentUnderstood } from '../services/understandingService';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import { isFragmentUnderstood } from '../services/understandingService';
 
 export function useUnderstandingStatus(fragmentId: string) {
   const { user } = useAuth();

@@ -1,5 +1,5 @@
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 /**
  * ユーザーが存在しない場合は作成する

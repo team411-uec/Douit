@@ -1,5 +1,4 @@
-import { Text } from '@radix-ui/themes';
-import { Select, TextField } from '@radix-ui/themes';
+import { Select, Text, TextField } from '@radix-ui/themes';
 import { forwardRef } from 'react';
 
 interface InputProps {

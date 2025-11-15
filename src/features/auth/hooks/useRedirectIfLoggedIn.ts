@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
 
 export function useRedirectIfLoggedIn(redirectPath: string) {

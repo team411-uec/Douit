@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import type { TermFragment, FragmentRef } from '@/types';
-import { getTermFragment } from '../services/fragmentService';
-import { isFragmentUnderstood } from '@/features/understanding/services/understandingService';
 import { useAuth } from '@/features/auth/contexts/AuthContext';
+import type { FragmentRef } from '@/features/termSet/types';
+import { isFragmentUnderstood } from '@/features/understanding/services/understandingService';
 import type { AsyncState } from '@/lib/AsyncState';
+import { getTermFragment } from '../services/fragmentService';
+import type { TermFragment } from '../types';
 
 export interface FragmentWithData {
   ref: FragmentRef;

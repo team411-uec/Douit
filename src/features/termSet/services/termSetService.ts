@@ -1,16 +1,16 @@
 import {
+  addDoc,
   collection,
   doc,
-  addDoc,
   getDoc,
   getDocs,
-  updateDoc,
-  query,
   orderBy,
+  query,
   serverTimestamp,
+  updateDoc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import type { TermSet, FragmentRef } from '../types';
+import type { FragmentRef, TermSet } from '../types';
 
 export async function createTermSet(
   userId: string,

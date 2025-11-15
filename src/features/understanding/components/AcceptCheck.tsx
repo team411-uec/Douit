@@ -1,11 +1,11 @@
 'use client';
 
-import { Box, Heading, Text, Container } from '@radix-ui/themes';
+import { Box, Container, Heading, Text } from '@radix-ui/themes';
 import CommonParametersCard from '@/components/ui/CommonParametersCard';
 import FragmentStatusCard from '@/features/fragment/components/FragmentStatusCard';
-import UnderstandingSummary from './UnderstandingSummary';
-import type { TermSet } from '@/features/termSet/types';
 import type { FragmentWithData } from '@/features/fragment/hooks/useFragmentsWithStatus';
+import type { TermSet } from '@/features/termSet/types';
+import UnderstandingSummary from './UnderstandingSummary';
 
 interface AcceptCheckProps {
   termSetData: TermSet;

@@ -1,7 +1,7 @@
-import { searchTermFragments } from '@/features/search/services/tagSearch';
-import type { TermFragment } from '../types';
 import { useEffect, useState } from 'react';
+import { searchTermFragments } from '@/features/search/services/tagSearch';
 import type { AsyncState } from '@/lib/AsyncState';
+import type { TermFragment } from '../types';
 
 export function useFragments(searchTag?: string): AsyncState<TermFragment[]> {
   const [state, setState] = useState<AsyncState<TermFragment[]>>({

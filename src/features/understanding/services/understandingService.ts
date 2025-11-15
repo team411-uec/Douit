@@ -1,14 +1,14 @@
-import { db } from '@/lib/firebase';
 import {
-  collection,
   addDoc,
-  getDocs,
+  collection,
   deleteDoc,
-  query,
-  where,
+  getDocs,
   orderBy,
+  query,
   serverTimestamp,
+  where,
 } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import type { UnderstoodRecord } from '../types';
 
 // 機能6: 理解済み規約片の識別表示機能

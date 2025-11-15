@@ -2,11 +2,11 @@
 
 import { Box, Container } from '@radix-ui/themes';
 import Header from '@/components/ui/Header';
-import { useFragments } from '@/features/fragment/hooks/useFragments';
-import { useAuth } from '@/features/auth/contexts/AuthContext';
-import NewFragmentDialog from '@/features/fragment/components/NewFragmentDialog';
 import SearchBar from '@/components/ui/SearchBar';
+import { useAuth } from '@/features/auth/contexts/AuthContext';
 import FragmentList from '@/features/fragment/components/FragmentList';
+import NewFragmentDialog from '@/features/fragment/components/NewFragmentDialog';
+import { useFragments } from '@/features/fragment/hooks/useFragments';
 
 export default function HomePage() {
   const { user } = useAuth();

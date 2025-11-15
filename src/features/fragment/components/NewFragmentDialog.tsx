@@ -1,7 +1,7 @@
-import { createTermFragment } from '../services/fragmentService';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { Dialog, Box, Button, Flex, TextField, TextArea, Text } from '@radix-ui/themes';
+import { Box, Button, Dialog, Flex, Text, TextArea, TextField } from '@radix-ui/themes';
 import { useState } from 'react';
+import { createTermFragment } from '../services/fragmentService';
 
 export default function NewFragmentDialog() {
   const [isOpen, setIsOpen] = useState(false);

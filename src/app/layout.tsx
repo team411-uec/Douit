@@ -1,6 +1,6 @@
+import { Theme } from '@radix-ui/themes';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { Theme } from '@radix-ui/themes';
 import { AuthProvider } from '@/features/auth/contexts/AuthContext';
 import '@/styles/globals.css';
 
